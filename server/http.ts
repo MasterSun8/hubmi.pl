@@ -1,8 +1,6 @@
-import { timingSafeEqual } from "node:crypto";
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 import { AiNotImplementedError } from "./ai/types";
-import { getEnv } from "./env";
 
 export class HttpError extends Error {
   constructor(
@@ -64,13 +62,3 @@ export async function getId(context: { params: Promise<{ id: string }> }): Promi
   return parsed.data;
 }
 
-// Tymczasowa autoryzacja panelu: współdzielony token. Docelowo role administratorów (otwarta decyzja).
-export function requireAdmin(request: NextRequest): void {
-  const header = request.headers.get("authorization") ?? "";
-  const token = header.startsWith("Bearer ") ? header.slice(7) : "";
-  const expected = Buffer.from(getEnv().ADMIN_API_TOKEN);
-  const given = Buffer.from(token);
-  if (given.length !== expected.length || !timingSafeEqual(given, expected)) {
-    throw new HttpError(401, "Unauthorized");
-  }
-}

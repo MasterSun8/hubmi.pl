@@ -392,7 +392,7 @@ Konfiguracja znajduje się w `next.config.ts`, a pliki publiczne w `public/`.
 API działa jako Route Handlers Next.js w `app/api/*`; logika w `server/`. Baza: PostgreSQL z pgvector (serwer w LAN), ORM Drizzle.
 
 ```bash
-cp .env.example .env     # uzupełnij DATABASE_URL (serwer w LAN) i ADMIN_API_TOKEN
+cp .env.example .env     # uzupełnij DATABASE_URL (serwer w LAN)
 pnpm db:migrate          # migracje z server/db/migrations (w tym CREATE EXTENSION vector)
 pnpm db:seed             # przykładowe, fikcyjne rozwiązania do dema
 pnpm db:generate         # nowa migracja po zmianie server/db/schema.ts
@@ -427,4 +427,6 @@ pnpm db:reindex          # przeliczenie embeddingów po wdrożeniu OpenAI
 | `/api/admin/knowledge[/:id]` | Zasobnik wiedzy ROPS. |
 | `GET /api/admin/stats` | Dane do mapy i trendów. |
 
-Endpointy `/api/admin/*` wymagają nagłówka `Authorization: Bearer <ADMIN_API_TOKEN>` — to tymczasowe rozwiązanie do czasu ustalenia ról administratorów.
+Przykladowe wywolanie endpointu - 
+http://localhost:3000/api/solutions?q=posi%C5%82ki 
+Endpointy `/api/admin/*` są na razie bez autoryzacji — do dodania przed udostępnieniem poza siecią lokalną.

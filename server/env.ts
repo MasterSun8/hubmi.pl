@@ -11,7 +11,6 @@ const envSchema = z.object({
   OPENAI_CHAT_MODEL: optional,
   OPENAI_EMBEDDING_MODEL: optional,
   OPENAI_EMBEDDING_DIMENSIONS: z.coerce.number().int().positive().default(1536),
-  ADMIN_API_TOKEN: z.string().min(16),
   ROPS_PHONE: optional,
   ROPS_DUTY_HOURS: optional,
 });

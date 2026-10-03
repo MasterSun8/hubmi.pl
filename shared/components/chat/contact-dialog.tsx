@@ -14,7 +14,7 @@ const phonePattern = /^\+?[\d\s-]{9,15}$/;
 
 const bodyClass = "flex flex-col items-start gap-5 pt-5";
 const inputClass =
-  "min-h-10 rounded-input border border-line bg-transparent px-5 py-1.75 text-ink transition-colors placeholder:text-muted focus:border-primary focus:outline-none aria-invalid:border-error";
+  "min-h-10 rounded-input border border-field bg-transparent px-5 py-1.75 text-ink transition-colors placeholder:text-muted focus:border-primary focus:outline-none aria-invalid:border-error";
 const errorClass = "-mt-2.5 text-caption leading-6.5 text-error";
 const backClass = "cursor-pointer border-0 bg-transparent p-0 text-caption font-medium tracking-label-sm text-ink uppercase no-underline";
 

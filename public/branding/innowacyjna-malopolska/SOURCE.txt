@@ -1,0 +1,5 @@
+Źródło: https://innowacyjna.malopolska.pl/pl
+Pobrano: 2026-10-03
+logo.svg: oryginalny SVG z nagłówka strony.
+logo.png: PNG wygenerowany z logo.svg w skali 4×.
+Favicony i apple-touch-icon: oryginalne pliki z /public/theme/favicons/.

@@ -5,8 +5,8 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/:path*",
-        has: [{ type: "host", value: "hubmi.pl" }],
-        destination: "https://www.hubmi.pl/:path*",
+        has: [{ type: "host", value: "hubmi-innovations.org" }],
+        destination: "https://www.hubmi-innovations.org/:path*",
         permanent: true,
       },
     ];

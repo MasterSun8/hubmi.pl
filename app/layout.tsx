@@ -16,7 +16,7 @@ const roboto = localFont({
 export const metadata: Metadata = {
   title: "Hubmi — razem możemy więcej",
   description: "Zgłoś problem lub zaoferuj pomoc. Łączymy potrzeby mieszkańców Małopolski z pomysłami i rozwiązaniami społecznymi.",
-  metadataBase: new URL("https://www.hubmi.pl"),
+  metadataBase: new URL("https://www.hubmi-innovations.org"),
   alternates: {
     canonical: "/",
   },

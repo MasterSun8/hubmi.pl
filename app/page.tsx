@@ -24,7 +24,7 @@ export default function Home() {
       <AccessibilityBar />
       <header className={styles.header}>
         <Link className={styles.brand} href="/" aria-label="Hubmi — strona główna">
-          hubmi.pl
+          hubmi-innovations.org
         </Link>
         <p className="hubmi-label hubmi-label--small">
           Innowacje społeczne dla Małopolski

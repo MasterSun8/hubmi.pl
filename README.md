@@ -1,5 +1,5 @@
 <img src="assets/hubmipl.png" alt="" width="400">
-# hubmi.pl — platforma innowacji społecznych dla ROPS Kraków
+# hubmi-innovations.org — platforma innowacji społecznych dla ROPS Kraków
 
 ## 1. Cel projektu
 

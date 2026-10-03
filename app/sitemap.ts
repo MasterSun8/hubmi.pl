@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const SITE_URL = "https://www.hubmi.pl";
+const SITE_URL = "https://www.hubmi-innovations.org";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

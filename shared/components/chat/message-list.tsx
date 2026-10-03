@@ -1,10 +1,11 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Markdown } from "@/shared/components/markdown";
 import { enter } from "@/shared/components/motion/enter";
 import { useChat } from "./chat-provider";
+import { cardsPerMessage } from "./cited-sources";
 import { InitiativeCard } from "./initiative-card";
 
 const authorClass = "text-caption leading-(--text-body--line-height) font-medium tracking-label-sm uppercase";
@@ -14,6 +15,7 @@ export function MessageList() {
   const { messages, thinking, waiting } = useChat();
   const endRef = useRef<HTMLDivElement>(null);
   const lastLength = messages.at(-1)?.content.length;
+  const cards = useMemo(() => cardsPerMessage(messages), [messages]);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
@@ -23,7 +25,7 @@ export function MessageList() {
     <>
       {/* Screen readers hear finished turns only, not every streamed token. */}
       <ol className="m-0 flex list-none flex-col gap-5 p-0" aria-live="polite" aria-busy={waiting}>
-        {messages.map((message) => (
+        {messages.map((message, index) => (
           <motion.li key={message.id} className="flex flex-col items-start" {...enter()}>
             <p className={`${authorClass} ${message.role === "assistant" ? "text-primary" : ""}`}>
               {message.role === "assistant" ? "Asystent Hubmi" : "Ty"}
@@ -35,11 +37,12 @@ export function MessageList() {
                 {message.content}
               </p>
             )}
-            {message.sources && message.sources.length > 0 && (
+            {/* Cards appear once the answer is complete, so they match the solutions it names. */}
+            {cards[index].length > 0 && !(waiting && index === messages.length - 1) && (
               <ul className="m-0 mt-2.5 flex list-none flex-col gap-2.5 p-0" aria-label="Rozwiązania z bazy">
-                {message.sources.map((solution, index) => (
+                {cards[index].map((solution, cardIndex) => (
                   <li key={solution.id}>
-                    <InitiativeCard solution={solution} index={index} />
+                    <InitiativeCard solution={solution} index={cardIndex} />
                   </li>
                 ))}
               </ul>

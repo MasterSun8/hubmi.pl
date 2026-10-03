@@ -3,7 +3,7 @@ import type { ConversationResponse } from "@/types/chat";
 
 // Without auth the conversation id works as the access key: anyone who has
 // it can read the conversation.
-export async function GET(_request: Request, ctx: RouteContext<"/api/conversations/[id]">) {
+export async function GET(_request: Request, ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params;
   if (!isConversationId(id)) {
     return Response.json({ error: "Conversation not found" }, { status: 404 });

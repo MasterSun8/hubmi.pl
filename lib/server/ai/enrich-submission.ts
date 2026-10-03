@@ -24,13 +24,17 @@ type SummaryFields = z.infer<typeof SubmissionSummary>;
 type Submission = typeof submissions.$inferSelect;
 type EmbeddingFields = Pick<Submission, "embedding" | "embeddingModel" | "embeddingUpdatedAt" | "contentHash">;
 
-// Runs after POST /api/submissions has answered (see `after` in the route).
-// Rewrites the raw text the client sent into a clean summary and embeds it.
+// Runs after POST /api/submissions has answered (see `after` in the route),
+// and from scripts/enrich-submissions.mts for rows that missed it.
+// Rewrites the raw text the client sent into a clean summary, picks the
+// category (which is also the submission's group) and embeds the result.
 // Each step degrades on its own: without the summary we embed the raw text,
-// without the embedding the row keeps embedding = NULL for a later backfill.
+// without the embedding the row waits for a backfill.
 export async function enrichSubmission(id: string): Promise<void> {
   const [submission] = await getDb().select().from(submissions).where(eq(submissions.id, id)).limit(1);
-  if (!submission) return;
+  // The embedding is computed from the summary, so a row that has one was
+  // already processed (or the summary failed and we settled for raw text).
+  if (!submission || submission.embedding) return;
 
   const summary = await summarize(submission).catch((err) => {
     console.error(`[submissions] AI summary failed for ${id}, embedding the raw text`, err);

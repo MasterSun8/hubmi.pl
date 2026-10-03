@@ -1,5 +1,6 @@
 import { after } from "next/server";
 import { enrichSubmission } from "@/lib/server/ai/enrich-submission";
+import { SUBMISSION_CATEGORIES } from "@/lib/server/ai/prompts/submission-summary";
 import {
   createSubmission,
   createSubmissionSchema,
@@ -20,6 +21,8 @@ export async function GET(request: Request) {
     | "rejected"
     | null;
   const type = url.searchParams.get("type") as "problem" | "idea" | null;
+  // A group from GET /api/groups.
+  const category = url.searchParams.get("category");
 
   if (limit < 1 || limit > MAX_LIMIT || offset < 0) {
     return Response.json({ error: "Invalid pagination" }, { status: 400 });
@@ -30,9 +33,18 @@ export async function GET(request: Request) {
   if (type && !["problem", "idea"].includes(type)) {
     return Response.json({ error: "Invalid type" }, { status: 400 });
   }
+  if (category && !(SUBMISSION_CATEGORIES as readonly string[]).includes(category)) {
+    return Response.json({ error: "Invalid category" }, { status: 400 });
+  }
 
   try {
-    const data = await listSubmissions({ limit, offset, status: status ?? undefined, type: type ?? undefined });
+    const data = await listSubmissions({
+      limit,
+      offset,
+      status: status ?? undefined,
+      type: type ?? undefined,
+      category: category ?? undefined,
+    });
     return Response.json({ data, limit, offset }, { headers: { "Cache-Control": "no-store" } });
   } catch (err) {
     console.error("[submissions] list failed", err);

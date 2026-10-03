@@ -100,12 +100,14 @@ export async function getSubmission(id: string) {
 export async function listSubmissions(filters: {
   status?: (typeof submissions.$inferSelect)["status"];
   type?: (typeof submissions.$inferSelect)["type"];
+  category?: string;
   limit: number;
   offset: number;
 }) {
   const conditions = [
     filters.status ? eq(submissions.status, filters.status) : undefined,
     filters.type ? eq(submissions.type, filters.type) : undefined,
+    filters.category ? eq(submissions.category, filters.category) : undefined,
   ].filter((condition): condition is NonNullable<typeof condition> => Boolean(condition));
 
   return getDb()

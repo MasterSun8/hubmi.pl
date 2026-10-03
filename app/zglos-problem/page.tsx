@@ -19,7 +19,7 @@ const placeholder = "Napisz, z czym potrzebujesz pomocy…";
 // Figma 11:544 (start), 11:566 (conversation), 15:777 (initiative suggestion), 11:662 (contact modal).
 export default function ReportProblemPage() {
   return (
-    <ChatProvider flowId="problem" firstQuestion="Z jakim problemem potrzebujesz pomocy?">
+    <ChatProvider flowId="problem" firstQuestion="Z jakim problemem potrzebujesz pomocy?" newConversationLabel="Nowy problem">
       <div className="flex min-h-svh flex-col gap-5 px-page py-10 max-sm:py-7.5">
         <SiteHeader>
           <p className="text-caption font-medium tracking-label-sm text-primary uppercase">Zgłoś problem</p>

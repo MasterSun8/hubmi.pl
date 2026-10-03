@@ -63,7 +63,7 @@ type SubmissionsState = {
   setFilter: <K extends keyof Filters>(key: K, value: Filters[K]) => void;
   sort: "score" | "date";
   toggleSort: () => void;
-  categories: string[];
+  categories: { category: string; count: number }[];
   locations: string[];
 };
 
@@ -99,6 +99,7 @@ export function SubmissionsProvider({ children }: { children: ReactNode }) {
   const [filters, setFilters] = useState<Filters>({ status: "all", type: "all", category: "", location: "", days: null, since: null });
   const [sort, setSort] = useState<SubmissionsState["sort"]>("score");
   const [page, setPage] = useState(1);
+  const [groups, setGroups] = useState<{ category: string; count: number }[]>([]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -117,6 +118,11 @@ export function SubmissionsProvider({ children }: { children: ReactNode }) {
           setStatus("error");
         }
       });
+    // The fixed AI categories with counts; the filter falls back to categories in the data.
+    fetch("/api/groups", { signal: controller.signal })
+      .then((response) => (response.ok ? (response.json() as Promise<{ data: { category: string; count: number }[] }>) : null))
+      .then((body) => body && setGroups(body.data))
+      .catch(() => {});
     return () => controller.abort();
   }, []);
 
@@ -163,7 +169,13 @@ export function SubmissionsProvider({ children }: { children: ReactNode }) {
         },
         sort,
         toggleSort: () => setSort((current) => (current === "score" ? "date" : "score")),
-        categories: distinct(all.map((item) => item.category)),
+        categories:
+          groups.length > 0
+            ? groups
+            : distinct(all.map((item) => item.category)).map((category) => ({
+                category,
+                count: all.filter((item) => item.category === category).length,
+              })),
         locations: distinct(all.map((item) => item.location)),
       }}
     >

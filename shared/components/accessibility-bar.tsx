@@ -8,7 +8,7 @@ import {
   readA11yPreferences,
   type A11yPreferences,
   type TextSize,
-} from "@/app/components/accessibility-preferences";
+} from "@/shared/components/accessibility-preferences";
 
 // The size buttons keep a fixed font size so the controls stay put while the page scales.
 const textSizes: { value: TextSize; label: string; name: string; className: string }[] = [

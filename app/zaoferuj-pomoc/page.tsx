@@ -19,7 +19,7 @@ const placeholder = "Napisz, jak możesz pomóc…";
 // Figma 11:603 (conversation) and 14:756 (contact modal); the start screen follows 11:544.
 export default function OfferHelpPage() {
   return (
-    <ChatProvider flowId="pomoc" firstQuestion="Jak chcesz pomóc i komu chcesz zaoferować wsparcie?">
+    <ChatProvider flowId="pomoc" firstQuestion="Jak chcesz pomóc i komu chcesz zaoferować wsparcie?" newConversationLabel="Nowa oferta pomocy">
       <div className="flex min-h-svh flex-col gap-5 px-page py-10 max-sm:py-7.5">
         <SiteHeader>
           <p className="text-caption font-medium tracking-label-sm text-primary uppercase">Zaoferuj pomoc</p>

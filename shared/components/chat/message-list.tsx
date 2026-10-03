@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef } from "react";
+import { Markdown } from "@/shared/components/markdown";
 import { enter } from "@/shared/components/motion/enter";
 import { useChat } from "./chat-provider";
 import { InitiativeCard } from "./initiative-card";
@@ -27,9 +28,13 @@ export function MessageList() {
             <p className={`${authorClass} ${message.role === "assistant" ? "text-primary" : ""}`}>
               {message.role === "assistant" ? "Asystent Hubmi" : "Ty"}
             </p>
-            <p className={`max-w-[60ch] whitespace-pre-wrap ${message.error ? "text-error" : ""}`} role={message.error ? "alert" : undefined}>
-              {message.content}
-            </p>
+            {message.role === "assistant" && !message.error ? (
+              <Markdown>{message.content}</Markdown>
+            ) : (
+              <p className={`max-w-[60ch] whitespace-pre-wrap ${message.error ? "text-error" : ""}`} role={message.error ? "alert" : undefined}>
+                {message.content}
+              </p>
+            )}
             {message.sources && message.sources.length > 0 && (
               <ul className="m-0 mt-2.5 flex list-none flex-col gap-2.5 p-0" aria-label="Rozwiązania z bazy">
                 {message.sources.map((solution, index) => (

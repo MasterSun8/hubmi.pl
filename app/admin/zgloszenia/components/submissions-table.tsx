@@ -60,6 +60,7 @@ export function SubmissionsTable() {
             <p className="text-caption">
               {submissionNumber(item.id)} · {typeLabels[item.type]} · {formatDate(item.createdAt)}
             </p>
+            <p className="mt-1 line-clamp-2 max-w-[70ch] text-caption text-ink/80">{item.summary}</p>
           </div>
           <p role="cell">
             {item.location}

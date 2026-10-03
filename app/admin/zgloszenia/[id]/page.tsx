@@ -5,6 +5,7 @@ import { ConversationHistory } from "./components/conversation-history";
 import { LocationMap } from "./components/location-map";
 import { SubmissionDetailsProvider, WhenLoaded } from "./components/submission-details-provider";
 import { SubmissionHeader } from "./components/submission-header";
+import { SubmissionSummary } from "./components/submission-summary";
 
 export const metadata: Metadata = {
   title: "Szczegóły zgłoszenia — Panel instytucji Hubmi",
@@ -23,10 +24,13 @@ export default async function SubmissionDetailsPage({ params }: PageProps<"/admi
 
         <WhenLoaded>
           <SubmissionHeader />
-          <div className="grid grid-cols-[minmax(0,1fr)_430px] items-start gap-7.5 max-xl:grid-cols-1">
-            <section className="flex flex-col gap-5" aria-label="Historia rozmowy">
-              <ConversationHistory />
-            </section>
+          <div className="mt-5 grid grid-cols-[minmax(0,1fr)_430px] items-start gap-x-15 gap-y-10 max-xl:grid-cols-1">
+            <div className="flex flex-col gap-7.5">
+              <SubmissionSummary />
+              <section className="flex flex-col gap-5" aria-label="Historia rozmowy">
+                <ConversationHistory />
+              </section>
+            </div>
             <div className="flex flex-col gap-7.5">
               <ContactDetails />
               <LocationMap />

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { MotionProvider } from "@/shared/components/motion/motion-provider";
-import { a11yInlineScript } from "@/app/components/accessibility-preferences";
+import { a11yInlineScript } from "@/shared/components/accessibility-preferences";
 import "./globals.css";
 
 const roboto = localFont({

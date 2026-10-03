@@ -2,7 +2,7 @@
 
 import { createContext, use, useEffect, useState, type ReactNode } from "react";
 import type { ConversationResponse } from "@/types/chat";
-import type { Submission } from "../../components/submissions-provider";
+import type { Submission, SubmissionStatus } from "../../components/submissions-provider";
 
 // GET /api/submissions/[id] does not return contact details yet; when it adds a
 // `submitter` object the contact section picks it up without further changes.
@@ -16,12 +16,26 @@ type DetailsState =
   | { status: "error" }
   | { status: "ready"; submission: SubmissionDetails; conversation: ConversationResponse | null };
 
-const DetailsContext = createContext<DetailsState | null>(null);
+type DetailsContextValue = {
+  state: DetailsState;
+  // PATCH /api/submissions/[id]; resolves to an error message, or null on success.
+  updateStatus: (status: SubmissionStatus) => Promise<string | null>;
+};
+
+const DetailsContext = createContext<DetailsContextValue | null>(null);
+
+function useDetailsContext() {
+  const value = use(DetailsContext);
+  if (!value) throw new Error("useSubmissionDetails must be used inside <SubmissionDetailsProvider>");
+  return value;
+}
 
 export function useSubmissionDetails() {
-  const state = use(DetailsContext);
-  if (!state) throw new Error("useSubmissionDetails must be used inside <SubmissionDetailsProvider>");
-  return state;
+  return useDetailsContext().state;
+}
+
+export function useUpdateStatus() {
+  return useDetailsContext().updateStatus;
 }
 
 export function SubmissionDetailsProvider({ id, children }: { id: string; children: ReactNode }) {
@@ -52,7 +66,24 @@ export function SubmissionDetailsProvider({ id, children }: { id: string; childr
     return () => controller.abort();
   }, [id]);
 
-  return <DetailsContext value={state}>{children}</DetailsContext>;
+  async function updateStatus(status: SubmissionStatus) {
+    try {
+      const response = await fetch(`/api/submissions/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      });
+      if (!response.ok) return "Nie udało się zmienić statusu. Spróbuj ponownie.";
+      setState((current) =>
+        current.status === "ready" ? { ...current, submission: { ...current.submission, status } } : current,
+      );
+      return null;
+    } catch {
+      return "Nie udało się zmienić statusu. Sprawdź połączenie z internetem.";
+    }
+  }
+
+  return <DetailsContext value={{ state, updateStatus }}>{children}</DetailsContext>;
 }
 
 // Renders children only once the submission has loaded; otherwise the loading or error message.

@@ -59,9 +59,9 @@ export function SubmissionsFilters() {
       </FilterSelect>
       <FilterSelect label="Kategoria" value={filters.category} onChange={(value) => setFilter("category", value)}>
         <option value="">wszystkie</option>
-        {categories.map((category) => (
+        {categories.map(({ category, count }) => (
           <option key={category} value={category}>
-            {category}
+            {category} ({count})
           </option>
         ))}
       </FilterSelect>

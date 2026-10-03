@@ -31,6 +31,10 @@ type ChatState = {
   openDialog: () => void;
   closeDialog: () => void;
   markSent: () => void;
+  // Clears the chat and returns to the start screen, so another submission can be made.
+  startNew: () => void;
+  // Button text for startNew, e.g. "Nowy problem".
+  newConversationLabel: string;
 };
 
 export type SubmissionDraft = {
@@ -60,6 +64,7 @@ type ChatProviderProps = {
   flowId: ChatFlowId;
   // Shown as the assistant's first message; it is UI copy, not part of the stored conversation.
   firstQuestion: string;
+  newConversationLabel: string;
   children: ReactNode;
 };
 
@@ -81,7 +86,7 @@ function storeId(flowId: ChatFlowId, id: string | null) {
   } catch {}
 }
 
-export function ChatProvider({ flowId, firstQuestion, children }: ChatProviderProps) {
+export function ChatProvider({ flowId, firstQuestion, newConversationLabel, children }: ChatProviderProps) {
   const [messages, setMessages] = useState<ConversationMessage[]>([]);
   const [waiting, setWaiting] = useState(false);
   const [thinking, setThinking] = useState(false);
@@ -189,6 +194,15 @@ export function ChatProvider({ flowId, firstQuestion, children }: ChatProviderPr
         openDialog: () => setDialogOpen(true),
         closeDialog: () => setDialogOpen(false),
         markSent: () => setSent(true),
+        startNew: () => {
+          conversationId.current = null;
+          storeId(flowId, null);
+          setMessages([]);
+          setSent(false);
+          setDialogOpen(false);
+          window.scrollTo({ top: 0 });
+        },
+        newConversationLabel,
       }}
     >
       {children}

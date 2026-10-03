@@ -132,6 +132,37 @@ export const solutions = pgTable(
   ],
 );
 
+// ---------- Kontakty i Działy ROPS ----------
+
+export const contacts = pgTable("contacts", {
+  id: uuid().primaryKey().defaultRandom(),
+  department: text().notNull(),
+  address: text(),
+  openingHours: text().array().notNull().default(sql`'{}'::text[]`),
+  phones: jsonb().notNull().default([]), // array of { number, description }
+  emails: text().array().notNull().default(sql`'{}'::text[]`),
+  roles: jsonb().notNull().default([]), // array of { title, name, email, phone }
+  ...timestamps,
+});
+
+// ---------- Obserwator Statystyk Społecznych (Wskaźniki Regionalne) ----------
+
+export const regionalStatistics = pgTable("regional_statistics", {
+  id: uuid().primaryKey().defaultRandom(),
+  category: text().notNull(), // np. 'LUDNOŚĆ'
+  indicator: text().notNull(), // np. 'Ludność ogółem'
+  region: text().notNull(), // np. 'powiat bocheński', 'Małopolska'
+  year: integer().notNull(), // np. 2024
+  value: real(), // Wartość liczbowa (jeśli dotyczy)
+  valueText: text(), // Wartość tekstowa w razie znaków specjalnych (np. brak danych)
+  ...timestamps,
+}, (t) => [
+  index().on(t.category),
+  index().on(t.indicator),
+  index().on(t.region),
+  index().on(t.year),
+]);
+
 // ---------- Zasobnik wiedzy ROPS (moduł 6) ----------
 
 export const knowledgeDocuments = pgTable("knowledge_documents", {

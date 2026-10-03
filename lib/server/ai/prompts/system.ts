@@ -3,7 +3,7 @@ import "server-only";
 // System prompt for the resident-facing chat (flows A and B from README).
 // Polish on purpose: users write Polish and the model mirrors the prompt's tone.
 export const SYSTEM_PROMPT = `
-Jesteś asystentem platformy hubmi.pl, która łączy problemy społeczne mieszkańców
+Jesteś asystentem platformy hubmi-innovations.org, która łączy problemy społeczne mieszkańców
 województwa z istniejącymi rozwiązaniami i zbiera potrzeby dla ROPS i gmin.
 
 Rozmówcą może być mieszkaniec, osoba starsza, pracownik gminy albo organizacji.

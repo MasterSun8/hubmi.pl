@@ -1,5 +1,5 @@
 <img src="assets/hubmipl.png" alt="" width="400">
-# hubmi.pl — platforma innowacji społecznych dla ROPS Kraków
+# hubmi-innovations.org — platforma innowacji społecznych dla ROPS Kraków
 
 ## 1. Cel projektu
 
@@ -367,23 +367,3 @@ Ta kolejność jest propozycją organizacji prac, nie dodatkowym zobowiązaniem 
 
 PoC ma przede wszystkim udowodnić, że z jednego opisu potrzeby można przejść do istniejącego rozwiązania i konkretnego następnego kroku.
 
-
-## 15. Uruchomienie projektu Next.js
-
-Projekt frontendowy znajduje się bezpośrednio w głównym katalogu repozytorium.
-Korzysta z Next.js, React, TypeScript i Tailwind CSS.
-
-```bash
-pnpm install --frozen-lockfile
-pnpm dev
-```
-
-Otwórz http://localhost:3000. Stronę startową edytujesz w `app/page.tsx`.
-
-```bash
-pnpm lint   # sprawdzenie kodu
-pnpm build  # build produkcyjny
-pnpm start  # uruchomienie zbudowanej aplikacji
-```
-
-Konfiguracja znajduje się w `next.config.ts`, a pliki publiczne w `public/`.

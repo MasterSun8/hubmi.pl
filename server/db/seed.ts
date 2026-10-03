@@ -41,26 +41,45 @@ async function seedInnovations() {
     // Usuń stare dane
     await db.delete(solutions);
     
-    const mapped = innovations.map((inv: any) => ({
-      title: inv.title,
-      description: inv.shortDescription || inv.fullDescription || "",
-      categories: [inv.category].filter(Boolean),
-      sourceName: "Biblioteka Innowacji Społecznych",
-      sourceUrl: inv.sourceUrl,
-      externalId: inv.id,
-      authors: [inv.author].filter(Boolean),
-      authorName: inv.author,
-      organization: inv.organization,
-      contactEmail: inv.email,
-      contactPhone: inv.phone,
-      contactUrl: inv.website,
-      materialsUrls: inv.files?.map((f: any) => f.url) || [],
-      searchText: `${inv.title} ${inv.shortDescription} ${inv.category}`.toLowerCase(),
-    }));
+    const mapped = innovations.map((inv: any) => {
+      // Prosta ekstrakcja z contactData
+      const contactStr = inv.contactData || "";
+      const emailMatch = contactStr.match(/[^\s@]+@[^\s@]+\.[^\s@]+/);
+      const phoneMatch = contactStr.match(/(?:\+48)?\s*(?:\d\s*){9}/);
+      
+      return {
+        title: inv.title,
+        description: inv.shortDescription || inv.fullDescription || "",
+        categories: [], // Brak ścisłej kategorii ze scrapera, zostawiamy puste
+        targetGroups: [inv.targetGroup].filter(Boolean),
+        sourceName: "Biblioteka Innowacji Społecznych",
+        sourceUrl: inv.sourceUrl,
+        externalId: inv.sourceUrl, // Gwarantuje unikalność w bazie dla danej innowacji
+        authors: [inv.author].filter(Boolean),
+        authorName: inv.author,
+        organization: inv.author, // W ROPS autor to zazwyczaj organizacja
+        contactEmail: emailMatch ? emailMatch[0] : null,
+        contactPhone: phoneMatch ? phoneMatch[0].trim() : null,
+        materialsUrls: inv.materialsLinks || [],
+        videoUrls: inv.videoLinks || [],
+        termsOfUseUrl: inv.termsOfUse || null,
+        searchText: `${inv.title} ${inv.shortDescription} ${inv.targetGroup} ${inv.author}`.toLowerCase(),
+      };
+    });
 
-    if (mapped.length > 0) {
-      await db.insert(solutions).values(mapped);
-      console.log(`[Seed] Zapisano ${mapped.length} innowacji do bazy.`);
+    // Deduplikacja, aby uniknąć błędów PostgresError: duplicate key value
+    const uniqueMapped = [];
+    const seenExternalIds = new Set();
+    for (const item of mapped) {
+      if (!seenExternalIds.has(item.externalId)) {
+        seenExternalIds.add(item.externalId);
+        uniqueMapped.push(item);
+      }
+    }
+
+    if (uniqueMapped.length > 0) {
+      await db.insert(solutions).values(uniqueMapped);
+      console.log(`[Seed] Zapisano ${uniqueMapped.length} innowacji do bazy (po usunięciu duplikatów).`);
     }
   } catch (err) {
     console.log(`[Seed] Brak pliku cleaned_innovations.json lub błąd:`, err);

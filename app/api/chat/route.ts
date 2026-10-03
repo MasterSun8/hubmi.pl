@@ -1,7 +1,15 @@
 import { streamChat } from "@/lib/server/ai/chat";
-import type { ChatEvent, ChatMessage, ChatRequest } from "@/types/chat";
+import {
+  createConversation,
+  getConversation,
+  isConversationId,
+  loadHistory,
+  saveMessage,
+} from "@/lib/server/chat/history";
+import type { ChatEvent, ChatMessage, ChatRequest, SolutionRef } from "@/types/chat";
 
-const MAX_MESSAGES = 50;
+// How many stored messages the model sees; older ones are dropped.
+const MAX_HISTORY_MESSAGES = 50;
 const MAX_CONTENT_LENGTH = 8_000;
 
 export async function POST(request: Request) {
@@ -12,9 +20,35 @@ export async function POST(request: Request) {
     return Response.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  const messages = parseMessages(body);
-  if (!messages) {
-    return Response.json({ error: "Invalid messages" }, { status: 400 });
+  const parsed = parseRequest(body);
+  if (!parsed) {
+    return Response.json({ error: "Invalid request" }, { status: 400 });
+  }
+
+  let conversationId: string;
+  let history: ChatMessage[];
+  try {
+    if (parsed.conversationId) {
+      const conversation = await getConversation(parsed.conversationId);
+      if (!conversation) {
+        return Response.json({ error: "Conversation not found" }, { status: 404 });
+      }
+      // A submitted conversation is the basis of a submission; keep it frozen.
+      if (conversation.status === "submitted") {
+        return Response.json({ error: "Conversation already submitted" }, { status: 409 });
+      }
+      conversationId = conversation.id;
+    } else {
+      conversationId = (await createConversation()).id;
+    }
+
+    // Saved before the model runs, so the question survives a failed answer
+    // and the next turn still sees it.
+    await saveMessage(conversationId, "user", parsed.message);
+    history = await loadHistory(conversationId, MAX_HISTORY_MESSAGES);
+  } catch (err) {
+    console.error("[chat] history storage failed", err);
+    return Response.json({ error: "Storage unavailable" }, { status: 503 });
   }
 
   const encoder = new TextEncoder();
@@ -23,8 +57,18 @@ export async function POST(request: Request) {
 
   const stream = new ReadableStream({
     async start(controller) {
+      send(controller, { type: "conversation", id: conversationId });
+
+      let answer = "";
+      const sources: SolutionRef[] = [];
+
       try {
-        for await (const event of streamChat(messages, request.signal)) {
+        for await (const event of streamChat(history, request.signal)) {
+          if (event.type === "delta") answer += event.text;
+          if (event.type === "sources") sources.push(...event.items);
+          // Persist before `done`, so a client that reloads right after it
+          // gets the answer from GET /api/conversations/[id].
+          if (event.type === "done") await saveAnswer(conversationId, answer, sources);
           send(controller, event);
         }
       } catch (err) {
@@ -47,19 +91,23 @@ export async function POST(request: Request) {
   });
 }
 
-// Returns null for anything that doesn't match ChatRequest, so the model
-// never sees unvalidated roles (e.g. a client-injected "system" message).
-function parseMessages(body: unknown): ChatMessage[] | null {
-  const messages = (body as Partial<ChatRequest> | null)?.messages;
-  if (!Array.isArray(messages) || messages.length === 0) return null;
-  if (messages.length > MAX_MESSAGES) return null;
-
-  for (const m of messages) {
-    if (m?.role !== "user" && m?.role !== "assistant") return null;
-    if (typeof m.content !== "string" || m.content.trim() === "") return null;
-    if (m.content.length > MAX_CONTENT_LENGTH) return null;
+// The user already has the answer on screen, so a failed write is logged
+// rather than turned into an error event.
+async function saveAnswer(conversationId: string, answer: string, sources: SolutionRef[]) {
+  try {
+    await saveMessage(conversationId, "assistant", answer, sources.length > 0 ? { sources } : {});
+  } catch (err) {
+    console.error("[chat] failed to save assistant message", err);
   }
-  if (messages.at(-1)!.role !== "user") return null;
+}
 
-  return messages.map(({ role, content }) => ({ role, content }));
+// Returns null for anything that doesn't match ChatRequest.
+function parseRequest(body: unknown): ChatRequest | null {
+  const { conversationId, message } = (body ?? {}) as Partial<ChatRequest>;
+
+  if (typeof message !== "string" || message.trim() === "") return null;
+  if (message.length > MAX_CONTENT_LENGTH) return null;
+  if (conversationId !== undefined && !isConversationId(conversationId)) return null;
+
+  return { conversationId, message };
 }

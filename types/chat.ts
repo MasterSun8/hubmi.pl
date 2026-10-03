@@ -1,4 +1,5 @@
-// API contract for POST /api/chat, shared by backend and frontend.
+// API contract for POST /api/chat and GET /api/conversations/[id], shared by
+// backend and frontend.
 // Keep this file free of runtime code and server-only imports.
 
 export type ChatRole = "user" | "assistant";
@@ -8,11 +9,11 @@ export type ChatMessage = {
   content: string;
 };
 
+// History lives on the server: the client sends only the new user message.
 export type ChatRequest = {
-  // Stateless for now: the client sends the whole history on every request.
-  messages: ChatMessage[];
-  // Reserved for server-side history storage; ignored until then.
+  // Omit to start a new conversation; its id arrives in the `conversation` event.
   conversationId?: string;
+  message: string;
 };
 
 export type SolutionRef = {
@@ -22,9 +23,26 @@ export type SolutionRef = {
 };
 
 // The response is a Server-Sent Events stream; each `data:` line is one
-// JSON-encoded ChatEvent. The stream always ends with `done` or `error`.
+// JSON-encoded ChatEvent. The stream starts with `conversation` and always
+// ends with `done` or `error`.
 export type ChatEvent =
+  | { type: "conversation"; id: string }
   | { type: "delta"; text: string }
   | { type: "sources"; items: SolutionRef[] }
   | { type: "done" }
   | { type: "error"; message: string };
+
+export type StoredChatMessage = ChatMessage & {
+  id: string;
+  // Present on assistant messages that cited solutions.
+  sources?: SolutionRef[];
+  // ISO 8601.
+  createdAt: string;
+};
+
+// Response of GET /api/conversations/[id], used to restore a chat after reload.
+export type ConversationResponse = {
+  id: string;
+  status: "open" | "submitted" | "abandoned";
+  messages: StoredChatMessage[];
+};

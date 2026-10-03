@@ -1,0 +1,286 @@
+[
+  {
+    "departmentName": "Regionalny Ośrodek Polityki Społecznej w Krakowie",
+    "address": "ul. Piastowska 32, 30-070 Kraków",
+    "openingHours": [
+      {
+        "days": "poniedziałek - piątek",
+        "hours": "8:00 - 16:00"
+      }
+    ],
+    "phones": [
+      "SEKRETARIAT (+48 12) 422 06 36",
+      "(+48 12) 661 03 00",
+      "(+48 12) 626 13 73",
+      "(+48 12) 422 06 36 | w. 44"
+    ],
+    "email": "biuro@rops.krakow.pl",
+    "nip": "676-210-18-14",
+    "regon": "351612501",
+    "director": [
+      {
+        "name": "Wioletta Wilimska",
+        "email": "biuro@rops.krakow.pl",
+        "phones": [
+          "(+48 12) 422 06 36"
+        ],
+        "originalRaw": "Wioletta Wilimska tel.: (+48 12) 422 06 36 e-mail: biuro@rops.krakow.pl"
+      }
+    ],
+    "deputyDirector": [
+      {
+        "name": "Rafał Barański",
+        "email": "biuro@rops.krakow.pl",
+        "phones": [
+          "(+48 12) 422 06 36"
+        ],
+        "originalRaw": "I Zastępca Dyrektora Rafał Barański tel.:(+48 12) 422 06 36 e-mail: biuro@rops.krakow.pl"
+      },
+      {
+        "name": "Michał Góra",
+        "email": "biuro@rops.krakow.pl",
+        "phones": [
+          "(+48 12) 422 06 36"
+        ],
+        "originalRaw": "I Zastępca Dyrektora Michał Góra tel.: (+48 12) 422 06 36 e-mail: biuro@rops.krakow.pl"
+      }
+    ],
+    "dpo": [
+      {
+        "name": "Piotr Sokołowski",
+        "email": "iod@rops.krakow.pl",
+        "phones": [
+          "Inspektor Ochrony Danych Piotr Sokołowski e-mail: iod@rops.krakow.pl"
+        ],
+        "originalRaw": "Inspektor Ochrony Danych Piotr Sokołowski e-mail: iod@rops.krakow.pl"
+      },
+      {
+        "name": "Paweł Gątkiewicz",
+        "email": "iod@rops.krakow.pl",
+        "phones": [
+          "Z-ca Inspektora Ochrony Danych Paweł Gątkiewicz e-mail: iod@rops.krakow.pl"
+        ],
+        "originalRaw": "Z-ca Inspektora Ochrony Danych Paweł Gątkiewicz e-mail: iod@rops.krakow.pl"
+      }
+    ],
+    "accessibilityCoordinator": [
+      {
+        "name": "Roksana Mirek (SMS)",
+        "email": "rmirek@rops.krakow.pl",
+        "phones": [
+          "(+48 12) 422 06 36 | w. 45",
+          "(+48) 728 431 370"
+        ],
+        "originalRaw": "Roksana Mirek tel.: (+48 12) 422 06 36 | w. 45 (+48) 728 431 370 (SMS) e-mail: rmirek@rops.krakow.pl"
+      }
+    ],
+    "sourceUrl": "https://rops.krakow.pl/kontakt/regionalny-osrodek-polityki-spolecznej-w-krakowie"
+  },
+  {
+    "departmentName": "Małopolski Ośrodek Adopcyjny",
+    "address": "ul. Podhalańska 18, 33-300 Nowy Sącz",
+    "openingHours": [
+      {
+        "days": "poniedziałek-czwartek",
+        "hours": "7:00-16:00"
+      },
+      {
+        "days": "piątek",
+        "hours": "7:00-18:00"
+      }
+    ],
+    "phones": [
+      "SEKRETARIAT (+48 18) 262 28 53",
+      "(+48 18) 262 31 96",
+      "(+48 18) 262 28 53"
+    ],
+    "email": "moanowysacz@rops.krakow.pl",
+    "nip": "",
+    "regon": "",
+    "director": [],
+    "deputyDirector": [],
+    "dpo": [],
+    "accessibilityCoordinator": [],
+    "sourceUrl": "https://rops.krakow.pl/kontakt/malopolski-osrodek-adopcyjny"
+  },
+  {
+    "departmentName": "Dział Ekonomii Społecznej i Rozwoju Lokalnego",
+    "address": "ul. Piastowska 32",
+    "openingHours": [
+      {
+        "days": "poniedziałek - piątek",
+        "hours": "8:00 - 16:00"
+      }
+    ],
+    "phones": [
+      "(+48 12) 422 06 36 | w. 35",
+      "(+48 12) 422 06 36 | w. 44"
+    ],
+    "email": "biuro@rops.krakow.pl",
+    "nip": "",
+    "regon": "",
+    "director": [],
+    "deputyDirector": [],
+    "dpo": [],
+    "accessibilityCoordinator": [],
+    "sourceUrl": "https://rops.krakow.pl/kontakt/dzial-ekonomii-spolecznej-i-rozwoju-lokalnego"
+  },
+  {
+    "departmentName": "Dział Innowacji Społecznych",
+    "address": "ul. Piastowska 32, 30-070 Kraków",
+    "openingHours": [
+      {
+        "days": "poniedziałek - piątek",
+        "hours": "8:00 - 16:00"
+      }
+    ],
+    "phones": [
+      "(+48 12) 422 06 36 | w. 34",
+      "(+48 12) 422 06 36 | w. 27",
+      "(+48) 606 628 470",
+      "(+48 12) 422 06 36 | w. 44"
+    ],
+    "email": "iws@rops.krakow.pl",
+    "nip": "",
+    "regon": "",
+    "director": [],
+    "deputyDirector": [],
+    "dpo": [],
+    "accessibilityCoordinator": [],
+    "sourceUrl": "https://rops.krakow.pl/kontakt/dzial-innowacji-spolecznych"
+  },
+  {
+    "departmentName": "Dział Małopolska Niania",
+    "address": "Piastowska 32, 30-070 Kraków",
+    "openingHours": [
+      {
+        "days": "poniedziałek - piątek",
+        "hours": "08:00-16:00"
+      }
+    ],
+    "phones": [
+      "(+48 12) 422 06 36 | w. 23",
+      "(+48) 698 897 002",
+      "(+48) 728 431 384",
+      "(+48 12) 422 06 36 | w. 44"
+    ],
+    "email": "niania@rops.krakow.pl",
+    "nip": "",
+    "regon": "",
+    "director": [],
+    "deputyDirector": [],
+    "dpo": [],
+    "accessibilityCoordinator": [],
+    "sourceUrl": "https://rops.krakow.pl/kontakt/dzial-malopolska-niania"
+  },
+  {
+    "departmentName": "Dział Polityki Społecznej",
+    "address": "ul. Piastowska 32, 30-070 Kraków",
+    "openingHours": [
+      {
+        "days": "poniedziałek - piątek",
+        "hours": "8:00 - 16:00"
+      }
+    ],
+    "phones": [
+      "(+48 12) 422 06 36 | w. 21",
+      "(+48 12) 422 06 36 | w. 49",
+      "(+48 12) 422 06 36 | w. 44"
+    ],
+    "email": "biuro@rops.krakow.pl",
+    "nip": "",
+    "regon": "",
+    "director": [],
+    "deputyDirector": [],
+    "dpo": [],
+    "accessibilityCoordinator": [],
+    "sourceUrl": "https://rops.krakow.pl/kontakt/dzial-polityki-spolecznej"
+  },
+  {
+    "departmentName": "Dział Doskonalenia Kadr",
+    "address": "ul. Przybyszewskiego 56, 30-128 Kraków",
+    "openingHours": [
+      {
+        "days": "poniedziałek - piątek",
+        "hours": "8:00 - 16:00"
+      }
+    ],
+    "phones": [
+      "(+48) 12 213 38 54",
+      "(+48) 12 213 36 98",
+      "(+48) 12 213 36 99"
+    ],
+    "email": "szkolenia@rops.krakow.pl",
+    "nip": "",
+    "regon": "",
+    "director": [],
+    "deputyDirector": [],
+    "dpo": [],
+    "accessibilityCoordinator": [],
+    "sourceUrl": "https://rops.krakow.pl/kontakt/dzial-doskonalenia-kadr"
+  },
+  {
+    "departmentName": "Dział Badań i Analiz",
+    "address": "ul. Piastowska 32, 30-070 Kraków",
+    "openingHours": [
+      {
+        "days": "poniedziałek - piątek",
+        "hours": "8:00 - 16:00"
+      }
+    ],
+    "phones": [
+      "(+48 12) 422 06 36 | w. 40"
+    ],
+    "email": "biuro@rops.krakow.pl",
+    "nip": "",
+    "regon": "",
+    "director": [],
+    "deputyDirector": [],
+    "dpo": [],
+    "accessibilityCoordinator": [],
+    "sourceUrl": "https://rops.krakow.pl/kontakt/dzial-badan-i-analiz"
+  },
+  {
+    "departmentName": "Dział Poradnictwa Rodzinnego",
+    "address": "ul. Przybyszewskiego 56, 30-128 Kraków",
+    "openingHours": [
+      {
+        "days": "poniedziałek - piątek",
+        "hours": "8:00 - 16:00"
+      }
+    ],
+    "phones": [
+      "(+48) 12 213 36 97",
+      "(+48) 728 431 377"
+    ],
+    "email": "rodzina@rops.krakow.pl",
+    "nip": "",
+    "regon": "",
+    "director": [],
+    "deputyDirector": [],
+    "dpo": [],
+    "accessibilityCoordinator": [],
+    "sourceUrl": "https://rops.krakow.pl/kontakt/dzial-poradnictwa-rodzinnego"
+  },
+  {
+    "departmentName": "Dział Rozwoju Centrów Usług Społecznych",
+    "address": "ul. Piastowska, 32",
+    "openingHours": [
+      {
+        "days": "poniedziałek - piątek",
+        "hours": "8:00 - 16:00"
+      }
+    ],
+    "phones": [
+      "(+48 12) 422 06 36 | w. 38"
+    ],
+    "email": "biuro@rops.krakow.pl",
+    "nip": "",
+    "regon": "",
+    "director": [],
+    "deputyDirector": [],
+    "dpo": [],
+    "accessibilityCoordinator": [],
+    "sourceUrl": "https://rops.krakow.pl/kontakt/dzial-rozwoju-centrow-uslug-spolecznych"
+  }
+]

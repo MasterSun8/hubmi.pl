@@ -43,3 +43,6 @@ next-env.d.ts
 
 # scrapped data
 app/data/obserwator/*
+# this project uses pnpm; keep other package managers' lockfiles out
+package-lock.json
+yarn.lock

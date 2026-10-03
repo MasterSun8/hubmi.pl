@@ -28,8 +28,7 @@ function colorFor(indicator: Indicator, value: number | null | undefined) {
 const cities = ["powiat m. Kraków", "powiat m. Tarnów", "powiat m. Nowy Sącz"];
 
 export function CountyMap() {
-  const { selected, status, hoveredRegion, setHoveredRegion, layer } = useIndicators();
-  const heatmap = layer === "heatmap" && selected !== null;
+  const { selected, status, hoveredRegion, setHoveredRegion } = useIndicators();
 
   return (
     <svg
@@ -48,9 +47,9 @@ export function CountyMap() {
             d={county.path}
             tabIndex={0}
             aria-label={`${county.name}: ${formatValue(value)}`}
-            style={{ fill: heatmap && selected ? colorFor(selected, value) : "var(--color-surface)" }}
-            className={`cursor-pointer stroke-ink/60 transition-[fill,stroke-width] duration-300 outline-none focus-visible:stroke-ink ${
-              hovered ? "stroke-ink stroke-2" : "stroke-1"
+            style={{ fill: selected ? colorFor(selected, value) : "var(--color-surface)" }}
+            className={`cursor-pointer stroke-1 transition-[fill,stroke] duration-300 outline-none focus-visible:stroke-ink ${
+              hovered ? "stroke-ink" : "stroke-ink/60"
             }`}
             strokeLinejoin="round"
             onMouseEnter={() => setHoveredRegion(county.name)}
@@ -73,29 +72,5 @@ export function CountyMap() {
           </g>
         ))}
     </svg>
-  );
-}
-
-export function LayerToggle() {
-  const { layer, setLayer } = useIndicators();
-  const option = (value: "outline" | "heatmap", label: string) => (
-    <button
-      type="button"
-      aria-pressed={layer === value}
-      onClick={() => setLayer(value)}
-      className="border-0 bg-transparent p-0 text-caption font-medium tracking-label-sm text-primary uppercase aria-pressed:text-ink aria-pressed:underline aria-pressed:underline-offset-4"
-    >
-      {label}
-    </button>
-  );
-
-  return (
-    <div className="flex items-center gap-2.5" role="group" aria-label="Warstwa mapy">
-      {option("outline", "Sam kontur")}
-      <span className="text-caption text-primary" aria-hidden="true">
-        /
-      </span>
-      {option("heatmap", "Heatmapa")}
-    </div>
   );
 }

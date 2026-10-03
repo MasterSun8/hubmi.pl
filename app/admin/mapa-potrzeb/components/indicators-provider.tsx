@@ -32,8 +32,6 @@ type IndicatorsState = {
   select: (name: string) => void;
   hoveredRegion: string | null;
   setHoveredRegion: (region: string | null) => void;
-  layer: "heatmap" | "outline";
-  setLayer: (layer: "heatmap" | "outline") => void;
 };
 
 const IndicatorsContext = createContext<IndicatorsState | null>(null);
@@ -76,7 +74,6 @@ export function IndicatorsProvider({ children }: { children: ReactNode }) {
   const [indicators, setIndicators] = useState<Indicator[]>([]);
   const [selectedName, setSelectedName] = useState<string | null>(null);
   const [hoveredRegion, setHoveredRegion] = useState<string | null>(null);
-  const [layer, setLayer] = useState<IndicatorsState["layer"]>("heatmap");
 
   useEffect(() => {
     const controller = new AbortController();
@@ -112,8 +109,6 @@ export function IndicatorsProvider({ children }: { children: ReactNode }) {
         select: setSelectedName,
         hoveredRegion,
         setHoveredRegion,
-        layer,
-        setLayer,
       }}
     >
       {children}

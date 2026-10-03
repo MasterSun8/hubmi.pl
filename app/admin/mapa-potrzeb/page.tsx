@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { CountyMap, LayerToggle } from "./components/county-map";
+import { CountyMap } from "./components/county-map";
 import { IndicatorMeta } from "./components/indicator-meta";
 import { IndicatorSearch } from "./components/indicator-search";
 import { IndicatorSummary } from "./components/indicator-summary";
@@ -25,14 +25,11 @@ export default function NeedsMapPage() {
         <IndicatorSearch />
         <IndicatorMeta />
 
-        <div className="grid grid-cols-[minmax(0,860px)_minmax(300px,400px)] items-center gap-7.5 max-xl:grid-cols-1">
+        <div className="grid grid-cols-[minmax(0,860px)_minmax(300px,400px)] items-start gap-7.5 max-xl:grid-cols-1">
           <figure className="m-0 flex flex-col gap-2.5">
             <CountyMap />
-            <figcaption className="flex flex-wrap items-center justify-between gap-x-7.5 gap-y-2.5">
-              <span className="text-caption">
-                Granice powiatów: polska-geojson (GUGiK PRG) · dane: Obserwatorium ROPS Kraków
-              </span>
-              <LayerToggle />
+            <figcaption className="text-caption">
+              Granice powiatów: polska-geojson (GUGiK PRG) · dane: Obserwatorium ROPS Kraków
             </figcaption>
           </figure>
           <aside aria-label="Analiza wybranego wskaźnika">

@@ -7,7 +7,7 @@ export function SubmissionsSearch() {
   const { query, setQuery } = useSubmissions();
 
   return (
-    <label className="flex min-h-10.5 items-center gap-5 rounded-input border border-line px-5 transition-colors focus-within:border-primary">
+    <label className="flex min-h-10.5 items-center gap-5 rounded-input border border-field px-5 transition-colors focus-within:border-primary">
       <span className="sr-only">Szukaj zgłoszeń</span>
       <svg viewBox="0 0 16 16" fill="none" className="size-4 flex-none" aria-hidden="true">
         <circle cx="7" cy="7" r="5.25" stroke="currentColor" strokeWidth="1.5" />

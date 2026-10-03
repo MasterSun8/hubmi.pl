@@ -16,11 +16,15 @@
   --color-background: #f5f5f5;
   --color-surface: #fefefe;
   --color-ink: #1c1c1c;
+  /* Decorative dividers only; WCAG does not require contrast for them. */
   --color-line: #9a9a9a;
-  --color-muted: #9a9a9a;
+  /* Borders of form fields: at least 3:1 against the page (WCAG 1.4.11). */
+  --color-field: #858585;
+  /* Secondary text: at least 4.5:1 on background and surface (WCAG 1.4.3). */
+  --color-muted: #6b6b6b;
   --color-success: #9dbf4f;
   --color-warning: #edc033;
-  --color-error: #f05a56;
+  --color-error: #c8322f;
   --color-overlay: rgb(255 255 255 / 50%);
 
   /* Every size is multiplied by --text-scale (A / A+ / A++). */
@@ -104,6 +108,7 @@
   --color-surface: #000000;
   --color-ink: #ffff00;
   --color-line: #ffff00;
+  --color-field: #ffff00;
   --color-muted: #ffff00;
   --color-overlay: rgb(0 0 0 / 70%);
   --shadow-dialog: none;

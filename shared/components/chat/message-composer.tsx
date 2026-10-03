@@ -40,7 +40,7 @@ export function MessageComposer({ placeholder, hint, autoFocus }: MessageCompose
       <div className="flex items-center gap-5">
         <textarea
           id={fieldId}
-          className="field-sizing-content max-h-65 min-h-22.5 flex-1 resize-none rounded-input border border-line bg-transparent p-5 text-ink transition-colors placeholder:text-muted focus:border-primary focus:outline-none"
+          className="field-sizing-content max-h-65 min-h-22.5 flex-1 resize-none rounded-input border border-field bg-transparent p-5 text-ink transition-colors placeholder:text-muted focus:border-primary focus:outline-none"
           value={text}
           placeholder={placeholder}
           rows={2}

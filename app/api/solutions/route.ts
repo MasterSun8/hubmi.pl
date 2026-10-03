@@ -1,31 +1,11 @@
 import { NextResponse } from "next/server";
-import { getDb } from "@/server/db/client";
-import { solutions } from "@/server/db/schema";
+import { listSolutions } from "@/lib/server/solutions";
 
-export async function GET(request: Request) {
+// All innovations with the fields the library needs, plus `matchedSubmissions`:
+// how many submissions have the innovation among their closest matches.
+export async function GET() {
   try {
-    const db = getDb();
-    
-    // Zwracamy tylko określone ("relevant") kolumny
-    const data = await db
-      .select({
-        title: solutions.title,
-        description: solutions.description,
-        targetGroups: solutions.targetGroups,
-        authorName: solutions.authorName,
-        organization: solutions.organization,
-        sourceName: solutions.sourceName,
-        sourceUrl: solutions.sourceUrl,
-        externalId: solutions.externalId,
-        contactUrl: solutions.contactUrl,
-        status: solutions.status,
-        searchText: solutions.searchText,
-        authors: solutions.authors,
-        materialsUrls: solutions.materialsUrls,
-        videoUrls: solutions.videoUrls,
-        termsOfUseUrl: solutions.termsOfUseUrl,
-      })
-      .from(solutions);
+    const data = await listSolutions();
 
     return NextResponse.json({
       success: true,

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ContactDetails } from "./components/contact-details";
 import { ConversationHistory } from "./components/conversation-history";
 import { LocationMap } from "./components/location-map";
+import { MatchingSolutions } from "./components/matching-solutions";
 import { SubmissionDetailsProvider, WhenLoaded } from "./components/submission-details-provider";
 import { SubmissionHeader } from "./components/submission-header";
 import { SubmissionSummary } from "./components/submission-summary";
@@ -27,6 +28,7 @@ export default async function SubmissionDetailsPage({ params }: PageProps<"/admi
           <div className="mt-5 grid grid-cols-[minmax(0,1fr)_430px] items-start gap-x-15 gap-y-10 max-xl:grid-cols-1">
             <div className="flex flex-col gap-7.5">
               <SubmissionSummary />
+              <MatchingSolutions />
               <section className="flex flex-col gap-5" aria-label="Historia rozmowy">
                 <ConversationHistory />
               </section>

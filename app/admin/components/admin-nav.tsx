@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 const items = [
   { label: "Mapa potrzeb", href: "/admin/mapa-potrzeb" },
   { label: "Zgłoszenia", href: "/admin/zgloszenia" },
-  { label: "Inicjatywy" },
+  { label: "Inicjatywy", href: "/admin/inicjatywy" },
   { label: "Baza wiedzy" },
   { label: "Ustawienia" },
 ] as const;

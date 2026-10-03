@@ -88,6 +88,24 @@ export async function createSubmission(input: CreateSubmissionInput) {
   });
 }
 
+export const updateSubmissionStatusSchema = z
+  .object({
+    status: z.enum(["new", "in_review", "in_progress", "resolved", "rejected"]),
+  })
+  .strict();
+
+export type UpdateSubmissionStatusInput = z.infer<typeof updateSubmissionStatusSchema>;
+
+// Returns the updated row, or null when no submission has this id.
+export async function updateSubmissionStatus(id: string, { status }: UpdateSubmissionStatusInput) {
+  const [submission] = await getDb()
+    .update(submissions)
+    .set({ status, updatedAt: new Date() })
+    .where(eq(submissions.id, id))
+    .returning({ id: submissions.id, status: submissions.status, updatedAt: submissions.updatedAt });
+  return submission ?? null;
+}
+
 export async function getSubmission(id: string) {
   const [submission] = await getDb()
     .select()

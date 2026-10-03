@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { AccessibilityBar } from "@/app/components/accessibility-bar";
+import { AccessibilityBar } from "@/shared/components/accessibility-bar";
 import { SiteHeader } from "@/shared/components/site-header";
 import { ArrowButton } from "@/shared/components/arrow-button";
 import * as motion from "motion/react-client";

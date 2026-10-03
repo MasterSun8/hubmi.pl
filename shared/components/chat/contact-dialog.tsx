@@ -30,7 +30,8 @@ function validate({ location, email, phone }: ContactDetails): Errors {
 }
 
 export function ContactDialog() {
-  const { dialogOpen: open, sent, closeDialog: onClose, markSent, submissionDraft } = useChat();
+  const { dialogOpen: open, sent, closeDialog: onClose, markSent, submissionDraft, startNew, newConversationLabel } =
+    useChat();
   const [submitting, setSubmitting] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [errors, setErrors] = useState<Errors>({});
@@ -110,6 +111,9 @@ export function ContactDialog() {
               Dziękujemy. Rozmowa i dane kontaktowe trafiły do systemu. Odezwiemy się, gdy zgłoszenie zostanie
               przejrzane.
             </p>
+            <div className="pt-2.5">
+              <ArrowButton onClick={startNew}>{newConversationLabel}</ArrowButton>
+            </div>
             <Link className={backClass} href="/">
               Wróć na stronę główną
             </Link>

@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { motion } from "motion/react";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
+import { createSubmission } from "@/lib/chat/chat-client";
 import { ArrowButton } from "@/shared/components/arrow-button";
 import { useChat } from "./chat-provider";
 
-export type ContactDetails = { email: string; phone: string };
+export type ContactDetails = { location: string; email: string; phone: string };
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const phonePattern = /^\+?[\d\s-]{9,15}$/;
@@ -17,10 +18,11 @@ const inputClass =
 const errorClass = "-mt-2.5 text-caption leading-6.5 text-error";
 const backClass = "cursor-pointer border-0 bg-transparent p-0 text-caption font-medium tracking-label-sm text-ink uppercase no-underline";
 
-type Errors = Partial<Record<keyof ContactDetails | "form", string>>;
+type Errors = Partial<Record<keyof ContactDetails | "form" | "submit", string>>;
 
-function validate({ email, phone }: ContactDetails): Errors {
+function validate({ location, email, phone }: ContactDetails): Errors {
   const errors: Errors = {};
+  if (!location) errors.location = "Podaj miejscowość lub gminę.";
   if (!email && !phone) errors.form = "Podaj e-mail lub numer telefonu.";
   if (email && !emailPattern.test(email)) errors.email = "Sprawdź adres e-mail, np. anna@example.com.";
   if (phone && !phonePattern.test(phone)) errors.phone = "Sprawdź numer telefonu, np. 600 123 456.";
@@ -28,13 +30,15 @@ function validate({ email, phone }: ContactDetails): Errors {
 }
 
 export function ContactDialog() {
-  const { dialogOpen: open, sent, closeDialog: onClose, markSent } = useChat();
+  const { dialogOpen: open, sent, closeDialog: onClose, markSent, submissionDraft } = useChat();
+  const [submitting, setSubmitting] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const [errors, setErrors] = useState<Errors>({});
   const titleId = useId();
   const formErrorId = useId();
   const emailErrorId = useId();
   const phoneErrorId = useId();
+  const locationErrorId = useId();
 
   // The native dialog gives focus trapping, Esc to close and an inert page behind it.
   useEffect(() => {
@@ -44,17 +48,33 @@ export function ContactDialog() {
     if (!open && dialog.open) dialog.close();
   }, [open]);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const contact = {
+      location: String(data.get("location") ?? "").trim(),
       email: String(data.get("email") ?? "").trim(),
       phone: String(data.get("phone") ?? "").trim(),
     };
     const nextErrors = validate(contact);
     setErrors(nextErrors);
-    // No endpoint yet: the contact details stay in the browser until the API exists.
-    if (Object.keys(nextErrors).length === 0) markSent();
+    if (Object.keys(nextErrors).length > 0) return;
+
+    const draft = submissionDraft();
+    if (!draft) {
+      setErrors({ submit: "Najpierw napisz coś asystentowi, żeby było co przekazać." });
+      return;
+    }
+
+    setSubmitting(true);
+    const failure = await createSubmission({
+      ...draft,
+      location: contact.location,
+      submitter: { email: contact.email || undefined, phone: contact.phone || undefined },
+    });
+    setSubmitting(false);
+    if (failure) setErrors({ submit: failure });
+    else markSent();
   }
 
   return (
@@ -97,7 +117,7 @@ export function ContactDialog() {
         ) : (
           <form className={bodyClass} noValidate onSubmit={handleSubmit}>
             <p id={formErrorId}>
-              Podaj e-mail lub numer telefonu. Możesz podać oba.
+              Podaj miejscowość oraz e-mail lub numer telefonu.
               <br />
               Potrzebujemy przynajmniej jednego sposobu kontaktu.
             </p>
@@ -106,6 +126,27 @@ export function ContactDialog() {
                 {errors.form}
               </p>
             )}
+
+            <div className="flex flex-col gap-5 self-stretch">
+              <label className="text-caption font-medium tracking-label-sm uppercase" htmlFor={`${titleId}-location`}>
+                Miejscowość lub gmina
+              </label>
+              <input
+                id={`${titleId}-location`}
+                className={inputClass}
+                name="location"
+                autoComplete="address-level2"
+                placeholder="np. Słomniki"
+                required
+                aria-invalid={Boolean(errors.location)}
+                aria-describedby={errors.location ? locationErrorId : undefined}
+              />
+              {errors.location && (
+                <p id={locationErrorId} className={errorClass}>
+                  {errors.location}
+                </p>
+              )}
+            </div>
 
             <div className="flex flex-col gap-5 self-stretch">
               <label className="text-caption font-medium tracking-label-sm uppercase" htmlFor={`${titleId}-email`}>
@@ -156,8 +197,15 @@ export function ContactDialog() {
               <br />
               Zgłoszenie trafi do systemu do dalszej obsługi.
             </p>
+            {errors.submit && (
+              <p className="text-caption text-error" role="alert">
+                {errors.submit}
+              </p>
+            )}
             <div className="pt-2.5">
-              <ArrowButton type="submit">Wyślij zgłoszenie</ArrowButton>
+              <ArrowButton type="submit" disabled={submitting}>
+                {submitting ? "Wysyłanie…" : "Wyślij zgłoszenie"}
+              </ArrowButton>
             </div>
             <button type="button" className={backClass} onClick={onClose}>
               Wróć do rozmowy

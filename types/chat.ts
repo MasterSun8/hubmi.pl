@@ -9,11 +9,16 @@ export type ChatMessage = {
   content: string;
 };
 
+// Which path the user picked: "help" = Zgłoś problem, "idea" = Zaoferuj pomoc.
+export type ChatFlow = "help" | "idea";
+
 // History lives on the server: the client sends only the new user message.
 export type ChatRequest = {
   // Omit to start a new conversation; its id arrives in the `conversation` event.
   conversationId?: string;
   message: string;
+  // Stored on the conversation when it is created; ignored for an existing one.
+  flow?: ChatFlow;
 };
 
 export type SolutionRef = {

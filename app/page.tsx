@@ -30,8 +30,8 @@ export default function Home() {
         <div className="flex flex-wrap items-center justify-end gap-x-7.5 gap-y-2.5 max-sm:justify-start">
           <p className="text-caption font-medium tracking-label-sm uppercase">Innowacje społeczne dla Małopolski</p>
           {/* Demo shortcut to the institution panel. */}
-          <Link className="text-caption font-medium tracking-label-sm text-primary uppercase no-underline" href="/admin">
-            Panel instytucji →
+          <Link className="text-body font-medium tracking-label text-primary uppercase no-underline" href="/admin">
+            Kliknij tu aby wejść w admin panel
           </Link>
         </div>
       </SiteHeader>

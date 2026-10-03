@@ -1,0 +1,18 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-medium);
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--color-primary);
+  font: inherit;
+  font-weight: var(--weight-label);
+  line-height: var(--text-cta-line);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  transition: color var(--duration-button) ease-out;
+}
+.button:disabled { cursor: not-allowed; }
+.icon { width: var(--cta-width); height: var(--cta-height); flex: none; }
+@media (prefers-reduced-motion: reduce) { .button { transition: none; } }

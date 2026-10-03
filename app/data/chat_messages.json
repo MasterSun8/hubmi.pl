@@ -1,0 +1,272 @@
+[
+    {
+        "id": "seed-conv-001",
+        "flowType": "szukam_pomocy",
+        "scenario": "znaleziono_rozwiazanie",
+        "userData": {
+            "location": "Gmina Słomniki",
+            "age": 42,
+            "email": "anna.nowak@swietlica.slomniki.pl",
+            "phone": "500123456"
+        },
+        "messages": [
+            {
+                "role": "user",
+                "content": "Cześć, pracuję w wiejskiej świetlicy. Mamy problem z seniorami, którzy czują się bardzo samotni i rzadko wychodzą z domów. Brakuje nam sprawdzonych narzędzi, żeby ich zintegrować.",
+                "createdAt": "2026-10-03T10:00:00Z"
+            },
+            {
+                "role": "bot",
+                "content": "Rozumiem sytuację. Samotność i izolacja wśród osób starszych to częste wyzwanie. W naszej Bazie Innowacji Społecznych znajduje się przetestowane rozwiązanie: **\"Kawiarenka dla Seniora - model aktywizacji w małych społecznościach\"**. To gotowy scenariusz prowadzenia regularnych spotkań, niewymagający dużego budżetu.\n\n🔗 [Link do karty rozwiązania: Kawiarenka dla Seniora]\n\nCzy chcesz przejrzeć szczegóły tej innowacji, czy wolisz od razu skontaktować się z jej autorem?",
+                "createdAt": "2026-10-03T10:00:05Z"
+            },
+            {
+                "role": "user",
+                "content": "Brzmi ciekawie. Pokaż mi szczegóły.",
+                "createdAt": "2026-10-03T10:01:10Z"
+            },
+            {
+                "role": "bot",
+                "content": "Karta innowacji \"Kawiarenka dla Seniora\" zakłada cykliczne spotkania organizowane przy wsparciu lokalnych wolontariuszy. Oprócz opisu, na stronie znajdziesz też podręcznik wdrożeniowy PDF. Jeśli zdecydujecie się na realizację, mogę pomóc ułożyć wstępny plan działania dostosowany do Waszego zespołu.",
+                "createdAt": "2026-10-03T10:01:15Z"
+            }
+        ]
+    },
+    {
+        "id": "seed-conv-002",
+        "flowType": "szukam_pomocy",
+        "scenario": "brak_rozwiazania_fallback",
+        "userData": {
+            "location": "Miechów",
+            "age": 55,
+            "email": null,
+            "phone": "600987654"
+        },
+        "messages": [
+            {
+                "role": "user",
+                "content": "Cześć, jestem w kryzysie bezdomności, poruszam się na wózku inwalidzkim. Szukam schroniska w małej gminie, które jest dostosowane architektonicznie do moich potrzeb. Pomożesz mi?",
+                "createdAt": "2026-10-03T10:15:00Z"
+            },
+            {
+                "role": "bot",
+                "content": "Przykro mi z powodu trudności, w jakich się znalazłeś. Przeszukałem naszą bazę innowacji, ale obecnie nie dysponujemy gotowym projektem, który bezpośrednio rozwiązuje problem braku dostosowanych architektonicznie schronisk w małych gminach.\n\nProponuję Ci dwie ścieżki:\n1. Bezpośredni kontakt z ekspertem z Działu Innowacji Społecznych, który może znać niestandardowe formy wsparcia w regionie: 📞 12 123 45 67, ✉️ innowacje@rops.krakow.pl.\n2. Jeśli widzisz sposób, w jaki można by ten problem systemowo rozwiązać, możemy przejść do panelu „Zgłoś pomysł” i zapisać tę potrzebę dla przyszłych działań ROPS.",
+                "createdAt": "2026-10-03T10:15:08Z"
+            }
+        ]
+    },
+    {
+        "id": "seed-conv-003",
+        "flowType": "mam_pomysl",
+        "scenario": "znaleziono_grant",
+        "userData": {
+            "location": "Nowy Targ",
+            "age": 38,
+            "email": "jan.kowalski@mobilnarehab.pl",
+            "phone": null
+        },
+        "messages": [
+            {
+                "role": "user",
+                "content": "Chciałbym założyć mobilną wypożyczalnię sprzętu rehabilitacyjnego dla małych wsi, gdzie nie dociera transport publiczny i ludzie nie mają jak odebrać kul czy wózków.",
+                "createdAt": "2026-10-03T11:00:00Z"
+            },
+            {
+                "role": "bot",
+                "content": "To bardzo potrzebna inicjatywa, która odpowiada na wykluczenie transportowe i problemy opiekuńcze. Świetnie się składa – obecnie trwa nabór w programie grantowym **\"Inkubator Dostępności 2.0\"**, który idealnie wpisuje się w ten temat. Możesz uzyskać do 50 000 zł na przetestowanie tego rozwiązania.\n\nCzy chcesz, abym pomógł Ci rozpisać Twój pomysł na fiszkę projektową, która ułatwi Ci złożenie wniosku?",
+                "createdAt": "2026-10-03T11:00:06Z"
+            },
+            {
+                "role": "user",
+                "content": "Tak, chętnie. Od czego zacząć?",
+                "createdAt": "2026-10-03T11:02:00Z"
+            },
+            {
+                "role": "bot",
+                "content": "Znakomicie. Zacznijmy od grupy docelowej. Kto dokładnie miałby wypożyczać ten sprzęt – sami seniorzy i osoby z niepełnosprawnościami, czy raczej ich opiekunowie?",
+                "createdAt": "2026-10-03T11:02:05Z"
+            }
+        ]
+    },
+    {
+        "id": "seed-conv-004",
+        "flowType": "mam_pomysl",
+        "scenario": "brak_grantu_fallback",
+        "userData": {
+            "location": "Kraków",
+            "age": 24,
+            "email": "krzysztof.vr@startup.pl",
+            "phone": "700111222"
+        },
+        "messages": [
+            {
+                "role": "user",
+                "content": "Cześć. Mam pomysł na stworzenie gry na gogle VR, która będzie pomagać nastolatkom z domów dziecka oswajać się z rynkiem pracy i rozmowami rekrutacyjnymi.",
+                "createdAt": "2026-10-03T11:30:00Z"
+            },
+            {
+                "role": "bot",
+                "content": "Wykorzystanie wirtualnej rzeczywistości w aktywizacji zawodowej młodzieży to bardzo innowacyjne podejście. Przeanalizowałem nasze aktualne konkursy, jednak w tej chwili nie mamy aktywnych programów grantowych wspierających tworzenie drogich rozwiązań technologicznych VR.\n\nProponuję zapisać Twój pomysł w naszej bazie – dzięki temu wrócimy do niego, gdy uruchomimy nabór w obszarze nowych technologii. Dodatkowo, jeśli chcesz skonsultować potencjał tego rozwiązania z naszym zespołem, zachęcam do kontaktu z Działem Innowacji Społecznych: ✉️ innowacje@rops.krakow.pl. \n\nPrzechodzimy do zapisania pomysłu?",
+                "createdAt": "2026-10-03T11:30:10Z"
+            }
+        ]
+    },
+    {
+        "id": "seed-conv-005",
+        "flowType": "szukam_pomocy",
+        "scenario": "znaleziono_rozwiazanie",
+        "userData": {
+            "location": "Kraków",
+            "age": 28,
+            "email": "kontakt@fundacjajutro.pl",
+            "phone": "555444333"
+        },
+        "messages": [
+            {
+                "role": "user",
+                "content": "Dzień dobry, prowadzimy fundację wspierającą młodzież opuszczającą domy dziecka. Szukamy sprawdzonych modeli, jak uczyć ich zarządzania własnym budżetem. Niestety nasze dotychczasowe szkolenia są dla nich zbyt nudne.",
+                "createdAt": "2026-10-04T09:00:00Z"
+            },
+            {
+                "role": "bot",
+                "content": "Dzień dobry! Zgadzam się, tradycyjne szkolenia mogą nie trafiać do młodzieży. W naszej bazie znajduje się innowacja **\"Gra symulacyjna: Życie na swoim\"**. To interaktywna gra planszowa, w której młodzi dorośli mogą bezpiecznie uczyć się planowania wydatków domowych w warunkach zbliżonych do realnych.\n\n🔗 [Link do karty rozwiązania: Gra symulacyjna: Życie na swoim]\n\nCzy chcecie pobrać darmowe materiały do samodzielnego druku tej gry, czy wolicie umówić się na spotkanie z autorem innowacji?",
+                "createdAt": "2026-10-04T09:00:10Z"
+            },
+            {
+                "role": "user",
+                "content": "Pobierzemy materiały. Super, dzięki!",
+                "createdAt": "2026-10-04T09:01:25Z"
+            },
+            {
+                "role": "bot",
+                "content": "Cieszę się, że mogłem pomóc! Pliki są dostępne w karcie innowacji na samym dole strony. W razie pytań przy wdrażaniu, służymy pomocą.",
+                "createdAt": "2026-10-04T09:01:30Z"
+            }
+        ]
+    },
+    {
+        "id": "seed-conv-006",
+        "flowType": "szukam_pomocy",
+        "scenario": "brak_rozwiazania_fallback",
+        "userData": {
+            "location": "Tarnów",
+            "age": 35,
+            "email": "janina@gmail.com",
+            "phone": null
+        },
+        "messages": [
+            {
+                "role": "user",
+                "content": "Witaj. Szukam rozwiązania dla mojego niesłyszącego syna (16 lat), żeby pomóc mu w nauce skomplikowanego słownictwa prawniczego. W jego szkole zawodowej ma z tym ogromny problem.",
+                "createdAt": "2026-10-04T12:20:00Z"
+            },
+            {
+                "role": "bot",
+                "content": "Witaj. Przeskanowałem naszą bazę innowacji pod kątem edukacji dla osób niesłyszących, jednak w tej chwili nie dysponujemy gotowym, specyficznym rozwiązaniem dotyczącym nauki słownictwa prawniczego w języku migowym.\n\nMam jednak dwie propozycje:\n1. Skontaktuj się bezpośrednio z naszym Działem Innowacji Społecznych: 📞 12 123 45 67, ✉️ innowacje@rops.krakow.pl. Mają rozbudowaną sieć kontaktów i być może podpowiedzą inną instytucję.\n2. Jeśli masz pomysł na to, jak taki program mógłby wyglądać, możesz przejść do panelu „Zgłoś pomysł”. Wspólnie możemy poszukać finansowania na stworzenie takiej innowacji.\n\nCzy chcesz przejść do panelu pomysłów?",
+                "createdAt": "2026-10-04T12:20:12Z"
+            }
+        ]
+    },
+    {
+        "id": "seed-conv-007",
+        "flowType": "mam_pomysl",
+        "scenario": "znaleziono_grant",
+        "userData": {
+            "location": "Stary Sącz",
+            "age": 41,
+            "email": "mariusz.budowa@op.pl",
+            "phone": "888777666"
+        },
+        "messages": [
+            {
+                "role": "user",
+                "content": "Mamy z sąsiadami pomysł. Chcielibyśmy zamienić stary pustostan na warsztat naprawczy, w którym będziemy naprawiać stare sprzęty i uczyć tego fachu młodych ze świetlicy środowiskowej.",
+                "createdAt": "2026-10-05T14:15:00Z"
+            },
+            {
+                "role": "bot",
+                "content": "To świetny pomysł! Łączy w sobie edukację międzypokoleniową, ekologię (zero waste) i aktywizację młodzieży. W ramach Małopolskiego Ośrodka Polityki Społecznej realizujemy program grantowy **\"Małopolski Inkubator Innowacji Społecznych\"**, który przewiduje mikrogranty (do 40 000 zł) dokładnie na takie testowe inicjatywy!\n\nCzy chciałbyś abym wygenerował dla Was szkic fiszki projektowej, którą możecie złożyć w najbliższym naborze?",
+                "createdAt": "2026-10-05T14:15:07Z"
+            },
+            {
+                "role": "user",
+                "content": "Jasne, brzmi super. Tylko czy musimy zakładać stowarzyszenie?",
+                "createdAt": "2026-10-05T14:18:00Z"
+            },
+            {
+                "role": "bot",
+                "content": "Nie musicie! W ramach tego inkubatora możecie aplikować jako tzw. grupa nieformalna (np. 3 osoby fizyczne). Będzie Wam potrzebny jedynie patronat innej fundacji lub po prostu umowa z ROPS. Przejdźmy zatem do krótkiego formularza - potrzebuję informacji, do jakiej konkretnie grupy młodzieży chcielibyście skierować to działanie?",
+                "createdAt": "2026-10-05T14:18:10Z"
+            }
+        ]
+    },
+    {
+        "id": "seed-conv-008",
+        "flowType": "mam_pomysl",
+        "scenario": "brak_grantu_fallback",
+        "userData": {
+            "location": "Oświęcim",
+            "age": 29,
+            "email": "agnieszka.nowa@firma.pl",
+            "phone": "505606707"
+        },
+        "messages": [
+            {
+                "role": "user",
+                "content": "Chcę zbudować ogromne, prywatne centrum rehabilitacyjne dla 500 pacjentów. Potrzebuję dotacji około 10 milionów złotych na budowę budynku. Gdzie mogę złożyć wniosek?",
+                "createdAt": "2026-10-06T10:00:00Z"
+            },
+            {
+                "role": "bot",
+                "content": "Projekt budowy dużego centrum rehabilitacyjnego to poważne i cenne przedsięwzięcie infrastrukturalne. Jednak nasze programy innowacyjne (np. mikrogranty w Inkubatorze) są przeznaczone na testowanie nowych metod w małej skali (zwykle do kilkudziesięciu tysięcy złotych) i nie przewidują finansowania \"twardej\" infrastruktury budowlanej na taką kwotę.\n\nAby uzyskać wsparcie na budowę, proponuję skonsultować się z punktem informacyjnym Funduszy Europejskich (Fundusze Europejskie dla Małopolski), które wspierają inwestycje infrastrukturalne.\n\nOprócz tego, gorąco polecam kontakt z naszym Działem Rozwoju Centrów Usług Społecznych: 📞 12 422 06 36 wew. 38, aby dowiedzieć się o możliwościach współpracy w zakresie świadczenia usług. Czy mogę w czymś jeszcze pomóc?",
+                "createdAt": "2026-10-06T10:00:15Z"
+            }
+        ]
+    },
+    {
+        "id": "seed-conv-009",
+        "flowType": "szukam_pomocy",
+        "scenario": "znaleziono_rozwiazanie",
+        "userData": {
+            "location": "Wieliczka",
+            "age": 45,
+            "email": "katarzyna.b@przedszkole.edu.pl",
+            "phone": "606707808"
+        },
+        "messages": [
+            {
+                "role": "user",
+                "content": "Jestem dyrektorką przedszkola. Mamy u siebie coraz więcej dzieci w spektrum autyzmu. Moje przedszkolanki nie zawsze wiedzą jak łagodzić ich stres. Czy macie jakieś innowacyjne metody?",
+                "createdAt": "2026-10-07T08:30:00Z"
+            },
+            {
+                "role": "bot",
+                "content": "Zdecydowanie tak. W naszej Bibliotece Innowacji Społecznych dla dzieci, młodzieży i rodziny znajdziesz świetne rozwiązanie pt. **\"Brzuszkole - brzuszek zostaje w przedszkolu\"** lub **\"Mobilny pomocnik dydaktyczno-sensoryczny dla uczniów ze spektrum autyzmu\"**.\n\nTo drugie rozwiązanie to zestaw autorskich narzędzi sensorycznych, które pomagają dzieciom regulować emocje podczas zajęć edukacyjnych. Narzędzia te łatwo przenieść z sali do sali.\n\n🔗 [Link do karty rozwiązania: Mobilny pomocnik dydaktyczno-sensoryczny]\n\nChcesz dowiedzieć się, z czego składa się ten zestaw?",
+                "createdAt": "2026-10-07T08:30:15Z"
+            }
+        ]
+    },
+    {
+        "id": "seed-conv-010",
+        "flowType": "mam_pomysl",
+        "scenario": "znaleziono_grant",
+        "userData": {
+            "location": "Zakopane",
+            "age": 32,
+            "email": "michal@gory.pl",
+            "phone": "123123123"
+        },
+        "messages": [
+            {
+                "role": "user",
+                "content": "Chciałbym szkolić psy ze schroniska na asystentów dla osób niewidomych, żeby dać drugą szansę zwierzętom i pomóc niepełnosprawnym. Nikt w okolicy tego nie robi.",
+                "createdAt": "2026-10-08T16:45:00Z"
+            },
+            {
+                "role": "bot",
+                "content": "To wspaniała i bardzo innowacyjna idea! Łączy ona dobrostan zwierząt i realną pomoc osobom z niepełnosprawnością narządu wzroku. \n\nMamy aktualnie otwarty nabór w obszarze włączenia społecznego – **\"Inkubator Dostępności\"**. Twój pomysł ma dużą szansę na zdobycie mikrograntu, aby przetestować taki model szkolenia np. na dwóch pieskach przez najbliższe pół roku.\n\nZanim przejdziemy do wypełniania fiszki, napisz mi, czy masz już doświadczenie w pracy z psami lub osobami niewidomymi?",
+                "createdAt": "2026-10-08T16:45:10Z"
+            }
+        ]
+    }
+]

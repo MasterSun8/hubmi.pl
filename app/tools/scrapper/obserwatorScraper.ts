@@ -129,6 +129,7 @@ async function startObserwatorScraper() {
   await fs.mkdir(outputDir, { recursive: true });
 
   let totalFiles = 0;
+  const indicatorsMetadata: any[] = [];
 
   for (const category of categories) {
     const categoryDir = path.join(outputDir, sanitizeName(category.name));
@@ -150,6 +151,26 @@ async function startObserwatorScraper() {
           await fs.writeFile(csvPath, csvContent, 'utf-8');
           totalFiles++;
           
+          // Pobieranie Opisu i Źródła
+          let sourceText = '';
+          let descriptionText = '';
+          
+          $page('h3').each((_, h3) => {
+             const text = $page(h3).text().trim().toLowerCase();
+             if (text.includes('źródło')) {
+                sourceText = $page(h3).next('p').text().trim();
+             } else if (text.includes('opis')) {
+                descriptionText = $page(h3).next('p').text().trim();
+             }
+          });
+          
+          indicatorsMetadata.push({
+             category: category.name,
+             indicator: link.title,
+             source: sourceText,
+             description: descriptionText
+          });
+          
           // Pobieranie obrazka mapy
           const imgBuffer = await fetchImage(BASE_URL + '/differenceanalysis/mapimg', pageResult.cookie);
           if (imgBuffer) {
@@ -165,7 +186,11 @@ async function startObserwatorScraper() {
     }
   }
 
+  const metadataPath = path.join(outputDir, 'indicators_metadata.json');
+  await fs.writeFile(metadataPath, JSON.stringify(indicatorsMetadata, null, 2), 'utf-8');
+
   console.log(`[ObserwatorScraper] Zakończono pomyślnie. Zapisano ${totalFiles} plików CSV w ${outputDir}.`);
+  console.log(`[ObserwatorScraper] Zapisano metadane (Opis, Źródło) do ${metadataPath}`);
 }
 
 startObserwatorScraper().catch(err => {

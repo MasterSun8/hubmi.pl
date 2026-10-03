@@ -155,6 +155,8 @@ export const regionalStatistics = pgTable("regional_statistics", {
   year: integer().notNull(), // np. 2024
   value: real(), // Wartość liczbowa (jeśli dotyczy)
   valueText: text(), // Wartość tekstowa w razie znaków specjalnych (np. brak danych)
+  description: text(), // Opis wskaźnika
+  source: text(), // Źródło danych
   ...timestamps,
 }, (t) => [
   index().on(t.category),

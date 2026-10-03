@@ -101,6 +101,15 @@ async function seedObserwator() {
     await db.delete(regionalStatistics);
     const categories = await fs.readdir(baseDir);
     let totalInserted = 0;
+    
+    // Wczytaj metadane
+    let metadata: any[] = [];
+    try {
+      const metaContent = await fs.readFile(path.join(baseDir, 'indicators_metadata.json'), 'utf-8');
+      metadata = JSON.parse(metaContent);
+    } catch (e) {
+      console.log("[Seed] Brak pliku indicators_metadata.json. Uruchom najpierw scrapera, by pobrać opisy.");
+    }
 
     for (const category of categories) {
       const categoryPath = path.join(baseDir, category);
@@ -146,13 +155,17 @@ async function seedObserwator() {
                }
             }
             
+            const indicatorMeta = metadata.find(m => m.indicator === indicatorName && m.category === category);
+            
             recordsToInsert.push({
               category: category,
               indicator: indicatorName,
               region: region,
               year: year,
               value: value,
-              valueText: valueText
+              valueText: valueText,
+              description: indicatorMeta?.description || null,
+              source: indicatorMeta?.source || null,
             });
           }
         }

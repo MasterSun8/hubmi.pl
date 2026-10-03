@@ -1,0 +1,78 @@
+"use client";
+
+import { createContext, use, useEffect, useState, type ReactNode } from "react";
+import type { ConversationResponse } from "@/types/chat";
+import type { Submission } from "../../components/submissions-provider";
+
+// GET /api/submissions/[id] does not return contact details yet; when it adds a
+// `submitter` object the contact section picks it up without further changes.
+export type SubmissionDetails = Submission & {
+  submitter?: { fullName?: string | null; email?: string | null; phone?: string | null } | null;
+};
+
+type DetailsState =
+  | { status: "loading" }
+  | { status: "not-found" }
+  | { status: "error" }
+  | { status: "ready"; submission: SubmissionDetails; conversation: ConversationResponse | null };
+
+const DetailsContext = createContext<DetailsState | null>(null);
+
+export function useSubmissionDetails() {
+  const state = use(DetailsContext);
+  if (!state) throw new Error("useSubmissionDetails must be used inside <SubmissionDetailsProvider>");
+  return state;
+}
+
+export function SubmissionDetailsProvider({ id, children }: { id: string; children: ReactNode }) {
+  const [state, setState] = useState<DetailsState>({ status: "loading" });
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const { signal } = controller;
+
+    async function load() {
+      const response = await fetch(`/api/submissions/${id}`, { signal });
+      if (response.status === 404) return setState({ status: "not-found" });
+      if (!response.ok) throw new Error(`Submission request failed: ${response.status}`);
+      const { data: submission } = (await response.json()) as { data: SubmissionDetails };
+
+      // The conversation is extra context; the page still works without it.
+      const conversationResponse = await fetch(`/api/conversations/${submission.conversationId}`, { signal });
+      const conversation = conversationResponse.ok ? ((await conversationResponse.json()) as ConversationResponse) : null;
+      setState({ status: "ready", submission, conversation });
+    }
+
+    load().catch((error: unknown) => {
+      if (!signal.aborted) {
+        console.error(error);
+        setState({ status: "error" });
+      }
+    });
+    return () => controller.abort();
+  }, [id]);
+
+  return <DetailsContext value={state}>{children}</DetailsContext>;
+}
+
+// Renders children only once the submission has loaded; otherwise the loading or error message.
+export function WhenLoaded({ children }: { children: ReactNode }) {
+  const state = useSubmissionDetails();
+  if (state.status === "loading") return <p aria-live="polite">Ładowanie zgłoszenia…</p>;
+  if (state.status === "not-found") return <p role="alert">Nie znaleziono takiego zgłoszenia.</p>;
+  if (state.status === "error") {
+    return (
+      <p role="alert" className="text-error">
+        Nie udało się pobrać zgłoszenia. Spróbuj odświeżyć stronę.
+      </p>
+    );
+  }
+  return children;
+}
+
+// Narrowed access for components rendered inside <WhenLoaded>.
+export function useLoadedSubmission() {
+  const state = useSubmissionDetails();
+  if (state.status !== "ready") throw new Error("useLoadedSubmission must be used inside <WhenLoaded>");
+  return state;
+}

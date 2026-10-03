@@ -30,8 +30,12 @@
   --text-body--line-height: calc(26px * var(--text-scale));
   --text-cta: calc(16px * var(--text-scale));
   --text-cta--line-height: calc(20px * var(--text-scale));
+  --text-lead: calc(20px * var(--text-scale));
+  --text-lead--line-height: calc(30px * var(--text-scale));
   --text-card-title: calc(24px * var(--text-scale));
   --text-card-title--line-height: calc(34px * var(--text-scale));
+  --text-subtitle: calc(28px * var(--text-scale));
+  --text-subtitle--line-height: calc(38px * var(--text-scale));
   --text-title: calc(32px * var(--text-scale));
   --text-title--line-height: calc(40px * var(--text-scale));
   --text-section: calc(40px * var(--text-scale));

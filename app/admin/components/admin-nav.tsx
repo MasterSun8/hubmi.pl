@@ -3,10 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-// Only the needs map is built so far; the other sections are listed as in Figma 15:818.
+// Sections without a screen yet are listed as in Figma 15:818, without a link.
 const items = [
   { label: "Mapa potrzeb", href: "/admin/mapa-potrzeb" },
-  { label: "Zgłoszenia" },
+  { label: "Zgłoszenia", href: "/admin/zgloszenia" },
   { label: "Inicjatywy" },
   { label: "Baza wiedzy" },
   { label: "Ustawienia" },
@@ -22,7 +22,8 @@ export function AdminNav() {
           <Link
             key={item.label}
             href={item.href}
-            aria-current={pathname === item.href ? "page" : undefined}
+            // Sub-pages (e.g. a submission's details) keep their section highlighted.
+            aria-current={pathname.startsWith(item.href) ? "page" : undefined}
             className="text-ink no-underline aria-[current=page]:font-medium aria-[current=page]:text-primary"
           >
             {item.label}

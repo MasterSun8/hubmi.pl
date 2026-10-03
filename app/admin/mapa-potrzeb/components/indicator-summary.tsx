@@ -25,7 +25,7 @@ export function IndicatorSummary() {
     .sort((a, b) => b[1] - a[1]);
 
   return (
-    <div className="flex flex-col items-start gap-5" aria-live="polite">
+    <div className="flex flex-col items-start gap-5">
       <h2 className="font-heading text-title text-primary">{selected.name}</h2>
       <p>
         {selected.category.toLocaleLowerCase("pl")} · rok {selected.year}
@@ -38,22 +38,28 @@ export function IndicatorSummary() {
         <span>{formatValue(selected.max)}</span>
       </p>
 
-      <p className={labelClass}>{hoveredRegion ? "Wybrany powiat" : "Najwyższe wartości"}</p>
-      {hoveredRegion ? (
-        <p className="flex w-full max-w-90 justify-between gap-5">
-          <span>{hoveredRegion}</span>
-          <span className="font-medium">{formatValue(selected.values[hoveredRegion])}</span>
-        </p>
-      ) : (
-        <ol className="m-0 w-full max-w-90 list-none p-0">
-          {ranked.slice(0, 3).map(([region, value]) => (
-            <li key={region} className="flex justify-between gap-5">
-              <span>{region}</span>
-              <span className="font-medium">{formatValue(value)}</span>
-            </li>
-          ))}
-        </ol>
-      )}
+      <p className={labelClass}>Najwyższe wartości</p>
+      <ol className="m-0 w-full max-w-90 list-none p-0">
+        {ranked.slice(0, 3).map(([region, value]) => (
+          <li key={region} className="flex justify-between gap-5">
+            <span>{region}</span>
+            <span className="font-medium">{formatValue(value)}</span>
+          </li>
+        ))}
+      </ol>
+
+      {/* Always rendered with the same height, so hovering the map never shifts the layout. */}
+      <p className={labelClass}>Wybrany powiat</p>
+      <p className="-mt-2.5 flex w-full max-w-90 justify-between gap-5">
+        {hoveredRegion ? (
+          <>
+            <span>{hoveredRegion}</span>
+            <span className="font-medium">{formatValue(selected.values[hoveredRegion])}</span>
+          </>
+        ) : (
+          <span className="text-muted">Najedź na powiat na mapie</span>
+        )}
+      </p>
 
       <details className="w-full max-w-90">
         <summary className={`${labelClass} text-primary`}>Wszystkie powiaty ({ranked.length})</summary>

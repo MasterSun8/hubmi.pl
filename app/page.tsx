@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { AccessibilityBar } from "@/app/components/accessibility-bar";
 import { SiteHeader } from "@/shared/components/site-header";
 import { ArrowButton } from "@/shared/components/arrow-button";
@@ -26,7 +27,13 @@ export default function Home() {
     <div className="flex min-h-svh flex-col px-page py-10 max-sm:py-7.5">
       <AccessibilityBar />
       <SiteHeader>
-        <p className="text-caption font-medium tracking-label-sm uppercase">Innowacje społeczne dla Małopolski</p>
+        <div className="flex flex-wrap items-center justify-end gap-x-7.5 gap-y-2.5 max-sm:justify-start">
+          <p className="text-caption font-medium tracking-label-sm uppercase">Innowacje społeczne dla Małopolski</p>
+          {/* Demo shortcut to the institution panel. */}
+          <Link className="text-caption font-medium tracking-label-sm text-primary uppercase no-underline" href="/admin">
+            Panel instytucji →
+          </Link>
+        </div>
       </SiteHeader>
       <main id="main-content" className="flex flex-1 flex-col justify-center gap-7.5 py-15 max-sm:py-10">
         <motion.p className="text-body font-medium tracking-label text-primary uppercase" {...enter(0)}>

@@ -10,27 +10,39 @@ const authorClass = "text-caption leading-(--text-body--line-height) font-medium
 const dotClass = "size-2 rounded-full bg-primary animate-typing motion-reduce:animate-typing-fade";
 
 export function MessageList() {
-  const { messages, waiting } = useChat();
+  const { messages, thinking, waiting } = useChat();
   const endRef = useRef<HTMLDivElement>(null);
+  const lastLength = messages.at(-1)?.content.length;
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
-  }, [messages, waiting]);
+  }, [messages.length, lastLength, thinking]);
 
   return (
     <>
-      <ol className="m-0 flex list-none flex-col gap-5 p-0" aria-live="polite">
+      {/* Screen readers hear finished turns only, not every streamed token. */}
+      <ol className="m-0 flex list-none flex-col gap-5 p-0" aria-live="polite" aria-busy={waiting}>
         {messages.map((message) => (
           <motion.li key={message.id} className="flex flex-col items-start" {...enter()}>
             <p className={`${authorClass} ${message.role === "assistant" ? "text-primary" : ""}`}>
               {message.role === "assistant" ? "Asystent Hubmi" : "Ty"}
             </p>
-            <p className="max-w-[60ch] whitespace-pre-wrap">{message.content}</p>
-            {message.suggestion && <InitiativeCard suggestion={message.suggestion} />}
+            <p className={`max-w-[60ch] whitespace-pre-wrap ${message.error ? "text-error" : ""}`} role={message.error ? "alert" : undefined}>
+              {message.content}
+            </p>
+            {message.sources && message.sources.length > 0 && (
+              <ul className="m-0 mt-2.5 flex list-none flex-col gap-2.5 p-0" aria-label="Rozwiązania z bazy">
+                {message.sources.map((solution, index) => (
+                  <li key={solution.id}>
+                    <InitiativeCard solution={solution} index={index} />
+                  </li>
+                ))}
+              </ul>
+            )}
           </motion.li>
         ))}
         <AnimatePresence>
-          {waiting && (
+          {thinking && (
             <motion.li
               key="typing"
               className="flex flex-col items-start"

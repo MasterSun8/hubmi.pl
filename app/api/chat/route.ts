@@ -39,7 +39,7 @@ export async function POST(request: Request) {
       }
       conversationId = conversation.id;
     } else {
-      conversationId = (await createConversation()).id;
+      conversationId = (await createConversation(parsed.flow)).id;
     }
 
     // Saved before the model runs, so the question survives a failed answer
@@ -103,11 +103,12 @@ async function saveAnswer(conversationId: string, answer: string, sources: Solut
 
 // Returns null for anything that doesn't match ChatRequest.
 function parseRequest(body: unknown): ChatRequest | null {
-  const { conversationId, message } = (body ?? {}) as Partial<ChatRequest>;
+  const { conversationId, message, flow } = (body ?? {}) as Partial<ChatRequest>;
 
   if (typeof message !== "string" || message.trim() === "") return null;
   if (message.length > MAX_CONTENT_LENGTH) return null;
   if (conversationId !== undefined && !isConversationId(conversationId)) return null;
+  if (flow !== undefined && flow !== "help" && flow !== "idea") return null;
 
-  return { conversationId, message };
+  return { conversationId, message, flow };
 }

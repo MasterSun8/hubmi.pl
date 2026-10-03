@@ -1,6 +1,6 @@
 import "server-only";
 import { and, desc, eq, inArray } from "drizzle-orm";
-import type { ChatMessage, ChatRole, SolutionRef, StoredChatMessage } from "@/types/chat";
+import type { ChatFlow, ChatMessage, ChatRole, SolutionRef, StoredChatMessage } from "@/types/chat";
 import { getDb } from "@/server/db/client";
 import { conversations, messages } from "@/server/db/schema";
 
@@ -15,8 +15,8 @@ export function isConversationId(value: unknown): value is string {
   return typeof value === "string" && UUID_RE.test(value);
 }
 
-export async function createConversation(): Promise<Conversation> {
-  const [row] = await getDb().insert(conversations).values({}).returning();
+export async function createConversation(flow?: ChatFlow): Promise<Conversation> {
+  const [row] = await getDb().insert(conversations).values(flow ? { flow } : {}).returning();
   return row;
 }
 

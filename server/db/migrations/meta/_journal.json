@@ -15,6 +15,13 @@
       "when": 1791037392387,
       "tag": "0001_init",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1791042454413,
+      "tag": "0002_rops_innovation_fields",
+      "breakpoints": true
     }
   ]
 }

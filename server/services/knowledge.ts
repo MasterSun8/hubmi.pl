@@ -118,7 +118,7 @@ export async function retrieveKnowledge(query: string, limit = 3, minSimilarity 
   } else {
     const tsQuery = toPrefixTsQuery(query);
     if (!tsQuery) return [];
-    const fts = ftsMatch(knowledgeChunks.content, tsQuery);
+    const fts = ftsMatch(sql`to_tsvector('simple', ${knowledgeChunks.content})`, tsQuery);
     rows = await db
       .select({ ...base, similarity: fts.rank })
       .from(knowledgeChunks)

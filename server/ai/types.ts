@@ -12,6 +12,8 @@ export type RetrievedSolution = {
   id: string;
   title: string;
   description: string;
+  problem: string | null;
+  categories: string[];
   targetGroups: string[];
   sourceUrl: string | null;
   // 0..1, im wyżej tym lepiej dopasowane
@@ -79,6 +81,11 @@ export type ScoreOutput = {
 export type RecommendationInput = {
   history: ChatTurn[];
   solutions: (RetrievedSolution & {
+    // Ze źródła: kto może wdrożyć i czy test innowacji potwierdził skuteczność.
+    implementers: string | null;
+    effectiveness: string | null;
+    authors: string[];
+    materialsUrls: string[];
     implementationNotes: string | null;
     requiredResources: string | null;
   })[];

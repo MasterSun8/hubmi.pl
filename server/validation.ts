@@ -2,7 +2,6 @@ import { z } from "zod";
 
 const trimmed = z.string().trim();
 const optionalText = trimmed.min(1).nullish();
-const stringList = z.array(trimmed.min(1)).default([]);
 
 export const paginationQuery = {
   limit: z.coerce.number().int().min(1).max(100).default(20),
@@ -67,18 +66,32 @@ export const solutionSearchQuery = z.object({
   ...paginationQuery,
 });
 
-export const solutionInput = z.object({
+const contentStatus = z.enum(["draft", "published", "retired"]);
+const urlList = z.array(z.url());
+
+// Pola bez wartości domyślnych – wspólne dla tworzenia i PATCH
+// (w zod 4 `.partial()` zachowuje `.default()`, co nadpisywałoby pominięte pola).
+const solutionFields = z.object({
   title: trimmed.min(1).max(300),
   description: trimmed.min(1),
   problem: optionalText,
-  categories: stringList,
-  targetGroups: stringList,
+  categories: z.array(trimmed.min(1)),
+  targetGroups: z.array(trimmed.min(1)),
+  // Kto może wdrożyć / skorzystać z rozwiązania (instytucje, organizacje).
+  implementers: optionalText,
+  // „Czy to działa?” – wyniki testu innowacji ze źródła.
+  effectiveness: optionalText,
+  authors: z.array(trimmed.min(1)),
   authorName: optionalText,
   organization: optionalText,
   contactEmail: z.email().nullish(),
   contactPhone: optionalText,
   contactUrl: z.url().nullish(),
-  imageUrls: z.array(z.url()).default([]),
+  imageUrls: urlList,
+  materialsUrls: urlList,
+  videoUrls: urlList,
+  termsOfUseUrl: z.url().nullish(),
+  programName: optionalText,
   implementationNotes: optionalText,
   requiredResources: optionalText,
   region: optionalText,
@@ -86,16 +99,27 @@ export const solutionInput = z.object({
   sourceUrl: z.url().nullish(),
   externalId: optionalText,
   fetchedAt: z.coerce.date().nullish(),
-  importMetadata: z.record(z.string(), z.unknown()).default({}),
-  status: z.enum(["draft", "published", "retired"]).default("published"),
+  importMetadata: z.record(z.string(), z.unknown()),
+  status: contentStatus,
+});
+
+export const solutionInput = solutionFields.extend({
+  categories: solutionFields.shape.categories.default([]),
+  targetGroups: solutionFields.shape.targetGroups.default([]),
+  authors: solutionFields.shape.authors.default([]),
+  imageUrls: urlList.default([]),
+  materialsUrls: urlList.default([]),
+  videoUrls: urlList.default([]),
+  importMetadata: solutionFields.shape.importMetadata.default({}),
+  status: contentStatus.default("published"),
 });
 export type SolutionInput = z.infer<typeof solutionInput>;
 
-export const solutionPatch = solutionInput.partial();
+export const solutionPatch = solutionFields.partial();
 export type SolutionPatch = z.infer<typeof solutionPatch>;
 
 export const adminSolutionQuery = solutionSearchQuery.extend({
-  status: z.enum(["draft", "published", "retired"]).optional(),
+  status: contentStatus.optional(),
 });
 
 // ---------- Panel: zgłoszenia ----------
@@ -144,14 +168,16 @@ export const clusterInput = z.object({
 
 // ---------- Panel: zasobnik wiedzy ----------
 
-export const knowledgeInput = z.object({
+const knowledgeFields = z.object({
   title: trimmed.min(1).max(300),
   content: trimmed.min(1),
   sourceUrl: z.url().nullish(),
-  status: z.enum(["draft", "published", "retired"]).default("published"),
+  status: contentStatus,
 });
 
-export const knowledgePatch = knowledgeInput.partial();
+export const knowledgeInput = knowledgeFields.extend({ status: contentStatus.default("published") });
+
+export const knowledgePatch = knowledgeFields.partial();
 
 export const statsQuery = z.object({
   from: z.coerce.date().optional(),

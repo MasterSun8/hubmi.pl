@@ -394,7 +394,7 @@ API działa jako Route Handlers Next.js w `app/api/*`; logika w `server/`. Baza:
 ```bash
 cp .env.example .env     # uzupełnij DATABASE_URL (serwer w LAN)
 pnpm db:migrate          # migracje z server/db/migrations (w tym CREATE EXTENSION vector)
-pnpm db:seed             # przykładowe, fikcyjne rozwiązania do dema
+pnpm db:import           # import scraped_innovations.json (Biblioteka Innowacji Społecznych ROPS)
 pnpm db:generate         # nowa migracja po zmianie server/db/schema.ts
 pnpm db:reindex          # przeliczenie embeddingów po wdrożeniu OpenAI
 ```
@@ -418,7 +418,8 @@ pnpm db:reindex          # przeliczenie embeddingów po wdrożeniu OpenAI
 | `POST /api/conversations/:id/recommendations` | Rekomendacja wdrożenia wybranych rozwiązań (moduł 7). |
 | `POST /api/conversations/:id/submission/preview` | Podsumowanie do weryfikacji przed wysłaniem. |
 | `POST /api/conversations/:id/submission` | Wysłanie zgłoszenia; wymaga lokalizacji oraz e-maila lub telefonu. |
-| `GET /api/solutions`, `GET /api/solutions/:id` | Wyszukiwanie i karta rozwiązania. |
+| `GET /api/solutions`, `GET /api/solutions/:id` | Wyszukiwanie (`?q=`, `?category=`) i karta rozwiązania. |
+| `GET /api/solutions/categories` | Kategorie biblioteki z liczbą rozwiązań. |
 | `GET /api/config/rops-contact` | Telefon i godziny dyżuru ROPS z konfiguracji. |
 | `GET /api/health` | Sprawdzenie połączenia z bazą. |
 | `/api/admin/submissions[/:id[/rescore]]` | Lista z filtrami i sortowaniem po priorytecie, szczegóły, korekta, ponowny AI Score. |
@@ -430,3 +431,22 @@ pnpm db:reindex          # przeliczenie embeddingów po wdrożeniu OpenAI
 Przykladowe wywolanie endpointu - 
 http://localhost:3000/api/solutions?q=posi%C5%82ki 
 Endpointy `/api/admin/*` są na razie bez autoryzacji — do dodania przed udostępnieniem poza siecią lokalną.
+
+### Dane: Biblioteka Innowacji Społecznych ROPS
+
+Baza rozwiązań pochodzi z `scraped_innovations.json` (scraper strony rops.krakow.pl). `pnpm db:import` mapuje rekordy w `server/import/rops-innovations.ts`:
+
+| Pole w pliku | Pole rozwiązania |
+| --- | --- |
+| `fullDescription` → sekcja „1. Na czym polega rozwiązanie?” | `description` |
+| sekcja „2. Jakich problemów dotyczy innowacja?” | `problem` |
+| `targetGroup` / sekcja „3. Grupa docelowa” | `targetGroups` |
+| sekcja „4. Kto może skorzystać z innowacji?” | `implementers` |
+| sekcja „5. Czy to działa?” | `effectiveness` |
+| sekcja „Autorzy” / `author` | `authors`, `authorName` |
+| segment URL, np. `dla-seniorow` | `categories` (np. „Seniorzy”) |
+| końcówka URL po przecinku | `externalId` (klucz importu) |
+| `materialsLinks`, `videoLinks`, `termsOfUse` | `materialsUrls`, `videoUrls`, `termsOfUseUrl` |
+| `sourceUrl` | `sourceUrl`, `contactUrl` |
+
+Import jest idempotentny (aktualizacja po `externalId`), pomija duplikaty ze scrapera i zachowuje surowy opis w `importMetadata`. Źródło nie zawiera danych kontaktowych autorów, dlatego kontakt prowadzi do strony innowacji w ROPS. `pnpm db:import plik.json --prune` wycofuje rekordy, których nie ma już w nowym pliku.

@@ -118,14 +118,25 @@ export class MockAiProvider implements AiProvider {
 
   async recommendImplementation(input: RecommendationInput): Promise<RecommendationOutput> {
     const names = input.solutions.map((s) => s.title).join(", ") || "wybrane rozwiązanie";
+    const materials = input.solutions.flatMap((s) => s.materialsUrls);
     return {
       steps: [
+        {
+          title: "Zapoznanie z materiałami",
+          description: materials.length
+            ? `Pobierz materiały wdrożeniowe: ${materials.join(", ")}.`
+            : "Zapoznaj się z opisem rozwiązania na stronie źródłowej.",
+        },
         { title: "Kontakt z autorem", description: `Ustal warunki wdrożenia: ${names}.` },
         { title: "Pilotaż", description: "Uruchom działanie w małej skali i zbierz informacje zwrotne.", roles: ["koordynator"] },
         { title: "Ocena", description: "Po pilotażu zdecyduj o skalowaniu." },
       ],
       pilot: "[MOCK] Pilotaż na małej grupie odbiorców przez 4–8 tygodni.",
-      sourcedFacts: input.solutions.flatMap((s) => (s.requiredResources ? [`${s.title}: ${s.requiredResources}`] : [])),
+      sourcedFacts: input.solutions.flatMap((s) => [
+        ...(s.implementers ? [`${s.title} – kto może skorzystać: ${s.implementers}`] : []),
+        ...(s.effectiveness ? [`${s.title} – czy to działa: ${s.effectiveness}`] : []),
+        ...(s.requiredResources ? [`${s.title} – zasoby: ${s.requiredResources}`] : []),
+      ]),
       assumptions: ["[MOCK] Założono dostępność jednego koordynatora."],
       missingInfo: ["koszty wdrożenia", "dostępność partnerów"],
     };

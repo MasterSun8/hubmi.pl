@@ -14,7 +14,15 @@ export { solutionColumns };
 
 type SolutionText = Pick<
   SolutionInput,
-  "title" | "description" | "problem" | "categories" | "targetGroups" | "implementationNotes" | "requiredResources" | "region"
+  | "title"
+  | "description"
+  | "problem"
+  | "categories"
+  | "targetGroups"
+  | "implementers"
+  | "implementationNotes"
+  | "requiredResources"
+  | "region"
 >;
 
 export function buildSolutionSearchText(s: SolutionText): string {
@@ -24,6 +32,7 @@ export function buildSolutionSearchText(s: SolutionText): string {
     s.problem,
     s.categories.length ? `Kategorie: ${s.categories.join(", ")}` : null,
     s.targetGroups.length ? `Odbiorcy: ${s.targetGroups.join(", ")}` : null,
+    s.implementers ? `Kto może skorzystać: ${s.implementers}` : null,
     s.implementationNotes,
     s.requiredResources,
     s.region,
@@ -64,7 +73,12 @@ export async function searchSolutions(params: SolutionSearch) {
     }
     const tsQuery = toPrefixTsQuery(q);
     if (!tsQuery) return [];
-    const fts = ftsMatch(solutions.searchText, tsQuery);
+    // Ranking: tytuł > kategorie i odbiorcy > problem > reszta opisu.
+    const weighted = sql`setweight(to_tsvector('simple', ${solutions.title}), 'A')
+      || setweight(to_tsvector('simple', array_to_string(${solutions.categories} || ${solutions.targetGroups}, ' ')), 'B')
+      || setweight(to_tsvector('simple', coalesce(${solutions.problem}, '')), 'C')
+      || to_tsvector('simple', ${solutions.searchText})`;
+    const fts = ftsMatch(sql`to_tsvector('simple', ${solutions.searchText})`, tsQuery, weighted);
     return db
       .select({ ...solutionColumns, similarity: fts.rank })
       .from(solutions)
@@ -92,10 +106,23 @@ export async function retrieveSolutions(query: string, limit = 5, minSimilarity 
       id: r.id,
       title: r.title,
       description: r.description,
+      problem: r.problem,
+      categories: r.categories,
       targetGroups: r.targetGroups,
       sourceUrl: r.sourceUrl,
       similarity: r.similarity ?? 0,
     }));
+}
+
+// Kategorie opublikowanych rozwiązań z liczbą rekordów – do filtrów we frontendzie.
+export async function listSolutionCategories() {
+  const category = sql<string>`unnest(${solutions.categories})`;
+  return getDb()
+    .select({ category, count: sql<number>`count(*)::int` })
+    .from(solutions)
+    .where(eq(solutions.status, "published"))
+    .groupBy(category)
+    .orderBy(desc(sql`count(*)`));
 }
 
 export async function getSolution(id: string, { publishedOnly }: { publishedOnly: boolean }) {

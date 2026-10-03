@@ -93,12 +93,23 @@ export const solutions = pgTable(
     problem: text(),
     categories: text().array().notNull().default(sql`'{}'::text[]`),
     targetGroups: text().array().notNull().default(sql`'{}'::text[]`),
+    // Kto może wdrożyć / skorzystać z rozwiązania (instytucje, organizacje).
+    implementers: text(),
+    // „Czy to działa?” – wyniki testu innowacji ze źródła.
+    effectiveness: text(),
+    authors: text().array().notNull().default(sql`'{}'::text[]`),
     authorName: text(),
     organization: text(),
     contactEmail: text(),
     contactPhone: text(),
     contactUrl: text(),
     imageUrls: text().array().notNull().default(sql`'{}'::text[]`),
+    // Materiały do pobrania (PDF/ZIP), filmy i zasady wykorzystania (licencja).
+    materialsUrls: text().array().notNull().default(sql`'{}'::text[]`),
+    videoUrls: text().array().notNull().default(sql`'{}'::text[]`),
+    termsOfUseUrl: text(),
+    // Program, w którym innowację wybrano do upowszechniania (np. „Inkubator Dostępności”).
+    programName: text(),
     implementationNotes: text(),
     requiredResources: text(),
     region: text(),

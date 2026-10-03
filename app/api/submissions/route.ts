@@ -1,3 +1,5 @@
+import { after } from "next/server";
+import { enrichSubmission } from "@/lib/server/ai/enrich-submission";
 import {
   createSubmission,
   createSubmissionSchema,
@@ -57,6 +59,13 @@ export async function POST(request: Request) {
     if (submission === "already_submitted") {
       return Response.json({ error: "Conversation already submitted" }, { status: 409 });
     }
+
+    // AI summary and embedding take a few seconds; the user shouldn't wait.
+    after(() =>
+      enrichSubmission(submission.id).catch((err) =>
+        console.error(`[submissions] enrichment failed for ${submission.id}`, err),
+      ),
+    );
 
     return Response.json(
       { data: { id: submission.id, status: submission.status, createdAt: submission.createdAt } },

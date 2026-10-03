@@ -1,17 +1,20 @@
-import Link from "next/link";
-import { AccessibilityBar } from "@/components/ui/accessibility-bar";
-import { StartButton } from "@/components/ui/start-button";
-import styles from "./page.module.css";
+import { AccessibilityBar } from "@/app/components/accessibility-bar";
+import { SiteHeader } from "@/shared/components/site-header";
+import { ArrowButton } from "@/shared/components/arrow-button";
+import * as motion from "motion/react-client";
+import { enter } from "@/shared/components/motion/enter";
 
 const paths = [
   {
     id: "problem",
+    href: "/zglos-problem",
     title: "Zgłoś problem",
     description: "Potrzebujesz wsparcia dla siebie lub innych?",
     detail: "Pomóż nam zrozumieć, czego brakuje.",
   },
   {
     id: "pomoc",
+    href: "/zaoferuj-pomoc",
     title: "Zaoferuj pomoc",
     description: "Masz pomysł, doświadczenie lub gotowe rozwiązanie?",
     detail: "Podziel się tym, co może pomóc innym.",
@@ -20,30 +23,32 @@ const paths = [
 
 export default function Home() {
   return (
-    <div className={styles.page}>
+    <div className="flex min-h-svh flex-col px-page py-10 max-sm:py-7.5">
       <AccessibilityBar />
-      <header className={styles.header}>
-        <Link className={styles.brand} href="/" aria-label="Hubmi — strona główna">
-          hubmi-innovations.org
-        </Link>
-        <p className="hubmi-label hubmi-label--small">
-          Innowacje społeczne dla Małopolski
-        </p>
-      </header>
-      <main id="main-content" className={styles.main}>
-        <p className="hubmi-label hubmi-accent">Mały krok. Wspólna zmiana.</p>
-        <h1 className="hubmi-heading hubmi-heading--display hubmi-accent">
+      <SiteHeader>
+        <p className="text-caption font-medium tracking-label-sm uppercase">Innowacje społeczne dla Małopolski</p>
+      </SiteHeader>
+      <main id="main-content" className="flex flex-1 flex-col justify-center gap-7.5 py-15 max-sm:py-10">
+        <motion.p className="text-body font-medium tracking-label text-primary uppercase" {...enter(0)}>
+          Mały krok. Wspólna zmiana.
+        </motion.p>
+        <motion.h1 className="font-heading text-display text-primary" {...enter(1, { y: 20 })}>
           Razem możemy więcej
-        </h1>
-        <p>
+        </motion.h1>
+        <motion.p {...enter(2)}>
           Łączymy potrzeby mieszkańców z pomysłami i rozwiązaniami społecznymi.
           <br />
           Wybierz, jak chcesz działać.
-        </p>
-        <div className={styles.paths}>
-          {paths.map((path) => (
-            <section key={path.id} className={styles.path} aria-labelledby={path.id}>
-              <h2 id={path.id} className="hubmi-heading hubmi-heading--section">
+        </motion.p>
+        <div className="grid grid-cols-2 gap-10 pt-7.5 max-lg:gap-7.5 max-sm:grid-cols-1">
+          {paths.map((path, index) => (
+            <motion.section
+              key={path.id}
+              className="relative flex flex-col items-start gap-5 border-y border-line py-7.5"
+              aria-labelledby={path.id}
+              {...enter(3 + index, { y: 24 })}
+            >
+              <h2 id={path.id} className="font-heading text-section">
                 {path.title}
               </h2>
               <p>
@@ -51,17 +56,27 @@ export default function Home() {
                 <br />
                 {path.detail}
               </p>
-              <div className={styles.action}>
-                <StartButton label={`Rozpocznij — ${path.title.toLowerCase()}`} />
+              <div className="mt-auto pt-5">
+                {/* The link stretches over the whole card, so the title and text are clickable too. */}
+                <ArrowButton
+                  href={path.href}
+                  aria-label={`Rozpocznij — ${path.title.toLowerCase()}`}
+                  className="after:absolute after:inset-0"
+                >
+                  Rozpocznij
+                </ArrowButton>
               </div>
-            </section>
+            </motion.section>
           ))}
         </div>
       </main>
-      <footer className={styles.footer}>
-        <p className="hubmi-caption">Platforma innowacji społecznych</p>
-        <p className={styles.partner}>ROPS Kraków · Małopolska</p>
-      </footer>
+      <motion.footer
+        className="flex items-center justify-between gap-5 max-sm:flex-col max-sm:items-start max-sm:gap-2.5"
+        {...enter(6, { y: 0 })}
+      >
+        <p className="text-caption">Platforma innowacji społecznych</p>
+        <p className="text-caption font-medium tracking-caption uppercase">ROPS Kraków · Małopolska</p>
+      </motion.footer>
     </div>
   );
 }

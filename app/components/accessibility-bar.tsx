@@ -8,14 +8,17 @@ import {
   readA11yPreferences,
   type A11yPreferences,
   type TextSize,
-} from "@/components/ui/accessibility-preferences";
-import styles from "./accessibility-bar.module.css";
+} from "@/app/components/accessibility-preferences";
 
-const textSizes: { value: TextSize; label: string; name: string }[] = [
-  { value: "normal", label: "A", name: "Normalny rozmiar tekstu" },
-  { value: "large", label: "A+", name: "Większy tekst" },
-  { value: "xlarge", label: "A++", name: "Największy tekst" },
+// The size buttons keep a fixed font size so the controls stay put while the page scales.
+const textSizes: { value: TextSize; label: string; name: string; className: string }[] = [
+  { value: "normal", label: "A", name: "Normalny rozmiar tekstu", className: "text-[14px]" },
+  { value: "large", label: "A+", name: "Większy tekst", className: "text-[17px]" },
+  { value: "xlarge", label: "A++", name: "Największy tekst", className: "text-[20px]" },
 ];
+
+const buttonClass =
+  "inline-flex h-9 min-w-9 items-center justify-center gap-2 rounded-input border border-ink bg-transparent px-2.5 font-medium leading-5 text-ink cursor-pointer aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-on-primary";
 
 export function AccessibilityBar() {
   const [preferences, setPreferences] = useState<A11yPreferences>(defaultA11yPreferences);
@@ -40,9 +43,13 @@ export function AccessibilityBar() {
   const highContrast = preferences.contrast === "high";
 
   return (
-    <div className={styles.bar} role="group" aria-label="Ustawienia dostępności">
-      <div className={styles.sizes} role="group" aria-labelledby="a11y-text-size">
-        <span id="a11y-text-size" className={styles.label}>
+    <div
+      className="mb-5 flex flex-wrap items-center justify-end gap-x-5 gap-y-2.5 border-b border-line pb-5 max-sm:justify-start"
+      role="group"
+      aria-label="Ustawienia dostępności"
+    >
+      <div className="flex items-center gap-2.5" role="group" aria-labelledby="a11y-text-size">
+        <span id="a11y-text-size" className="text-caption font-medium tracking-label-sm uppercase">
           Rozmiar tekstu
         </span>
         {textSizes.map((size) => {
@@ -51,7 +58,7 @@ export function AccessibilityBar() {
             <button
               key={size.value}
               type="button"
-              className={`${styles.button} ${styles[`size_${size.value}`]}`}
+              className={`${buttonClass} ${size.className}`}
               aria-pressed={active}
               aria-label={size.name}
               onClick={() => update({ ...preferences, textSize: size.value })}
@@ -61,10 +68,10 @@ export function AccessibilityBar() {
           );
         })}
       </div>
-      <span className={styles.separator} aria-hidden="true" />
+      <span className="h-6 w-px bg-line max-sm:hidden" aria-hidden="true" />
       <button
         type="button"
-        className={`${styles.button} ${styles.contrast}`}
+        className={`${buttonClass} pr-4 pl-3.5 text-caption tracking-label-sm uppercase`}
         aria-pressed={highContrast}
         onClick={() => update({ ...preferences, contrast: highContrast ? "normal" : "high" })}
       >

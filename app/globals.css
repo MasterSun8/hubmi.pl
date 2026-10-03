@@ -1,32 +1,129 @@
 @import "tailwindcss";
-@import "./styles/tokens.css";
 
-@theme inline {
-  --color-foreground: var(--color-text);
-  --font-sans: var(--font-family);
+/* Design tokens from DESIGN.md and Figma (Hubmi page). Tailwind emits them as CSS
+   variables and the utilities read them at runtime, so the accessibility overrides
+   further down (text size, high contrast) restyle every component. */
+@theme {
+  --breakpoint-sm: 660px;
+  --breakpoint-3xl: 1600px;
+
+  --font-sans: var(--font-roboto), Roboto, sans-serif;
+  --font-weight-heading: 100;
+
+  --color-primary: #c32882;
+  --color-on-primary: #ffffff;
+  --color-secondary: #526aae;
+  --color-background: #f5f5f5;
+  --color-surface: #fefefe;
+  --color-ink: #1c1c1c;
+  --color-line: #9a9a9a;
+  --color-muted: #9a9a9a;
+  --color-success: #9dbf4f;
+  --color-warning: #edc033;
+  --color-error: #f05a56;
+  --color-overlay: rgb(255 255 255 / 50%);
+
+  /* Every size is multiplied by --text-scale (A / A+ / A++). */
+  --text-caption: calc(12px * var(--text-scale));
+  --text-caption--line-height: calc(22px * var(--text-scale));
+  --text-body: calc(16px * var(--text-scale));
+  --text-body--line-height: calc(26px * var(--text-scale));
+  --text-cta: calc(16px * var(--text-scale));
+  --text-cta--line-height: calc(20px * var(--text-scale));
+  --text-card-title: calc(24px * var(--text-scale));
+  --text-card-title--line-height: calc(34px * var(--text-scale));
+  --text-title: calc(32px * var(--text-scale));
+  --text-title--line-height: calc(40px * var(--text-scale));
+  --text-section: calc(40px * var(--text-scale));
+  --text-section--line-height: calc(48px * var(--text-scale));
+  --text-display: calc(56px * var(--text-scale));
+  --text-display--line-height: calc(64px * var(--text-scale));
+
+  --tracking-label: 1.6px;
+  --tracking-label-sm: 1.2px;
+  --tracking-caption: 0.6px;
+
+  --spacing-page: 6.180556vw;
+  --radius-input: 20px;
+  --shadow-dialog: 0 20px 60px rgb(28 28 28 / 18%), 0 4px 16px rgb(28 28 28 / 8%);
+  --ease-brand: cubic-bezier(0.5, 0, 0.2, 1);
+
+  --animate-typing: typing 1.2s var(--ease-brand) infinite;
+  --animate-typing-fade: typing-fade 2.4s var(--ease-brand) infinite;
+  @keyframes typing {
+    0%, 60%, 100% { opacity: 0.25; transform: translateY(0); }
+    30% { opacity: 1; transform: translateY(-4px); }
+  }
+  @keyframes typing-fade {
+    0%, 100% { opacity: 0.25; }
+    50% { opacity: 1; }
+  }
 }
-body {
-  background: var(--color-background);
-  color: var(--color-text);
-  font-family: var(--font-family);
-  font-size: var(--text-body);
-  font-weight: var(--weight-body);
-  line-height: var(--text-body-line);
+
+/* hc: styles that apply only in high-contrast mode. */
+@custom-variant hc (&:where([data-contrast="high"], [data-contrast="high"] *));
+
+:root {
+  color-scheme: light;
+  --text-scale: 1;
 }
-.hubmi-heading { font-weight: var(--weight-display); }
-.hubmi-heading--display { font-size: var(--text-display); line-height: var(--text-display-line); }
-.hubmi-heading--section { font-size: var(--text-section); line-height: var(--text-section-line); }
-.hubmi-label {
-  font-size: var(--text-body);
-  font-weight: var(--weight-label);
-  letter-spacing: var(--tracking-label);
-  text-transform: uppercase;
+/* The large display heading steps down with the viewport (DESIGN.md). */
+@media (width < 1024px) {
+  :root {
+    --text-display: calc(40px * var(--text-scale));
+    --text-display--line-height: calc(48px * var(--text-scale));
+    --text-section: calc(32px * var(--text-scale));
+    --text-section--line-height: calc(40px * var(--text-scale));
+  }
 }
-.hubmi-label--small {
-  font-size: var(--text-caption);
-  letter-spacing: var(--tracking-small-label);
-  line-height: var(--text-caption-line);
+@media (width < 660px) {
+  :root {
+    --text-display: calc(32px * var(--text-scale));
+    --text-display--line-height: calc(40px * var(--text-scale));
+  }
 }
-.hubmi-caption { font-size: var(--text-caption); line-height: var(--text-caption-line); }
-.hubmi-accent { color: var(--color-primary); }
-:focus-visible { outline: 3px dotted var(--color-text); outline-offset: 3px; }
+@media (width >= 1600px) {
+  :root {
+    --text-display: calc(80px * var(--text-scale));
+    --text-display--line-height: calc(90px * var(--text-scale));
+  }
+}
+
+/* Accessibility preferences, set on <html> by the accessibility bar (Figma 15:1368, 15:1416). */
+:root[data-text-size="large"] { --text-scale: 1.2; }
+:root[data-text-size="xlarge"] { --text-scale: 1.35; --font-weight-heading: 300; }
+:root[data-contrast="high"] {
+  color-scheme: dark;
+  --color-primary: #ffff00;
+  --color-on-primary: #000000;
+  --color-background: #000000;
+  --color-surface: #000000;
+  --color-ink: #ffff00;
+  --color-line: #ffff00;
+  --color-muted: #ffff00;
+  --color-overlay: rgb(0 0 0 / 70%);
+  --shadow-dialog: none;
+  --font-weight-heading: 300;
+}
+
+@layer base {
+  body {
+    @apply bg-background font-sans text-body font-normal text-ink;
+  }
+  :focus-visible {
+    outline: 3px dotted var(--color-ink);
+    outline-offset: 3px;
+  }
+  /* Everything clickable always shows the pointer on hover, disabled or not;
+     Tailwind's preflight resets buttons to the default cursor. */
+  a[href],
+  button,
+  [role="button"],
+  summary,
+  select,
+  label[for],
+  [aria-disabled="true"],
+  input:is([type="checkbox"], [type="radio"], [type="submit"], [type="button"], [type="reset"]) {
+    cursor: pointer;
+  }
+}

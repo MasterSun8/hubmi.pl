@@ -131,60 +131,89 @@ async function startObserwatorScraper() {
   let totalFiles = 0;
   const indicatorsMetadata: any[] = [];
 
+  // Płaska lista zadań do pobrania
+  interface Task {
+    categoryName: string;
+    categoryDir: string;
+    link: { title: string; url: string };
+  }
+  const tasks: Task[] = [];
+
   for (const category of categories) {
     const categoryDir = path.join(outputDir, sanitizeName(category.name));
     await fs.mkdir(categoryDir, { recursive: true });
-
-    console.log(`[Kategoria] ${category.name} (${category.links.length} wskaźników)`);
-
     for (const link of category.links) {
-      console.log(`  -> Pobieranie: ${link.title}...`);
-      const pageResult = await fetchPage(link.url);
-      
-      if (pageResult) {
-        const $page = cheerio.load(pageResult.html);
-        const csvContent = parseTableToCsv($page);
-        
-        if (csvContent) {
-          const fileName = `${sanitizeName(link.title)}`;
-          const csvPath = path.join(categoryDir, fileName + '.csv');
-          await fs.writeFile(csvPath, csvContent, 'utf-8');
-          totalFiles++;
-          
-          // Pobieranie Opisu i Źródła
-          let sourceText = '';
-          let descriptionText = '';
-          
-          $page('h3').each((_, h3) => {
-             const text = $page(h3).text().trim().toLowerCase();
-             if (text.includes('źródło')) {
-                sourceText = $page(h3).next('p').text().trim();
-             } else if (text.includes('opis')) {
-                descriptionText = $page(h3).next('p').text().trim();
-             }
-          });
-          
-          indicatorsMetadata.push({
-             category: category.name,
-             indicator: link.title,
-             source: sourceText,
-             description: descriptionText
-          });
-          
-          // Pobieranie obrazka mapy
-          const imgBuffer = await fetchImage(BASE_URL + '/differenceanalysis/mapimg', pageResult.cookie);
-          if (imgBuffer) {
-             const imgPath = path.join(categoryDir, fileName + '.png');
-             await fs.writeFile(imgPath, imgBuffer);
-          }
-        } else {
-          console.warn(`  [!] Nie znaleziono tabeli dla: ${link.title}`);
-        }
-      }
-      
-      await sleep(1000); // Grzeczne opóźnienie
+      tasks.push({ categoryName: category.name, categoryDir, link });
     }
   }
+
+  // Funkcja kontrolująca współbieżność
+  async function asyncPool<T>(poolLimit: number, array: T[], iteratorFn: (item: T) => Promise<void>) {
+    const ret: Promise<void>[] = [];
+    const executing = new Set<Promise<void>>();
+    for (const item of array) {
+      const p = Promise.resolve().then(() => iteratorFn(item));
+      ret.push(p);
+      executing.add(p);
+      const clean = () => executing.delete(p);
+      p.then(clean).catch(clean);
+      if (executing.size >= poolLimit) {
+        await Promise.race(executing);
+      }
+    }
+    return Promise.all(ret);
+  }
+
+  console.log(`[ObserwatorScraper] Rozpoczynam pobieranie ${tasks.length} wskaźników na 5 wątkach...`);
+
+  await asyncPool(5, tasks, async (task) => {
+    console.log(`  -> Pobieranie: [${task.categoryName}] ${task.link.title}...`);
+    const pageResult = await fetchPage(task.link.url);
+    
+    if (pageResult) {
+      const $page = cheerio.load(pageResult.html);
+      const csvContent = parseTableToCsv($page);
+      
+      if (csvContent) {
+        const fileName = `${sanitizeName(task.link.title)}`;
+        const csvPath = path.join(task.categoryDir, fileName + '.csv');
+        await fs.writeFile(csvPath, csvContent, 'utf-8');
+        totalFiles++;
+        
+        // Pobieranie Opisu i Źródła
+        let sourceText = '';
+        let descriptionText = '';
+        
+        $page('h3').each((_, h3) => {
+           const text = $page(h3).text().trim().toLowerCase();
+           if (text.includes('źródło')) {
+              sourceText = $page(h3).next('p').text().trim();
+           } else if (text.includes('opis')) {
+              descriptionText = $page(h3).next('p').text().trim();
+           }
+        });
+        
+        indicatorsMetadata.push({
+           category: task.categoryName,
+           indicator: task.link.title,
+           source: sourceText,
+           description: descriptionText
+        });
+        
+        // Pobieranie obrazka mapy
+        const imgBuffer = await fetchImage(BASE_URL + '/differenceanalysis/mapimg', pageResult.cookie);
+        if (imgBuffer) {
+           const imgPath = path.join(task.categoryDir, fileName + '.png');
+           await fs.writeFile(imgPath, imgBuffer);
+        }
+      } else {
+        console.warn(`  [!] Nie znaleziono tabeli dla: ${task.link.title}`);
+      }
+    }
+    
+    // Niewielkie opóźnienie by nie zamęczyć serwera
+    await sleep(200);
+  });
 
   const metadataPath = path.join(outputDir, 'indicators_metadata.json');
   await fs.writeFile(metadataPath, JSON.stringify(indicatorsMetadata, null, 2), 'utf-8');

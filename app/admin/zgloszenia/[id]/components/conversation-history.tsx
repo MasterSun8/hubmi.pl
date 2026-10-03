@@ -1,5 +1,6 @@
 "use client";
 
+import { Markdown } from "@/shared/components/markdown";
 import { plural } from "../../components/submissions-provider";
 import { useLoadedSubmission } from "./submission-details-provider";
 
@@ -38,7 +39,11 @@ export function ConversationHistory() {
             >
               {message.role === "assistant" ? "Asystent Hubmi" : "Mieszkaniec"} · {time(message.createdAt)}
             </p>
-            <p className="max-w-[60ch] whitespace-pre-wrap">{message.content}</p>
+            {message.role === "assistant" ? (
+              <Markdown>{message.content}</Markdown>
+            ) : (
+              <p className="max-w-[60ch] whitespace-pre-wrap">{message.content}</p>
+            )}
           </li>
         ))}
       </ol>

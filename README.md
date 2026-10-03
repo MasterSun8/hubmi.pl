@@ -386,3 +386,45 @@ pnpm start  # uruchomienie zbudowanej aplikacji
 ```
 
 Konfiguracja znajduje się w `next.config.ts`, a pliki publiczne w `public/`.
+
+## 16. Backend (draft)
+
+API działa jako Route Handlers Next.js w `app/api/*`; logika w `server/`. Baza: PostgreSQL z pgvector (serwer w LAN), ORM Drizzle.
+
+```bash
+cp .env.example .env     # uzupełnij DATABASE_URL (serwer w LAN) i ADMIN_API_TOKEN
+pnpm db:migrate          # migracje z server/db/migrations (w tym CREATE EXTENSION vector)
+pnpm db:seed             # przykładowe, fikcyjne rozwiązania do dema
+pnpm db:generate         # nowa migracja po zmianie server/db/schema.ts
+pnpm db:reindex          # przeliczenie embeddingów po wdrożeniu OpenAI
+```
+
+| Katalog | Zawartość |
+| --- | --- |
+| `server/db/` | Schemat, klient i migracje. |
+| `server/ai/` | Kontrakt warstwy AI (`types.ts`), provider `mock` i szkielet `openai.ts` do implementacji. |
+| `server/services/` | Czat z RAG, rozwiązania, zgłoszenia, AI Score, grupy problemów, wiedza ROPS, rekomendacje. |
+| `server/validation.ts` | Walidacja wejścia (zod). |
+
+`AI_PROVIDER=mock` daje deterministyczne odpowiedzi i wyszukiwanie full-text, więc frontend może działać bez klucza OpenAI. Po zaimplementowaniu `server/ai/openai.ts` i ustawieniu `AI_PROVIDER=openai` wyszukiwanie przechodzi na embeddingi (pgvector).
+
+### Endpointy
+
+| Metoda i ścieżka | Opis |
+| --- | --- |
+| `POST /api/conversations` | Nowa rozmowa. |
+| `GET /api/conversations/:id` | Rozmowa z pełną historią. |
+| `POST /api/conversations/:id/messages` | Wiadomość użytkownika → RAG → odpowiedź asystenta i karty rozwiązań. |
+| `POST /api/conversations/:id/recommendations` | Rekomendacja wdrożenia wybranych rozwiązań (moduł 7). |
+| `POST /api/conversations/:id/submission/preview` | Podsumowanie do weryfikacji przed wysłaniem. |
+| `POST /api/conversations/:id/submission` | Wysłanie zgłoszenia; wymaga lokalizacji oraz e-maila lub telefonu. |
+| `GET /api/solutions`, `GET /api/solutions/:id` | Wyszukiwanie i karta rozwiązania. |
+| `GET /api/config/rops-contact` | Telefon i godziny dyżuru ROPS z konfiguracji. |
+| `GET /api/health` | Sprawdzenie połączenia z bazą. |
+| `/api/admin/submissions[/:id[/rescore]]` | Lista z filtrami i sortowaniem po priorytecie, szczegóły, korekta, ponowny AI Score. |
+| `/api/admin/clusters[/:id]` | Grupy podobnych problemów. |
+| `/api/admin/solutions[/:id]` | Edycja bazy rozwiązań z automatyczną reindeksacją. |
+| `/api/admin/knowledge[/:id]` | Zasobnik wiedzy ROPS. |
+| `GET /api/admin/stats` | Dane do mapy i trendów. |
+
+Endpointy `/api/admin/*` wymagają nagłówka `Authorization: Bearer <ADMIN_API_TOKEN>` — to tymczasowe rozwiązanie do czasu ustalenia ról administratorów.

@@ -2,8 +2,9 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
+import { countyTitle } from "@/lib/geo/county-names";
 import { ReportMarkdown } from "./report-markdown";
-import { countyTitle, useReports } from "./reports-provider";
+import { useReports } from "./reports-provider";
 
 const actionClass =
   "inline-flex cursor-pointer items-center gap-2.5 border-0 bg-primary px-7.5 py-3.5 text-cta font-medium tracking-label text-on-primary uppercase disabled:cursor-progress";

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ideaStageLabels } from "@/shared/components/idea-stage";
+import { LocationLabel } from "./location-label";
 import { RiskBadge } from "./risk-level";
 import { statusLabels, submissionNumber, typeLabels, useSubmissions } from "./submissions-provider";
 
@@ -58,7 +59,7 @@ export function SubmissionsTable() {
             <p className="mt-1 line-clamp-2 max-w-[70ch] text-caption text-ink/80">{item.summary}</p>
           </div>
           <p role="cell">
-            {item.location}
+            <LocationLabel location={item.location} />
             <br />
             {item.category ?? <span className="text-muted">bez kategorii</span>}
           </p>

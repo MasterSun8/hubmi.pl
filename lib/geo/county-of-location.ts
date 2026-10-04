@@ -1,8 +1,9 @@
 // Residents type their town or gmina freely ("Słomniki", "Proszowice (test)"); reports and the
-// map work per county (names as in malopolska-counties.ts). This maps the county seats and
-// the larger towns of each county; anything else stays unassigned and is listed as such.
+// map work per county (names from county-names.ts). This maps the county seats and the
+// larger towns of each county; anything else stays unassigned and is listed as such.
+import { countyNames, type CountyName } from "./county-names";
 
-const townsByCounty: Record<string, string[]> = {
+const townsByCounty: Record<CountyName, string[]> = {
   "powiat bocheński": ["bochnia", "nowy wiśnicz"],
   "powiat brzeski": ["brzesko", "czchów"],
   "powiat chrzanowski": ["chrzanów", "trzebinia", "libiąż", "alwernia"],
@@ -28,14 +29,14 @@ const townsByCounty: Record<string, string[]> = {
 };
 
 // Longest names first, so "nowy sącz" is not mistaken for "stary sącz" and similar overlaps.
-const towns = Object.entries(townsByCounty)
-  .flatMap(([county, names]) => names.map((name) => ({ county, name })))
+const towns = countyNames
+  .flatMap((county) => townsByCounty[county].map((name) => ({ county, name })))
   .sort((a, b) => b.name.length - a.name.length);
 
-export function countyOfLocation(location: string): string | null {
+export function countyOfLocation(location: string): CountyName | null {
   const text = location.toLocaleLowerCase("pl").replace(/\(.*?\)/g, " ");
   // A county named outright ("powiat proszowicki", "pow. krakowski") wins over towns.
-  for (const county of Object.keys(townsByCounty)) {
+  for (const county of countyNames) {
     if (county.startsWith("powiat m.")) continue;
     const stem = county.slice("powiat ".length);
     if (new RegExp(`(powiat|pow\\.)\\s*${stem}`, "u").test(text)) return county;

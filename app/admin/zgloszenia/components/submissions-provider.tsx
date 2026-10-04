@@ -1,6 +1,8 @@
 "use client";
 
 import { createContext, use, useEffect, useMemo, useState, type ReactNode } from "react";
+import { countyNames, UNASSIGNED_COUNTY, type CountyFilter } from "@/lib/geo/county-names";
+import { countyOfLocation } from "@/lib/geo/county-of-location";
 import type { IdeaStage } from "@/shared/components/idea-stage";
 
 // Row shape returned by GET /api/submissions.
@@ -48,11 +50,21 @@ export const PAGE_SIZE = 5;
 // so search, filters, sorting and paging run in the browser.
 const FETCH_LIMIT = 100;
 
+// The county filter lives in the URL too, so the reports map can link to a filtered queue.
+const COUNTY_PARAM = "powiat";
+
+// The page ignores a value that is not a county or UNASSIGNED_COUNTY.
+export function submissionsHref(county: string) {
+  return `/admin/zgloszenia?${COUNTY_PARAM}=${encodeURIComponent(county)}`;
+}
+
+// The same mapping the reports map uses, so counts on both pages agree.
+const countyOf = (item: Submission): CountyFilter => countyOfLocation(item.location) ?? UNASSIGNED_COUNTY;
+
 export type Filters = {
   status: SubmissionStatus | "all";
-  type: Submission["type"] | "all";
   category: string;
-  location: string;
+  county: CountyFilter | "";
   risk: number | null;
   days: number | null;
   // Cutoff timestamp for `days`, fixed when the period is picked.
@@ -74,7 +86,8 @@ type SubmissionsState = {
   sort: "risk" | "date";
   toggleSort: () => void;
   categories: { category: string; count: number }[];
-  locations: string[];
+  // Every county plus the unassigned bucket, with the number of submissions in each.
+  counties: { county: CountyFilter; count: number }[];
 };
 
 const SubmissionsContext = createContext<SubmissionsState | null>(null);
@@ -102,15 +115,21 @@ export function submissionNumber(id: string) {
 const distinct = (values: (string | null)[]) =>
   [...new Set(values.filter((value): value is string => Boolean(value)))].sort((a, b) => a.localeCompare(b, "pl"));
 
-export function SubmissionsProvider({ children }: { children: ReactNode }) {
+export function SubmissionsProvider({
+  initialCounty = "",
+  children,
+}: {
+  // From ?powiat= (validated by the page), e.g. a link from the reports map.
+  initialCounty?: Filters["county"];
+  children: ReactNode;
+}) {
   const [status, setStatus] = useState<SubmissionsState["status"]>("loading");
   const [all, setAll] = useState<Submission[]>([]);
   const [query, setQueryState] = useState("");
   const [filters, setFilters] = useState<Filters>({
     status: "all",
-    type: "all",
     category: "",
-    location: "",
+    county: initialCounty,
     risk: null,
     days: null,
     since: null,
@@ -149,9 +168,8 @@ export function SubmissionsProvider({ children }: { children: ReactNode }) {
     const matching = all.filter(
       (item) =>
         (filters.status === "all" || item.status === filters.status) &&
-        (filters.type === "all" || item.type === filters.type) &&
         (!filters.category || item.category === filters.category) &&
-        (!filters.location || item.location === filters.location) &&
+        (!filters.county || countyOf(item) === filters.county) &&
         (!filters.risk || item.riskLevel === filters.risk) &&
         (!filters.since || new Date(item.createdAt).getTime() >= filters.since) &&
         (!phrase ||
@@ -162,6 +180,16 @@ export function SubmissionsProvider({ children }: { children: ReactNode }) {
     const risk = (item: Submission) => item.riskLevel ?? 0;
     return matching.sort((a, b) => (sort === "risk" ? risk(b) - risk(a) || byDate(a, b) : byDate(a, b)));
   }, [all, query, filters, sort]);
+
+  const counties = useMemo(() => {
+    const counts = new Map<CountyFilter, number>();
+    for (const item of all) {
+      const county = countyOf(item);
+      counts.set(county, (counts.get(county) ?? 0) + 1);
+    }
+    const options: CountyFilter[] = [...countyNames, UNASSIGNED_COUNTY];
+    return options.map((county) => ({ county, count: counts.get(county) ?? 0 }));
+  }, [all]);
 
   const pageCount = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
   const currentPage = Math.min(page, pageCount);
@@ -185,6 +213,12 @@ export function SubmissionsProvider({ children }: { children: ReactNode }) {
         setFilter: (key, value) => {
           setFilters((current) => ({ ...current, [key]: value }));
           setPage(1);
+          if (key === "county") {
+            const url = new URL(window.location.href);
+            if (value) url.searchParams.set(COUNTY_PARAM, String(value));
+            else url.searchParams.delete(COUNTY_PARAM);
+            window.history.replaceState(null, "", url);
+          }
         },
         sort,
         toggleSort: () => setSort((current) => (current === "risk" ? "date" : "risk")),
@@ -195,7 +229,7 @@ export function SubmissionsProvider({ children }: { children: ReactNode }) {
                 category,
                 count: all.filter((item) => item.category === category).length,
               })),
-        locations: distinct(all.map((item) => item.location)),
+        counties,
       }}
     >
       {children}

@@ -1,7 +1,8 @@
 "use client";
 
+import { shortCountyName } from "@/lib/geo/county-names";
 import { MAP_HEIGHT, MAP_WIDTH, counties } from "@/lib/geo/malopolska-counties";
-import { formatValue, shortRegionName, useIndicators, type Indicator } from "./indicators-provider";
+import { formatValue, useIndicators, type Indicator } from "./indicators-provider";
 
 // The legend from Figma 15:901: secondary → success (35%) → warning (65%) → error.
 const scale = [
@@ -67,7 +68,7 @@ export function CountyMap() {
           <g key={county.name} className="pointer-events-none" aria-hidden="true">
             <circle cx={county.center[0]} cy={county.center[1]} r="4" className="fill-ink" />
             <text x={county.center[0] + 7} y={county.center[1] - 6} className="fill-ink text-[17px]">
-              {shortRegionName(county.name)}
+              {shortCountyName(county.name)}
             </text>
           </g>
         ))}

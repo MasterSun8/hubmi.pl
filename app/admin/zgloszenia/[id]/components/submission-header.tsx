@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { LocationLabel } from "../../components/location-label";
 import { RiskBadge } from "../../components/risk-level";
 import { submissionNumber, typeLabels } from "../../components/submissions-provider";
 import { ResolveButton, StatusSelect } from "./status-control";
@@ -38,7 +39,9 @@ export function SubmissionHeader() {
           <Fact label="Ryzyko">
             <RiskBadge item={submission} />
           </Fact>
-          <Fact label="Lokalizacja">{submission.location}</Fact>
+          <Fact label="Lokalizacja">
+            <LocationLabel location={submission.location} />
+          </Fact>
           <Fact label="Kategoria">{submission.category ?? <span className="text-muted">nieprzypisana</span>}</Fact>
           <Fact label="Data">{formatDateTime(submission.createdAt)}</Fact>
         </dl>

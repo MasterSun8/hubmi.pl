@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { isCountyFilter } from "@/lib/geo/county-names";
 import { QueueSummary } from "./components/queue-summary";
 import { ResultsBar } from "./components/results-bar";
 import { SubmissionsFilters } from "./components/submissions-filters";
@@ -12,9 +13,12 @@ export const metadata: Metadata = {
 };
 
 // Figma 15:1464 — the submissions queue from GET /api/submissions.
-export default function SubmissionsPage() {
+// ?powiat= preselects the county filter (links from the reports map).
+export default async function SubmissionsPage({ searchParams }: PageProps<"/admin/zgloszenia">) {
+  const { powiat } = await searchParams;
+
   return (
-    <SubmissionsProvider>
+    <SubmissionsProvider initialCounty={isCountyFilter(powiat) ? powiat : ""}>
       <main id="main-content" className="flex flex-col gap-5 p-10 max-sm:p-5">
         <p className="text-caption font-medium tracking-label-sm text-primary uppercase">Małopolska / panel instytucji</p>
         <h1 className="font-heading text-display text-primary">Zgłoszenia</h1>

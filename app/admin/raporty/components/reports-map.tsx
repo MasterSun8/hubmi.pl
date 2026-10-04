@@ -1,8 +1,9 @@
 "use client";
 
+import { shortCountyName } from "@/lib/geo/county-names";
 import { MAP_HEIGHT, MAP_WIDTH, counties } from "@/lib/geo/malopolska-counties";
 import { plural } from "../../zgloszenia/components/submissions-provider";
-import { shortCountyName, useReports } from "./reports-provider";
+import { useReports } from "./reports-provider";
 
 // Same scale as the needs map (Figma 15:901): secondary → success → warning → error.
 const scale = [

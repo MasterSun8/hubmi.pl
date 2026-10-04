@@ -1,9 +1,12 @@
 "use client";
 
-import { plural } from "../../zgloszenia/components/submissions-provider";
-import { countyTitle, useReports, type CountyTrend } from "./reports-provider";
+import Link from "next/link";
+import { countyTitle, UNASSIGNED_COUNTY } from "@/lib/geo/county-names";
+import { plural, submissionsHref } from "../../zgloszenia/components/submissions-provider";
+import { useReports, type CountyTrend } from "./reports-provider";
 
 const labelClass = "text-caption font-medium tracking-label-sm uppercase";
+const linkClass = "font-medium text-primary no-underline";
 const numberFormat = new Intl.NumberFormat("pl-PL", { maximumFractionDigits: 2 });
 
 // Categories as horizontal bars, longest first.
@@ -76,7 +79,9 @@ export function RegionSummary() {
             <ol className="m-0 -mt-2.5 w-full list-none p-0">
               {top.map(([county, trend]) => (
                 <li key={county} className="flex justify-between gap-5">
-                  <span>{county}</span>
+                  <Link href={submissionsHref(county)} className="text-ink">
+                    {county}
+                  </Link>
                   <span className="font-medium">{trend.total}</span>
                 </li>
               ))}
@@ -87,7 +92,10 @@ export function RegionSummary() {
         {unassigned.total > 0 && (
           <p className="text-caption text-muted">
             Bez przypisanego powiatu: {unassigned.total} ({unassigned.locations.join(", ")}). Miejscowość nie pasuje do
-            żadnego powiatu albo jest testowa.
+            żadnego powiatu albo jest testowa.{" "}
+            <Link href={submissionsHref(UNASSIGNED_COUNTY)} className={linkClass}>
+              Pokaż zgłoszenia
+            </Link>
           </p>
         )}
         <p className="text-caption">Kliknij powiat na mapie, aby zobaczyć jego zgłoszenia i wskaźniki GUS.</p>
@@ -109,7 +117,14 @@ export function RegionSummary() {
 
       <p className={labelClass}>Zgłoszenia mieszkańców</p>
       <SubmissionsBlock trend={trend} />
-      {trend && trend.total > 0 && <p className="-mt-2.5 text-caption text-muted">Miejscowości: {trend.locations.join(", ")}</p>}
+      {trend && trend.total > 0 && (
+        <>
+          <p className="-mt-2.5 text-caption text-muted">Miejscowości: {trend.locations.join(", ")}</p>
+          <Link href={submissionsHref(selectedCounty)} className={linkClass}>
+            Pokaż zgłoszenia z tego obszaru <span aria-hidden="true">→</span>
+          </Link>
+        </>
+      )}
 
       <p className={labelClass}>Wskaźniki GUS (Obserwatorium ROPS)</p>
       {stats.length > 0 ? (

@@ -1,7 +1,8 @@
 "use client";
 
+import { shortCountyName } from "@/lib/geo/county-names";
 import { legendGradient } from "./county-map";
-import { formatValue, shortRegionName, useIndicators } from "./indicators-provider";
+import { formatValue, useIndicators } from "./indicators-provider";
 
 const labelClass = "text-caption font-medium tracking-label-sm uppercase";
 
@@ -66,7 +67,7 @@ export function IndicatorSummary() {
         <ol className="m-0 mt-2.5 list-none p-0">
           {ranked.map(([region, value]) => (
             <li key={region} className="flex justify-between gap-5 border-t border-line/40 py-1">
-              <span>{shortRegionName(region)}</span>
+              <span>{shortCountyName(region)}</span>
               <span>{formatValue(value)}</span>
             </li>
           ))}

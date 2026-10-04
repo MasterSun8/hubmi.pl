@@ -120,8 +120,3 @@ export function formatValue(value: number | null | undefined) {
   if (value === null || value === undefined) return "brak danych";
   return value.toLocaleString("pl-PL", { maximumFractionDigits: 2 });
 }
-
-// "powiat m. Kraków" -> "Kraków", "powiat bocheński" -> "bocheński".
-export function shortRegionName(region: string) {
-  return region.replace(/^powiat (m\. )?/, "");
-}

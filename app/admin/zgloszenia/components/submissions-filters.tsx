@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { riskLabels, type RiskLevel } from "./risk-level";
-import { statusLabels, typeLabels, useSubmissions, type Filters, type SubmissionStatus } from "./submissions-provider";
+import { statusLabels, useSubmissions, type Filters, type SubmissionStatus } from "./submissions-provider";
 
 // Figma 15:1483 — "Status: wszystkie ⌄" style filters, built on native selects.
 function FilterSelect({
@@ -41,7 +41,7 @@ const periods = [
 ];
 
 export function SubmissionsFilters() {
-  const { filters, setFilter, categories, locations } = useSubmissions();
+  const { filters, setFilter, categories, counties } = useSubmissions();
 
   return (
     <div className="flex flex-wrap items-center gap-x-7.5 gap-y-2.5" role="group" aria-label="Filtry zgłoszeń">
@@ -52,11 +52,6 @@ export function SubmissionsFilters() {
             {statusLabels[status].toLocaleLowerCase("pl")}
           </option>
         ))}
-      </FilterSelect>
-      <FilterSelect label="Typ" value={filters.type} onChange={(value) => setFilter("type", value as Filters["type"])}>
-        <option value="all">wszystkie</option>
-        <option value="problem">{typeLabels.problem.toLocaleLowerCase("pl")}</option>
-        <option value="idea">{typeLabels.idea.toLocaleLowerCase("pl")}</option>
       </FilterSelect>
       <FilterSelect
         label="Ryzyko"
@@ -78,11 +73,11 @@ export function SubmissionsFilters() {
           </option>
         ))}
       </FilterSelect>
-      <FilterSelect label="Lokalizacja" value={filters.location} onChange={(value) => setFilter("location", value)}>
-        <option value="">Małopolska</option>
-        {locations.map((location) => (
-          <option key={location} value={location}>
-            {location}
+      <FilterSelect label="Powiat" value={filters.county} onChange={(value) => setFilter("county", value as Filters["county"])}>
+        <option value="">cała Małopolska</option>
+        {counties.map(({ county, count }) => (
+          <option key={county} value={county}>
+            {county} ({count})
           </option>
         ))}
       </FilterSelect>

@@ -153,13 +153,3 @@ export function ReportsProvider({ children }: { children: ReactNode }) {
     </ReportsContext>
   );
 }
-
-// "powiat m. Kraków" → "Kraków", "powiat proszowicki" → "proszowicki" (map labels).
-export function shortCountyName(county: string) {
-  return county.replace(/^powiat (m\. )?/, "");
-}
-
-// "powiat m. Kraków" → "Kraków", "powiat proszowicki" → "Powiat proszowicki" (headings).
-export function countyTitle(county: string) {
-  return county.startsWith("powiat m. ") ? shortCountyName(county) : `Powiat ${shortCountyName(county)}`;
-}

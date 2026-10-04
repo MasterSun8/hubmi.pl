@@ -62,6 +62,12 @@ export function IdeasList() {
                   {idea.canvasFilled ? `${idea.canvasFilled} z ${CANVAS_FIELDS.length} pól` : "nie wypełniono"}
                 </dd>
               </div>
+              {Boolean(idea.submittedApplications) && (
+                <div>
+                  <dt className="inline font-medium">Wniosek: </dt>
+                  <dd className="inline font-medium text-primary">złożony w naborze</dd>
+                </div>
+              )}
             </div>
           </dl>
         </li>

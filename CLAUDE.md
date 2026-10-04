@@ -55,8 +55,11 @@ pnpm enrich:submissions  # AI title/summary/category/targetGroup for submissions
 ## Project layout and conventions
 
 - `app/` — routes. Public: `/` (landing), `/zglos-problem` (report a problem chat),
-  `/zaoferuj-pomoc` (offer help / idea chat). Admin ("Panel instytucji"): `/admin` (statistics),
-  `/admin/zgloszenia` (+ `[id]`), `/admin/inicjatywy` (+ `[id]`), `/admin/mapa-potrzeb`.
+  `/zaoferuj-pomoc` (offer help / idea chat) → `/zaoferuj-pomoc/kanwa` (innovation canvas + hand-off)
+  → `/zaoferuj-pomoc/wniosek` (grant application). Admin ("Panel instytucji"): `/admin` (statistics),
+  `/admin/zgloszenia` (+ `[id]`), `/admin/inicjatywy` (+ `[id]`), `/admin/nabory` (+ `[id]`),
+  `/admin/mapa-potrzeb`. The idea-creator flow for users and admins is described in
+  `docs/kreator-pomyslow.md`.
 - **`page.tsx` holds the full page skeleton** (landmarks, layout grid, section order) and composes
   components; it should read like an outline of the screen.
 - Components used by a single route go in `app/<route>/components/`. Components shared by several
@@ -117,7 +120,10 @@ pnpm enrich:submissions  # AI title/summary/category/targetGroup for submissions
 `/api/chat` · `/api/conversations/[id]` · `/api/submissions` (list, create) ·
 `/api/submissions/[id]` (GET, PATCH status) · `/api/submissions/[id]/matches` ·
 `/api/solutions` (list + `matchedSubmissions`) · `/api/solutions/[id]` (GET + matching submissions,
-PATCH status) · `/api/regional-statistics` · `/api/groups`.
+PATCH status) · `/api/regional-statistics` · `/api/groups` ·
+`/api/conversations/[id]/idea-card` · `/api/conversations/[id]/canvas` (GET, PUT, POST = AI draft) ·
+`/api/conversations/[id]/application` (GET, PUT, `/draft`, `/submit`) · `/api/grant-calls` (list, create) ·
+`/api/grant-calls/[id]` · `/api/submissions/[id]/applications`.
 
 When extending a teammate's endpoint, keep it additive (don't remove or rename existing fields) and
 tell them.
@@ -148,7 +154,7 @@ Don't rewrite another person's area unasked; if a change there is needed, keep i
 | --- | --- |
 | I. Matchmaking | Done in chat and admin (submission ↔ innovations, match counts) |
 | II. Knowledge base | Partial: needs map and innovation library in admin; no public library yet |
-| III. Idea creator | Ideas shown as cards in admin; no idea form / grant-application generator |
+| III. Idea creator | Done: live idea card, innovation canvas (our own fields until ROPS's file), grant calls and AI-drafted applications; no visualization |
 | IV. Innovation tester | Not started |
 | V. Communication | Not started: notify admin of new submissions, ROPS reply to the author |
 | VI. Admin panel | Done: submissions with statuses, innovations with publish/retire, needs map |

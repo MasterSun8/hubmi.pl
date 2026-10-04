@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { ArrowButton } from "@/shared/components/arrow-button";
 
 type CommentRow = {
   id: string;
@@ -17,7 +18,8 @@ export function InnovationComments({ solutionId, initialComments }: { solutionId
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    const fd = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const fd = new FormData(form);
     const payload = Object.fromEntries(fd.entries());
 
     try {
@@ -28,12 +30,12 @@ export function InnovationComments({ solutionId, initialComments }: { solutionId
       }).then(r => r.json());
       
       if (res.success) {
-        e.currentTarget.reset();
+        form.reset();
         router.refresh();
       } else {
         alert("Błąd: " + res.error);
       }
-    } catch (err) {
+    } catch {
       alert("Wystąpił błąd sieci");
     } finally {
       setLoading(false);
@@ -41,49 +43,34 @@ export function InnovationComments({ solutionId, initialComments }: { solutionId
   };
 
   return (
-    <section className="flex flex-col gap-8 mt-4 w-full">
-      <h3 className="font-heading text-2xl text-primary border-b border-line pb-2">Dyskusja ({initialComments.length})</h3>
-      
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 bg-surface p-5 rounded-lg border border-line">
-        <h4 className="font-semibold text-ink">Dodaj komentarz</h4>
-        <label className="flex min-h-10.5 items-center rounded-input border border-field px-5 transition-colors focus-within:border-primary">
-          <input name="authorName" required placeholder="Twoje imię / pseudonim" className="min-w-0 flex-1 bg-transparent py-2 text-ink placeholder:text-muted focus:outline-none" />
-        </label>
-        <label className="flex items-start rounded-input border border-field px-5 py-2.5 transition-colors focus-within:border-primary">
-          <textarea name="content" required placeholder="Dołącz do dyskusji o innowacji..." rows={3} className="min-w-0 flex-1 bg-transparent text-ink placeholder:text-muted focus:outline-none resize-none" />
-        </label>
-        <div className="flex justify-end mt-2">
-          <button type="submit" disabled={loading} className="rounded-button bg-primary px-5 py-2.5 font-medium text-on-primary transition-colors hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:opacity-50 cursor-pointer border-0">
-            {loading ? "Wysyłanie..." : "Opublikuj komentarz"}
-          </button>
-        </div>
-      </form>
-
-      <div className="flex flex-col gap-6">
-        {initialComments.length === 0 ? (
-          <p className="text-muted italic">Brak komentarzy. Bądź pierwszą osobą, która podzieli się opinią!</p>
-        ) : (
-          initialComments.map((comment) => {
-            const initials = comment.authorName.substring(0, 2).toUpperCase();
-            return (
-              <article key={comment.id} className="flex gap-4">
-                <div className="flex-none flex items-center justify-center w-11 h-11 rounded-full bg-primary/10 text-primary font-bold text-sm select-none">
-                  {initials}
-                </div>
-                <div className="flex-1 bg-surface border border-line rounded-2xl rounded-tl-sm p-4 flex flex-col gap-1.5 shadow-sm">
-                  <div className="flex justify-between items-baseline gap-2">
-                    <span className="font-semibold text-ink">{comment.authorName}</span>
-                    <span className="text-xs text-muted font-medium" title={new Date(comment.createdAt).toLocaleString()}>
-                      {new Date(comment.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                  <p className="text-ink leading-relaxed">{comment.content}</p>
-                </div>
-              </article>
-            );
-          })
-        )}
+    <section className="flex w-full flex-col gap-7.5 border-t border-line pt-7.5" aria-labelledby="discussion-title">
+      <div className="flex flex-col gap-2.5">
+        <h2 id="discussion-title" className="font-light text-subtitle text-primary">Dyskusja <span className="text-muted">({initialComments.length})</span></h2>
+        <p className="text-muted">Podziel się doświadczeniem lub zapytaj o wdrożenie tej innowacji.</p>
       </div>
+      <div className="flex flex-col gap-5">
+        {initialComments.length === 0 ? <p className="text-muted">Nie ma jeszcze komentarzy. Możesz rozpocząć rozmowę.</p> : initialComments.map(comment => (
+          <article key={comment.id} className="flex flex-col gap-2.5 border-b border-line pb-5">
+            <div className="flex flex-wrap items-baseline justify-between gap-2.5">
+              <h3 className="font-medium">{comment.authorName}</h3>
+              <time className="text-caption text-muted" dateTime={new Date(comment.createdAt).toISOString()}>{new Date(comment.createdAt).toLocaleDateString("pl-PL")}</time>
+            </div>
+            <p className="whitespace-pre-wrap break-words">{comment.content}</p>
+          </article>
+        ))}
+      </div>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+        <h3 className="text-caption font-medium tracking-label-sm text-primary uppercase">Dodaj komentarz</h3>
+        <label className="flex flex-col gap-2.5">
+          <span>Imię lub pseudonim</span>
+          <input name="authorName" required autoComplete="nickname" className="min-h-11 w-full rounded-input border border-field bg-surface px-5 py-2.5 text-ink" />
+        </label>
+        <label className="flex flex-col gap-2.5">
+          <span>Twój komentarz</span>
+          <textarea name="content" required rows={4} className="w-full resize-y rounded-input border border-field bg-surface px-5 py-2.5 text-ink" />
+        </label>
+        <div><ArrowButton type="submit" disabled={loading}>{loading ? "Publikowanie…" : "Opublikuj komentarz"}</ArrowButton></div>
+      </form>
     </section>
   );
 }

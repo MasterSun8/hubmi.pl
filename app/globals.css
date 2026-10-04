@@ -66,6 +66,12 @@
     0%, 100% { opacity: 0.25; }
     50% { opacity: 1; }
   }
+  /* Indeterminate progress (e.g. while AI writes a report): a bar sliding across its track. */
+  --animate-progress: progress 1.4s var(--ease-brand) infinite;
+  @keyframes progress {
+    0% { translate: -100% 0; }
+    100% { translate: 250% 0; }
+  }
 }
 
 /* hc: styles that apply only in high-contrast mode. */
@@ -140,5 +146,22 @@
   [aria-disabled="true"],
   input:is([type="checkbox"], [type="radio"], [type="submit"], [type="button"], [type="reset"]) {
     cursor: pointer;
+  }
+}
+
+/* Every enabled button, and every link styled as one (data-button), lightens on hover.
+   Unlayered on purpose: it must win over transition utilities such as transition-colors,
+   so it lists the color properties those utilities would animate too. */
+:is(button, [role="button"], [data-button]):not(:disabled, [aria-disabled="true"]) {
+  transition-property: opacity, color, background-color, border-color, fill, stroke;
+  transition-duration: 200ms;
+  transition-timing-function: var(--ease-brand);
+}
+:is(button, [role="button"], [data-button]):not(:disabled, [aria-disabled="true"]):hover {
+  opacity: 0.7;
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(button, [role="button"], [data-button]) {
+    transition: none;
   }
 }

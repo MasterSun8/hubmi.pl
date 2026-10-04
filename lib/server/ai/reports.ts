@@ -1,7 +1,8 @@
 import "server-only";
 import { getOpenAI } from "./client";
 import { getAiConfig } from "./config";
-import { getTrendsData } from "@/app/api/reports/trends/route";
+import { countyOfLocation } from "@/lib/geo/county-of-location";
+import { getTrendsData } from "@/lib/server/reports";
 
 export async function generateTrendReport(regionQuery?: string) {
   const { model } = getAiConfig();
@@ -16,9 +17,14 @@ export async function generateTrendReport(regionQuery?: string) {
   // Jeśli podano konkretny region, filtrujemy dane, aby nie obciążać kontekstu LLMa
   let filteredData = data;
   if (regionQuery) {
-    const normalizedRegion = regionQuery.toLowerCase();
+    const normalizedRegion = regionQuery.toLocaleLowerCase("pl");
     filteredData = {
-      trends: data.trends[normalizedRegion] ? { [normalizedRegion]: data.trends[normalizedRegion] } : {},
+      // Submissions are keyed by the town residents typed; keep the ones in the requested county.
+      trends: Object.fromEntries(
+        Object.entries(data.trends).filter(
+          ([location]) => countyOfLocation(location)?.toLocaleLowerCase("pl") === normalizedRegion,
+        ),
+      ),
       contextStats: data.contextStats[normalizedRegion] ? { [normalizedRegion]: data.contextStats[normalizedRegion] } : {},
     };
   }

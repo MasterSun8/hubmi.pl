@@ -9,6 +9,7 @@ const items = [
   { label: "Zgłoszenia", href: "/admin/zgloszenia" },
   { label: "Inicjatywy", href: "/admin/inicjatywy" },
   { label: "Nabory", href: "/admin/nabory" },
+  { label: "Raporty", href: "/admin/raporty" },
   { label: "Baza wiedzy" },
   { label: "Ustawienia" },
 ] as const;

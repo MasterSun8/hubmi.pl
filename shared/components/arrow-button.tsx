@@ -41,7 +41,7 @@ export function ArrowButton({ children, className, ...props }: ArrowButtonProps)
 
   if (props.href !== undefined) {
     return (
-      <Link className={classes} href={props.href} aria-label={props["aria-label"]}>
+      <Link className={classes} href={props.href} aria-label={props["aria-label"]} data-button>
         {content}
       </Link>
     );

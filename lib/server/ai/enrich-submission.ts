@@ -36,7 +36,7 @@ type EmbeddingFields = Pick<Submission, "embedding" | "embeddingModel" | "embedd
 // and from scripts/enrich-submissions.mts for rows that missed it.
 // Rewrites the raw text the client sent into a clean summary, picks the
 // category (which is also the submission's group), embeds the result and,
-// for problems, assesses the risk level.
+// assesses the risk level (for ideas: whether the idea or the chat signals harm to people).
 // Each step degrades on its own: without the summary we embed the raw text,
 // without the embedding or the risk level the row waits for a backfill.
 export async function enrichSubmission(id: string): Promise<void> {
@@ -47,7 +47,7 @@ export async function enrichSubmission(id: string): Promise<void> {
   // already summarized (or the summary failed and we settled for raw text).
   const needsSummary = !submission.embedding;
   // A separate check lets the backfill assess rows summarized before risk levels existed.
-  const needsRisk = submission.type === "problem" && submission.riskLevel === null;
+  const needsRisk = submission.riskLevel === null;
   if (!needsSummary && !needsRisk) return;
 
   const input = await buildInput(submission);

@@ -1,6 +1,6 @@
 import "server-only";
 
-// Triage for problem submissions: how much harm the people described are
+// Triage for submissions (problems and ideas): how much harm the people described are
 // exposed to, not how good or complete the submission is. Scale and
 // recurrence are left out on purpose: the panel shows peopleAffected on its
 // own and recurrence comes from similar submissions, not from one chat.
@@ -42,4 +42,15 @@ Zasady:
   „osoba”, „mieszkaniec”, „sąsiadka” itp.; nie podawaj adresów, telefonów ani e-maili.
 - Jeśli rozmowa nie zawiera żadnej konkretnej potrzeby, wybierz poziom 1 i napisz to
   w uzasadnieniu.
+
+Zgłoszenia typu „pomysł” (inicjatywa, którą ktoś chce zrealizować):
+- Oceniaj, czy pomysł albo sama rozmowa niesie szkodę dla ludzi: czy realizacja mogłaby
+  komuś zaszkodzić i czy w rozmowie padły sygnały zagrożenia (groźby, zamiar skrzywdzenia
+  kogoś, handel ludźmi, narażanie dzieci, jazda po alkoholu, przemoc).
+- Pomysł, który zakłada skrzywdzenie ludzi albo przestępstwo, lub rozmowa z wyraźną
+  groźbą wobec dzieci czy innych osób to poziom 4, nawet jeśli brzmi jak żart albo
+  autor twierdzi, że „nie ma ryzyka”. W uzasadnieniu napisz wprost, co padło, i że
+  sprawa może wymagać zgłoszenia na policję (112).
+- Zwykły, bezpieczny pomysł społeczny to poziom 1. Wyższy poziom tylko wtedy, gdy
+  realizacja niesie realne ryzyko dla uczestników (np. praca z dziećmi bez opieki dorosłych).
 `.trim();

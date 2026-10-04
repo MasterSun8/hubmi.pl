@@ -18,6 +18,8 @@ export type ConversationMessage = ChatMessage & {
 
 type ChatState = {
   messages: ConversationMessage[];
+  // Database id of the conversation, known after the first answer starts.
+  conversationId: string | null;
   started: boolean;
   // True from sending until the answer has finished streaming.
   waiting: boolean;
@@ -93,6 +95,12 @@ export function ChatProvider({ flowId, firstQuestion, newConversationLabel, chil
   const [dialogOpen, setDialogOpen] = useState(false);
   const [sent, setSent] = useState(false);
   const conversationId = useRef<string | null>(null);
+  // Mirror of the ref for rendering (the ref is read in send() without waiting for a render).
+  const [currentConversationId, setCurrentConversationId] = useState<string | null>(null);
+  const setConversationId = (id: string | null) => {
+    conversationId.current = id;
+    setCurrentConversationId(id);
+  };
   const localId = useRef(0);
   const nextLocalId = () => `local-${localId.current++}`;
   const greeting = (): ConversationMessage => ({ id: "greeting", role: "assistant", content: firstQuestion });
@@ -108,7 +116,7 @@ export function ChatProvider({ flowId, firstQuestion, newConversationLabel, chil
           storeId(flowId, null);
           return;
         }
-        conversationId.current = conversation.id;
+        setConversationId(conversation.id);
         setMessages([greeting(), ...conversation.messages]);
         setSent(conversation.status === "submitted");
       })
@@ -145,7 +153,7 @@ export function ChatProvider({ flowId, firstQuestion, newConversationLabel, chil
         flow: apiFlow[flowId],
       })) {
         if (event.type === "conversation") {
-          conversationId.current = event.id;
+          setConversationId(event.id);
           storeId(flowId, event.id);
         } else if (event.type === "delta") {
           setThinking(false);
@@ -184,6 +192,7 @@ export function ChatProvider({ flowId, firstQuestion, newConversationLabel, chil
     <ChatContext
       value={{
         messages,
+        conversationId: currentConversationId,
         started: messages.length > 0,
         waiting,
         thinking,
@@ -195,7 +204,7 @@ export function ChatProvider({ flowId, firstQuestion, newConversationLabel, chil
         closeDialog: () => setDialogOpen(false),
         markSent: () => setSent(true),
         startNew: () => {
-          conversationId.current = null;
+          setConversationId(null);
           storeId(flowId, null);
           setMessages([]);
           setSent(false);

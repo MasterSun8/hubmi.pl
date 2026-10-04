@@ -26,6 +26,8 @@ export async function GET(_request: Request, ctx: { params: Promise<{ id: string
           summary: data.summary,
           category: data.category,
           targetGroup: data.targetGroup,
+          essence: data.essence,
+          stage: data.stage,
           location: data.location,
           peopleAffected: data.peopleAffected,
           reporterType: data.reporterType,

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ideaStageLabels } from "@/shared/components/idea-stage";
 import { statusLabels, submissionNumber, typeLabels, useSubmissions, type Submission } from "./submissions-provider";
 
 const columns = "grid grid-cols-[minmax(0,1fr)_220px_160px_100px_30px] gap-x-5 max-lg:grid-cols-1";
@@ -58,7 +59,8 @@ export function SubmissionsTable() {
               {item.title}
             </Link>
             <p className="text-caption">
-              {submissionNumber(item.id)} · {typeLabels[item.type]} · {formatDate(item.createdAt)}
+              {submissionNumber(item.id)} · {typeLabels[item.type]}
+              {item.stage && ` (${ideaStageLabels[item.stage].toLocaleLowerCase("pl")})`} · {formatDate(item.createdAt)}
             </p>
             <p className="mt-1 line-clamp-2 max-w-[70ch] text-caption text-ink/80">{item.summary}</p>
           </div>

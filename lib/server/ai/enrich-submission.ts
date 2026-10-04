@@ -9,6 +9,7 @@ import { submissions } from "@/server/db/schema";
 import { getEnv } from "@/server/env";
 import { getOpenAI } from "./client";
 import { getAiConfig } from "./config";
+import { getIdeaCard } from "./idea-card";
 import { SUBMISSION_CATEGORIES, SUBMISSION_SUMMARY_PROMPT } from "./prompts/submission-summary";
 
 const MAX_TRANSCRIPT_MESSAGES = 50;
@@ -41,15 +42,18 @@ export async function enrichSubmission(id: string): Promise<void> {
     return null;
   });
 
-  const embedding = await embed(summary ?? submission).catch((err) => {
-    console.error(`[submissions] embedding failed for ${id}`, err);
-    return null;
-  });
+  const [embedding, ideaCard] = await Promise.all([
+    embed(summary ?? submission).catch((err) => {
+      console.error(`[submissions] embedding failed for ${id}`, err);
+      return null;
+    }),
+    submission.type === "idea" ? ideaCardFields(submission) : null,
+  ]);
 
-  if (!summary && !embedding) return;
+  if (!summary && !embedding && !ideaCard) return;
   await getDb()
     .update(submissions)
-    .set({ ...summary, ...embedding })
+    .set({ ...summary, ...embedding, ...ideaCard })
     .where(eq(submissions.id, id));
 }
 
@@ -72,6 +76,18 @@ async function summarize(submission: Submission): Promise<SummaryFields> {
 
   if (!response.output_parsed) throw new Error(`No parsed output (status: ${response.status})`);
   return response.output_parsed;
+}
+
+// The idea card (fiszka) the user watched fill in next to the chat: essence and stage are
+// stored for the admin panel; title, summary and target group come from the summary above.
+async function ideaCardFields(submission: Submission): Promise<Pick<Submission, "essence" | "stage"> | null> {
+  try {
+    const card = await getIdeaCard(submission.conversationId);
+    return card && { essence: card.essence, stage: card.stage };
+  } catch (err) {
+    console.error(`[submissions] idea card failed for ${submission.id}`, err);
+    return null;
+  }
 }
 
 // Same hash scheme as scripts/embed-solutions.mts: the model and dimensions

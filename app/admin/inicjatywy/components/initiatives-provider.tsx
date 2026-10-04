@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, use, useEffect, useMemo, useState, type ReactNode } from "react";
+import type { IdeaStage } from "@/shared/components/idea-stage";
 import type { Submission } from "../../zgloszenia/components/submissions-provider";
 
 // Row shape returned by GET /api/solutions.
@@ -26,12 +27,18 @@ export const solutionStatusLabels: Record<SolutionStatus, string> = {
 
 export const PAGE_SIZE = 10;
 
+export type IdeaStageFilter = IdeaStage | "unknown" | "all";
+
 type InitiativesState = {
   status: "loading" | "ready" | "error";
   tab: "library" | "ideas";
   setTab: (tab: "library" | "ideas") => void;
   solutions: Solution[];
   ideas: Submission[];
+  // Ideas after the stage filter; "unknown" = the conversation did not say.
+  ideaResults: Submission[];
+  stageFilter: IdeaStageFilter;
+  setStageFilter: (stage: IdeaStageFilter) => void;
   results: Solution[];
   pageItems: Solution[];
   page: number;
@@ -62,6 +69,7 @@ export function InitiativesProvider({ children }: { children: ReactNode }) {
   const [statusFilter, setStatusFilterState] = useState<SolutionStatus | "all">("all");
   const [sort, setSort] = useState<InitiativesState["sort"]>("matches");
   const [page, setPage] = useState(1);
+  const [stageFilter, setStageFilter] = useState<IdeaStageFilter>("all");
 
   useEffect(() => {
     const controller = new AbortController();
@@ -106,6 +114,14 @@ export function InitiativesProvider({ children }: { children: ReactNode }) {
     );
   }, [solutions, query, statusFilter, sort]);
 
+  const ideaResults = useMemo(
+    () =>
+      stageFilter === "all"
+        ? ideas
+        : ideas.filter((idea) => (stageFilter === "unknown" ? !idea.stage : idea.stage === stageFilter)),
+    [ideas, stageFilter],
+  );
+
   const pageCount = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
   const currentPage = Math.min(page, pageCount);
 
@@ -117,6 +133,9 @@ export function InitiativesProvider({ children }: { children: ReactNode }) {
         setTab,
         solutions,
         ideas,
+        ideaResults,
+        stageFilter,
+        setStageFilter,
         results,
         pageItems: results.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),
         page: currentPage,

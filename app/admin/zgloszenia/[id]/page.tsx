@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { BackLink } from "@/shared/components/back-link";
 import { DeleteButton } from "@/shared/components/delete-button";
 import { ContactDetails } from "./components/contact-details";
 import { ConversationHistory } from "./components/conversation-history";
@@ -23,9 +23,7 @@ export default async function SubmissionDetailsPage({ params }: PageProps<"/admi
     <SubmissionDetailsProvider id={id}>
       <main id="main-content" className="flex flex-col gap-10 p-10 max-sm:gap-7.5 max-sm:p-5">
         <div className="flex flex-wrap items-center justify-between gap-5">
-          <Link href="/admin/zgloszenia" className="text-primary no-underline">
-            <span aria-hidden="true">←</span> Wróć do zgłoszeń
-          </Link>
+          <BackLink href="/admin/zgloszenia">Wróć do zgłoszeń</BackLink>
         </div>
 
         <WhenLoaded>

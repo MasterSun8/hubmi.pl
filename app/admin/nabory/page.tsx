@@ -14,7 +14,7 @@ export default function GrantCallsPage() {
     <GrantCallsProvider>
       <main id="main-content" className="flex flex-col gap-5 p-10 max-sm:p-5">
         <p className="text-caption font-medium tracking-label-sm text-primary uppercase">Małopolska / panel instytucji</p>
-        <h1 className="font-heading text-display text-primary">Nabory</h1>
+        <h1 className="font-heading text-section text-primary">Nabory</h1>
         <p className="max-w-[70ch]">
           Ogłaszaj nabory na dofinansowanie pomysłów. Gdy nabór trwa, autor przekazanego pomysłu może przygotować wniosek:
           asystent pisze go z kanwy pomysłu, dopasowany do sekcji i kryteriów naboru.

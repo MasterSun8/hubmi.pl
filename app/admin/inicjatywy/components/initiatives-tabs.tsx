@@ -11,7 +11,7 @@ export function InitiativesTabs() {
   ];
 
   return (
-    <div role="tablist" aria-label="Rodzaj inicjatyw" className="flex flex-wrap gap-2.5">
+    <div role="tablist" aria-label="Rodzaj inicjatyw" className="flex flex-wrap gap-x-10 gap-y-2.5 border-b border-line">
       {tabs.map((item) => (
         <button
           key={item.id}
@@ -29,10 +29,10 @@ export function InitiativesTabs() {
             setTab(next.id);
             document.getElementById(`tab-${next.id}`)?.focus();
           }}
-          className={`flex min-h-11 items-center gap-2.5 rounded-input border px-5 py-2.5 font-medium hover:opacity-100! ${tab === item.id ? "border-primary bg-primary text-on-primary" : "border-field bg-surface text-ink hover:border-primary"}`}
+          className="-mb-px flex min-h-11 items-baseline gap-2 border-0 border-b-2 border-transparent bg-transparent px-0 pb-2.5 text-lead font-light text-ink aria-selected:border-primary aria-selected:text-primary"
         >
           {item.label}
-          {status === "ready" && <span className="text-caption tabular-nums">{item.count}</span>}
+          {status === "ready" && <span className="text-body text-muted tabular-nums">{item.count}</span>}
         </button>
       ))}
     </div>

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { AccessibilityBar } from "@/shared/components/accessibility-bar";
 import { SiteHeader } from "@/shared/components/site-header";
 import { ArrowButton } from "@/shared/components/arrow-button";
 import * as motion from "motion/react-client";
@@ -25,7 +24,6 @@ const paths = [
 export default function Home() {
   return (
     <div className="flex min-h-svh flex-col px-page py-10 max-sm:py-7.5">
-      <AccessibilityBar />
       <SiteHeader>
         <div className="flex flex-wrap items-center justify-end gap-x-7.5 gap-y-2.5 max-sm:justify-start">
           <p className="text-caption font-medium tracking-label-sm uppercase">Innowacje społeczne dla Małopolski</p>

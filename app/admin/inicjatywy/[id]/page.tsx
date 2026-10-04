@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { BackLink } from "@/shared/components/back-link";
 import { DeleteButton } from "@/shared/components/delete-button";
 import { InitiativeDescription } from "./components/initiative-description";
 import { InitiativeHeader } from "./components/initiative-header";
@@ -20,9 +20,7 @@ export default async function InitiativeDetailsPage({ params }: PageProps<"/admi
     <InitiativeProvider id={id}>
       <main id="main-content" className="flex flex-col gap-10 p-10 max-sm:gap-7.5 max-sm:p-5">
         <div className="flex flex-wrap items-center justify-between gap-5">
-          <Link href="/admin/inicjatywy" className="text-primary no-underline">
-            <span aria-hidden="true">←</span> Wróć do inicjatyw
-          </Link>
+          <BackLink href="/admin/inicjatywy">Wróć do inicjatyw</BackLink>
 
         </div>
 

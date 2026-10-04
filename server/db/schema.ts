@@ -381,3 +381,22 @@ export const grantApplications = pgTable(
   },
   (t) => [uniqueIndex().on(t.callId, t.submissionId), index().on(t.submissionId)],
 );
+
+// ---------- Tester Innowacji (moduł 4) ----------
+
+export const innovationTesters = pgTable(
+  "innovation_testers",
+  {
+    id: uuid().primaryKey().defaultRandom(),
+    solutionId: uuid()
+      .notNull()
+      .references(() => solutions.id, { onDelete: "cascade" }),
+    fullName: text().notNull(),
+    email: text().notNull(),
+    organization: text(),
+    motivation: text(),
+    status: submissionStatus().notNull().default("new"),
+    ...timestamps,
+  },
+  (t) => [index().on(t.solutionId)]
+);

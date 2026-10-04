@@ -59,10 +59,81 @@ function VideoPreview({ id, title }: { id: string; title: string }) {
   );
 }
 
+function TesterForm({ solutionId, onClose }: { solutionId: string; onClose: () => void }) {
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    const fd = new FormData(e.currentTarget);
+    const payload = Object.fromEntries(fd.entries());
+    payload.solutionId = solutionId;
+
+    try {
+      const res = await fetch("/api/innovation-testers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }).then(r => r.json());
+      
+      if (res.success) {
+        setSuccess(true);
+      } else {
+        alert("Błąd: " + res.error);
+      }
+    } catch (err) {
+      alert("Wystąpił błąd sieci");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (success) {
+    return (
+      <div className="mt-2 bg-success/10 text-success p-3 rounded text-sm font-medium">
+        Dziękujemy! Twoje zgłoszenie zostało wysłane do ROPS.
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="mt-3 flex flex-col gap-4 p-5 border border-line bg-surface rounded w-full">
+      <h4 className="font-heading text-lg text-primary">Zgłoś chęć pilotażu</h4>
+      
+      <label className="flex min-h-10.5 items-center rounded-input border border-field px-5 transition-colors focus-within:border-primary">
+        <input name="fullName" required placeholder="Imię i nazwisko" className="min-w-0 flex-1 bg-transparent py-2 text-ink placeholder:text-muted focus:outline-none" />
+      </label>
+      
+      <label className="flex min-h-10.5 items-center rounded-input border border-field px-5 transition-colors focus-within:border-primary">
+        <input name="email" type="email" required placeholder="Adres e-mail" className="min-w-0 flex-1 bg-transparent py-2 text-ink placeholder:text-muted focus:outline-none" />
+      </label>
+      
+      <label className="flex min-h-10.5 items-center rounded-input border border-field px-5 transition-colors focus-within:border-primary">
+        <input name="organization" placeholder="Organizacja / Samorząd (opcjonalnie)" className="min-w-0 flex-1 bg-transparent py-2 text-ink placeholder:text-muted focus:outline-none" />
+      </label>
+      
+      <label className="flex items-start rounded-input border border-field px-5 py-2.5 transition-colors focus-within:border-primary">
+        <textarea name="motivation" placeholder="Dlaczego chcesz przetestować to rozwiązanie?" rows={3} className="min-w-0 flex-1 bg-transparent text-ink placeholder:text-muted focus:outline-none resize-none" />
+      </label>
+
+      <div className="flex gap-4 justify-end mt-2">
+        <button type="button" onClick={onClose} className="px-5 py-2.5 text-muted hover:text-ink font-medium cursor-pointer transition-colors bg-transparent border-0">
+          Anuluj
+        </button>
+        <button type="submit" disabled={loading} className="rounded-button bg-primary px-5 py-2.5 font-medium text-on-primary transition-colors hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:opacity-50 cursor-pointer border-0">
+          {loading ? "Wysyłanie..." : "Wyślij zgłoszenie"}
+        </button>
+      </div>
+    </form>
+  );
+}
+
 // Figma 15:811 — a solution from the database (a RAG source) shown under the assistant's answer,
 // with its film and ROPS materials (GET /api/solutions/[id]/media) when the library has them.
 export function InitiativeCard({ solution, index = 0 }: { solution: SolutionRef; index?: number }) {
   const [media, setMedia] = useState<Media | null>(null);
+  const [showTesterForm, setShowTesterForm] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -110,12 +181,33 @@ export function InitiativeCard({ solution, index = 0 }: { solution: SolutionRef;
           </motion.div>
         )}
       </AnimatePresence>
-      {solution.url && (
-        <a className={linkClass} href={solution.url} target="_blank" rel="noreferrer">
-          Zobacz inicjatywę <span aria-hidden="true">→</span>
-          <span className="sr-only"> (otwiera się w nowej karcie)</span>
-        </a>
-      )}
+      <div className="flex w-full items-center justify-between gap-4 flex-wrap">
+        {solution.url && (
+          <a className={linkClass} href={solution.url} target="_blank" rel="noreferrer">
+            Zobacz inicjatywę <span aria-hidden="true">→</span>
+            <span className="sr-only"> (otwiera się w nowej karcie)</span>
+          </a>
+        )}
+        <button 
+          onClick={() => setShowTesterForm(!showTesterForm)}
+          className="text-primary font-medium text-sm hover:underline cursor-pointer bg-transparent border-0 p-0"
+        >
+          Zgłoś się do testowania
+        </button>
+      </div>
+
+      <AnimatePresence>
+        {showTesterForm && (
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }} 
+            animate={{ opacity: 1, height: "auto" }} 
+            exit={{ opacity: 0, height: 0 }} 
+            className="w-full overflow-hidden"
+          >
+            <TesterForm solutionId={solution.id} onClose={() => setShowTesterForm(false)} />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.article>
   );
 }

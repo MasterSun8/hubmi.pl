@@ -2,8 +2,36 @@ import fs from "fs/promises";
 import path from "path";
 import { getDb } from "./client";
 import { solutions, contacts, regionalStatistics } from "./schema";
+import { withSolutionEmbeddings } from "../../lib/server/ai/solution-embeddings";
 
 const db = getDb();
+
+type ImportedInnovation = {
+  title: string;
+  shortDescription?: string;
+  fullDescription?: string;
+  contactData?: string;
+  targetGroup?: string;
+  sourceUrl: string;
+  author?: string;
+  materialsLinks?: string[];
+  videoLinks?: string[];
+  termsOfUse?: string;
+};
+type ImportedContact = {
+  name?: string;
+  address?: string;
+  openingHours?: string[];
+  phones?: unknown;
+  emails?: string[];
+  roles?: unknown;
+};
+type IndicatorMetadata = {
+  indicator: string;
+  category: string;
+  description?: string;
+  source?: string;
+};
 
 // Prosty parser CSV radzący sobie z wartościami w cudzysłowach
 function parseCsvLine(text: string): string[] {
@@ -35,13 +63,10 @@ async function seedInnovations() {
   const dataPath = path.join(process.cwd(), "app", "data", "cleaned_innovations.json");
   try {
     const content = await fs.readFile(dataPath, "utf-8");
-    const innovations = JSON.parse(content);
+    const innovations: ImportedInnovation[] = JSON.parse(content);
     console.log(`[Seed] Wczytano ${innovations.length} innowacji.`);
     
-    // Usuń stare dane
-    await db.delete(solutions);
-    
-    const mapped = innovations.map((inv: any) => {
+    const mapped = innovations.map((inv) => {
       // Prosta ekstrakcja z contactData
       const contactStr = inv.contactData || "";
       const emailMatch = contactStr.match(/[^\s@]+@[^\s@]+\.[^\s@]+/);
@@ -51,11 +76,11 @@ async function seedInnovations() {
         title: inv.title,
         description: inv.shortDescription || inv.fullDescription || "",
         categories: [], // Brak ścisłej kategorii ze scrapera, zostawiamy puste
-        targetGroups: [inv.targetGroup].filter(Boolean),
+        targetGroups: inv.targetGroup ? [inv.targetGroup] : [],
         sourceName: "Biblioteka Innowacji Społecznych",
         sourceUrl: inv.sourceUrl,
         externalId: inv.sourceUrl, // Gwarantuje unikalność w bazie dla danej innowacji
-        authors: [inv.author].filter(Boolean),
+        authors: inv.author ? [inv.author] : [],
         authorName: inv.author,
         organization: inv.author, // W ROPS autor to zazwyczaj organizacja
         contactEmail: emailMatch ? emailMatch[0] : null,
@@ -78,11 +103,16 @@ async function seedInnovations() {
     }
 
     if (uniqueMapped.length > 0) {
-      await db.insert(solutions).values(uniqueMapped);
+      const embedded = await withSolutionEmbeddings(uniqueMapped);
+      await db.transaction(async (tx) => {
+        await tx.delete(solutions);
+        await tx.insert(solutions).values(embedded);
+      });
       console.log(`[Seed] Zapisano ${uniqueMapped.length} innowacji do bazy (po usunięciu duplikatów).`);
     }
   } catch (err) {
-    console.log(`[Seed] Brak pliku cleaned_innovations.json lub błąd:`, err);
+    console.error(`[Seed] Import innowacji nie powiódł się; dotychczasowa biblioteka nie została zmieniona.`, err);
+    throw err;
   }
 }
 
@@ -90,12 +120,12 @@ async function seedContacts() {
   const dataPath = path.join(process.cwd(), "app", "data", "cleaned_contacts.json");
   try {
     const content = await fs.readFile(dataPath, "utf-8");
-    const contactsData = JSON.parse(content);
+    const contactsData: ImportedContact[] = JSON.parse(content);
     console.log(`[Seed] Wczytano ${contactsData.length} kontaktów.`);
     
     await db.delete(contacts);
     
-    const mapped = contactsData.map((c: any) => ({
+    const mapped = contactsData.map((c) => ({
       department: c.name || "Brak danych",
       address: c.address,
       openingHours: c.openingHours || [],
@@ -122,11 +152,11 @@ async function seedObserwator() {
     let totalInserted = 0;
     
     // Wczytaj metadane
-    let metadata: any[] = [];
+    let metadata: IndicatorMetadata[] = [];
     try {
       const metaContent = await fs.readFile(path.join(baseDir, 'indicators_metadata.json'), 'utf-8');
       metadata = JSON.parse(metaContent);
-    } catch (e) {
+    } catch {
       console.log("[Seed] Brak pliku indicators_metadata.json. Uruchom najpierw scrapera, by pobrać opisy.");
     }
 

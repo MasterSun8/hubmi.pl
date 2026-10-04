@@ -14,10 +14,10 @@ export function getAiConfig(): AiConfig {
   if (cached) return cached;
 
   const apiKey = process.env.OPENAI_API_KEY;
-  const model = process.env.OPENAI_MODEL;
+  const model = process.env.OPENAI_CHAT_MODEL || process.env.OPENAI_MODEL;
 
   if (!apiKey) throw new Error("Missing OPENAI_API_KEY (see .env.example)");
-  if (!model) throw new Error("Missing OPENAI_MODEL (see .env.example)");
+  if (!model) throw new Error("Missing OPENAI_CHAT_MODEL (see .env.example)");
 
   cached = {
     apiKey,

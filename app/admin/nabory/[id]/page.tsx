@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { DeleteButton } from "@/shared/components/delete-button";
 import { CallApplications } from "./components/call-applications";
 import { CallDetailsProvider, WhenCallLoaded } from "./components/call-details-provider";
 import { CallHeader } from "./components/call-header";
@@ -15,9 +16,17 @@ export default async function GrantCallPage({ params }: PageProps<"/admin/nabory
   return (
     <CallDetailsProvider id={id}>
       <main id="main-content" className="flex flex-col gap-5 p-10 max-sm:p-5">
-        <Link href="/admin/nabory" className="self-start text-primary no-underline">
-          <span aria-hidden="true">←</span> Wróć do naborów
-        </Link>
+        <div className="flex flex-wrap items-center justify-between gap-5">
+          <Link href="/admin/nabory" className="text-primary no-underline">
+            <span aria-hidden="true">←</span> Wróć do naborów
+          </Link>
+          <DeleteButton
+            label="Usuń nabór"
+            what="ten nabór razem ze wszystkimi złożonymi w nim wnioskami"
+            endpoint={`/api/grant-calls/${id}`}
+            redirectTo="/admin/nabory"
+          />
+        </div>
         <WhenCallLoaded>
           <CallHeader />
           <CallApplications />

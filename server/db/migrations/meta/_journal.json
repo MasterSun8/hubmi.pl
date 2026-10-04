@@ -78,6 +78,13 @@
       "when": 1791078465763,
       "tag": "0010_curved_goliath",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1791081297101,
+      "tag": "0011_solid_sprite",
+      "breakpoints": true
     }
   ]
 }

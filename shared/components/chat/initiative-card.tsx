@@ -182,12 +182,9 @@ export function InitiativeCard({ solution, index = 0 }: { solution: SolutionRef;
         )}
       </AnimatePresence>
       <div className="flex w-full items-center justify-between gap-4 flex-wrap">
-        {solution.url && (
-          <a className={linkClass} href={solution.url} target="_blank" rel="noreferrer">
-            Zobacz inicjatywę <span aria-hidden="true">→</span>
-            <span className="sr-only"> (otwiera się w nowej karcie)</span>
-          </a>
-        )}
+        <a className={linkClass} href={`/innowacje/${solution.id}`} target="_blank" rel="noreferrer">
+          Zobacz stronę innowacji <span aria-hidden="true">→</span>
+        </a>
         <button 
           onClick={() => setShowTesterForm(!showTesterForm)}
           className="text-primary font-medium text-sm hover:underline cursor-pointer bg-transparent border-0 p-0"

@@ -3,7 +3,7 @@ import "server-only";
 import { eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import { getDb } from "@/server/db/client";
-import { solutions, innovationTesters } from "@/server/db/schema";
+import { solutions, innovationTesters, innovationComments } from "@/server/db/schema";
 import { getEnv } from "@/server/env";
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -191,7 +191,7 @@ export async function getInnovationTesters(solutionId: string) {
     .from(innovationTesters)
     .where(eq(innovationTesters.solutionId, solutionId))
     .orderBy(innovationTesters.createdAt);
-  
+
   return rows;
 }
 
@@ -199,4 +199,19 @@ export async function getInnovationTesters(solutionId: string) {
 export async function deleteSolution(id: string) {
   const [row] = await getDb().delete(solutions).where(eq(solutions.id, id)).returning({ id: solutions.id });
   return row ?? null;
+}
+
+export async function getInnovationComments(solutionId: string) {
+  const rows = await getDb()
+    .select({
+      id: innovationComments.id,
+      authorName: innovationComments.authorName,
+      content: innovationComments.content,
+      createdAt: innovationComments.createdAt,
+    })
+    .from(innovationComments)
+    .where(eq(innovationComments.solutionId, solutionId))
+    .orderBy(sql`${innovationComments.createdAt} DESC`);
+
+  return rows;
 }

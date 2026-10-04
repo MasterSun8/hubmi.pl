@@ -400,3 +400,17 @@ export const innovationTesters = pgTable(
   },
   (t) => [index().on(t.solutionId)]
 );
+
+export const innovationComments = pgTable(
+  "innovation_comments",
+  {
+    id: uuid().primaryKey().defaultRandom(),
+    solutionId: uuid()
+      .notNull()
+      .references(() => solutions.id, { onDelete: "cascade" }),
+    authorName: text().notNull(),
+    content: text().notNull(),
+    ...timestamps,
+  },
+  (t) => [index().on(t.solutionId)]
+);

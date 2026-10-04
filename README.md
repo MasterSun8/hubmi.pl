@@ -128,8 +128,9 @@ Szczegółowy przebieg ścieżki „Zaoferuj pomoc” (fiszka → kanwa → prze
 
 ## Zespół
 
-- Piotr_Wittig[Schoji]
-- Karol_Wroński[karol-wronski-dev]
-- Mikołaj_Mołodecki[MiniowaPM]
-- Paweł_Dutkiewicz[DudeQ7]
-- Scarlet_Dorożalska[MasterSun8]
+- Piotr_Wittig[**Schoji**]
+- Karol_Wroński[**karol-wronski-dev**]
+- Mikołaj_Mołodecki[**MiniowaPM**]
+- Paweł_Dutkiewicz[**DudeQ7**]
+- Scarlet_Dorożalska[**MasterSun8**]
+

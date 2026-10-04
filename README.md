@@ -8,9 +8,24 @@ Prototyp przygotowany na HackYeah dla **Regionalnego Ośrodka Polityki Społeczn
 
 ![Strona główna: dwie ścieżki — „Zgłoś problem” i „Zaoferuj pomoc”](docs/screenshots/home.png)
 
+## Wynik na HackYeah 2026
+
+Zespół **JSON Derulo** ze Szczecina, zadanie partnerskie **[UMWM]: HubMi.pl**. Do finałowych pitchy się nie
+dostaliśmy, ale średnia ocen jury była wyraźnie wyższa niż średnia wszystkich drużyn.
+
+| Kryterium (waga) | Ocena |
+| --- | ---: |
+| Stopień spełnienia wyzwania (40%) | 7,50 |
+| Potencjał wdrożeniowy (20%) | 7,00 |
+| Dostępność i intuicyjność prototypu (20%) | 7,50 |
+| Atrakcyjność, pomysłowość i jakość interfejsu (10%) | 7,00 |
+| Jakość dostarczonych materiałów oraz MVP (10%) | 7,50 |
+| **Średnia ważona** | **7,35** |
+| Średnia wszystkich drużyn | 5,57 |
+
 ## Demo w minutę
 
-Nigdzie nie trzeba się logować, również do panelu instytucji.
+Nigdzie nie trzeba się logować, również do Panelu Administratora.
 
 1. **`/zglos-problem`**: napisz jedno zdanie o problemie, np. *„Sąsiad z demencją od trzech dni nie
    otwiera drzwi”*. Asystent dopyta o szczegóły, pokaże pasujące innowacje i przygotuje zgłoszenie.
@@ -54,53 +69,16 @@ Nigdzie nie trzeba się logować, również do panelu instytucji.
 | ![Szczegóły innowacji](docs/screenshots/innovation.png) | |
 | **Strona innowacji**: opis, grupa docelowa, materiały do wdrożenia, komentarze i zapis na testera. | |
 
-### Panel instytucji (`/admin`)
+### Panel Administratora (`/admin`)
 
 | | |
 | --- | --- |
 | ![Lista zgłoszeń](docs/screenshots/submissions.png) | ![Szczegóły zgłoszenia](docs/screenshots/submission-details.png) |
 | **Zgłoszenia**: liczniki, wyszukiwarka, filtry i sortowanie po ryzyku. | **Szczegóły zgłoszenia**: podsumowanie AI, status, ryzyko z uzasadnieniem, mapa i dopasowane innowacje. |
-| ![Biblioteka inicjatyw](docs/screenshots/innovations.png) | ![Nabory](docs/screenshots/calls.png) |
-| **Inicjatywy**: 115 innowacji ROPS i pomysły mieszkańców, publikowanie i wycofywanie, liczba dopasowań. | **Nabory**: ogłaszanie naborów na dofinansowanie i przegląd złożonych wniosków. |
-| ![Mapa potrzeb społecznych](docs/screenshots/needs-map.png) | ![Raporty i trendy](docs/screenshots/reports.png) |
-| **Mapa potrzeb**: 149 wskaźników Obserwatorium ROPS w 22 powiatach Małopolski. | **Raporty i trendy**: zgłoszenia mieszkańców na tle wskaźników i synteza AI dla wybranego powiatu. |
-
-## Uruchomienie lokalne
-
-Wymagania: Node.js 20.9+, pnpm 12.8.1 (wersja przypięta w `packageManager`) i PostgreSQL z rozszerzeniem
-[pgvector](https://github.com/pgvector/pgvector).
-
-```bash
-pnpm install
-# utwórz .env ze zmiennymi z tabeli niżej
-pnpm db:migrate          # schemat bazy i rozszerzenie pgvector
-pnpm seed                # biblioteka innowacji ROPS wraz z embeddingami
-pnpm dev                 # http://localhost:3000
-```
-
-| Zmienna | Opis |
-| --- | --- |
-| `DATABASE_URL` | Połączenie z PostgreSQL (z pgvector) |
-| `OPENAI_API_KEY` | Klucz OpenAI |
-| `OPENAI_MODEL` | Model czatu, enrichmentu i raportów (`OPENAI_CHAT_MODEL` nadpisuje go tylko dla czatu) |
-| `OPENAI_EMBEDDING_MODEL` | Model embeddingów, np. `text-embedding-3-small` |
-| `OPENAI_EMBEDDING_DIMENSIONS` | Opcjonalnie; domyślnie `1536`, musi zgadzać się ze schematem bazy |
-| `OPENAI_TIMEOUT_MS` | Opcjonalnie; domyślnie `30000` |
-
-Nie commituj `.env`.
-
-### Polecenia
-
-```bash
-pnpm dev                 # serwer deweloperski
-pnpm build && pnpm start # build produkcyjny
-pnpm typecheck && pnpm lint
-pnpm db:generate         # nowa migracja po zmianie server/db/schema.ts
-pnpm db:migrate          # zastosowanie migracji
-pnpm seed                # ponowny import biblioteki innowacji (z embeddingami)
-pnpm embed:solutions     # uzupełnienie brakujących lub nieaktualnych embeddingów
-pnpm enrich:submissions  # ponowny enrichment zgłoszeń przez AI
-```
+| ![Biblioteka innowacji](docs/screenshots/innovations.png) | ![Nabory i wnioski](docs/screenshots/calls.png) |
+| **Biblioteka innowacji**: 115 innowacji ROPS, publikowanie i wycofywanie, liczba dopasowań. Pomysły mieszkańców mają osobną stronę. | **Nabory i wnioski**: ogłaszanie naborów na dofinansowanie i przegląd złożonych wniosków. |
+| ![Mapa wyzwań społecznych](docs/screenshots/needs-map.png) | ![Raporty i trendy](docs/screenshots/reports.png) |
+| **Mapa wyzwań**: 149 wskaźników Obserwatorium ROPS w 22 powiatach Małopolski. | **Raporty i trendy**: zgłoszenia mieszkańców na tle wskaźników i synteza AI dla wybranego powiatu. |
 
 ## Stack
 
@@ -115,7 +93,7 @@ app/                     trasy (UI po polsku)
   zglos-problem/         czat „Zgłoś problem”
   zaoferuj-pomoc/        czat „Zaoferuj pomoc” → kanwa/ → wniosek/
   innowacje/[id]/        publiczna strona innowacji
-  admin/                 panel instytucji: zgloszenia, inicjatywy, nabory, mapa-potrzeb, raporty
+  admin/                 Panel Administratora: zgloszenia, inicjatywy (+ pomysly), nabory, mapa-potrzeb, raporty
   api/                   cienkie route handlers: walidacja zod → lib/server
 lib/server/              dostęp do danych, AI (czat, RAG, enrichment, raporty), matchmaking
 server/db/               schemat Drizzle, migracje, seed

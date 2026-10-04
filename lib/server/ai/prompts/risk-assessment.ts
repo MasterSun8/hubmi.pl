@@ -13,10 +13,12 @@ czynnik osobno i rzetelnie.
 genuine – czy to prawdziwe zgłoszenie:
 - "yes": opisuje realną sytuację konkretnych ludzi albo realny pomysł;
 - "unclear": za mało informacji, żeby ocenić, czy sytuacja jest prawdziwa;
-- "no": test, żart, trolling, prowokacja albo prośba spoza tematu udająca problem
-  (przepis kulinarny, zadanie domowe, pytania o chemię lub materiały wybuchowe,
-  zdobycie alkoholu, rozmowa bez żadnej potrzeby społecznej). Np. „potrzebuję przepisu
-  na placki, żeby nakarmić głodnego” bez opisu prawdziwej osoby w potrzebie to "no".
+- "no": rozmowa wyraźnie fikcyjna, żart lub test bez realnej potrzeby albo samo
+  pytanie ogólne, z którego nie wynika sytuacja ani pomysł do zgłoszenia.
+Nie uznawaj prośby za fałszywą tylko dlatego, że dotyczy przepisu, kodu, tłumaczenia,
+rekreacji czy alkoholu. Oceniaj kontekst: jadłospis dla samotnego seniora albo strona
+fundacji mogą być częścią realnej potrzeby. Przy brakach informacji wybierz "unclear",
+a nie "no". Prośba o praktyczną poradę sama w sobie nie dowodzi pilnego zagrożenia.
 
 harm – jak poważna szkoda grozi osobom, których dotyczy zgłoszenie, jeśli nikt nie pomoże:
 - "none": brak szkody dla konkretnych osób (np. pomysł na zajęcia, usprawnienie);
@@ -43,7 +45,7 @@ threatToOthers – true tylko wtedy, gdy autor wyraża zamiar skrzywdzenia konkr
 albo opisuje przestępstwo przeciwko ludziom, które sam planuje lub popełnia (przemoc,
 handel ludźmi, narażanie dzieci), także w formie „żartu”. NIE jest groźbą: pytanie o
 niebezpieczne substancje, materiały wybuchowe, fajerwerki czy narkotyki bez zamiaru
-skrzywdzenia kogoś – to prośba spoza tematu (genuine: "no"). Opis bycia ofiarą też nie.
+skrzywdzenia kogoś – genuine oceń osobno na podstawie kontekstu. Opis bycia ofiarą też nie.
 
 riskReasoning (napisz je najpierw, a pozostałe czynniki ustaw zgodnie z nim) – 1–2 krótkie
 zdania dla pracownika ROPS: które fakty z rozmowy zdecydowały,

@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { ideaStageLabels } from "@/shared/components/idea-stage";
-import { statusLabels, submissionNumber, typeLabels, useSubmissions, type Submission } from "./submissions-provider";
+import { RiskBadge } from "./risk-level";
+import { statusLabels, submissionNumber, typeLabels, useSubmissions } from "./submissions-provider";
 
 const columns = "grid grid-cols-[minmax(0,1fr)_220px_160px_100px_30px] gap-x-5 max-lg:grid-cols-1";
 const headerClass = "text-caption font-medium uppercase";
@@ -19,19 +20,9 @@ function formatDate(iso: string) {
   return date.toLocaleDateString("pl-PL", { day: "2-digit", month: "2-digit", year: "numeric" });
 }
 
-function Score({ item }: { item: Submission }) {
-  const score = item.priorityOverride ?? item.aiScore;
-  if (score === null) return <span className="text-muted">brak oceny</span>;
-  return (
-    <span className="text-lead font-light text-primary">
-      {score} / 100{item.priorityOverride !== null && <span className="sr-only"> (priorytet ustawiony ręcznie)</span>}
-    </span>
-  );
-}
-
 // Figma 15:1492 — one row per submission; the columns stack on narrow screens.
 export function SubmissionsTable() {
-  const { status, pageItems, results, all } = useSubmissions();
+  const { status, pageItems, results, all, sort } = useSubmissions();
 
   if (status === "error") {
     return (
@@ -47,7 +38,9 @@ export function SubmissionsTable() {
         <span role="columnheader" className={headerClass}>Zgłoszenie</span>
         <span role="columnheader" className={headerClass}>Lokalizacja / temat</span>
         <span role="columnheader" className={headerClass}>Status</span>
-        <span role="columnheader" className={headerClass}>AI Score ↓</span>
+        <span role="columnheader" className={headerClass}>
+          Ryzyko{sort === "risk" && <span aria-hidden="true"> ↓</span>}
+        </span>
         <span role="columnheader" className="sr-only">Szczegóły</span>
       </div>
 
@@ -73,7 +66,8 @@ export function SubmissionsTable() {
             {statusLabels[item.status]}
           </p>
           <p role="cell">
-            <Score item={item} />
+            <span className="sr-only lg:hidden">Ryzyko: </span>
+            <RiskBadge item={item} />
           </p>
           <span role="cell" className="text-[24px] leading-7.5 text-primary max-lg:hidden" aria-hidden="true">
             →

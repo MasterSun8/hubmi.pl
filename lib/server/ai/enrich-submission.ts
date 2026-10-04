@@ -10,6 +10,7 @@ import { getEnv } from "@/server/env";
 import { getOpenAI } from "./client";
 import { getAiConfig } from "./config";
 import { getIdeaCard } from "./idea-card";
+import { RISK_ASSESSMENT_PROMPT } from "./prompts/risk-assessment";
 import { SUBMISSION_CATEGORIES, SUBMISSION_SUMMARY_PROMPT } from "./prompts/submission-summary";
 
 const MAX_TRANSCRIPT_MESSAGES = 50;
@@ -21,56 +22,100 @@ const SubmissionSummary = z.object({
   targetGroup: z.string().nullable(),
 });
 
+const RiskAssessment = z.object({
+  riskLevel: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]),
+  riskReasoning: z.string(),
+});
+
 type SummaryFields = z.infer<typeof SubmissionSummary>;
+type RiskFields = z.infer<typeof RiskAssessment>;
 type Submission = typeof submissions.$inferSelect;
 type EmbeddingFields = Pick<Submission, "embedding" | "embeddingModel" | "embeddingUpdatedAt" | "contentHash">;
 
 // Runs after POST /api/submissions has answered (see `after` in the route),
 // and from scripts/enrich-submissions.mts for rows that missed it.
 // Rewrites the raw text the client sent into a clean summary, picks the
-// category (which is also the submission's group) and embeds the result.
+// category (which is also the submission's group), embeds the result and,
+// for problems, assesses the risk level.
 // Each step degrades on its own: without the summary we embed the raw text,
-// without the embedding the row waits for a backfill.
+// without the embedding or the risk level the row waits for a backfill.
 export async function enrichSubmission(id: string): Promise<void> {
   const [submission] = await getDb().select().from(submissions).where(eq(submissions.id, id)).limit(1);
+  if (!submission) return;
+
   // The embedding is computed from the summary, so a row that has one was
-  // already processed (or the summary failed and we settled for raw text).
-  if (!submission || submission.embedding) return;
+  // already summarized (or the summary failed and we settled for raw text).
+  const needsSummary = !submission.embedding;
+  // A separate check lets the backfill assess rows summarized before risk levels existed.
+  const needsRisk = submission.type === "problem" && submission.riskLevel === null;
+  if (!needsSummary && !needsRisk) return;
 
-  const summary = await summarize(submission).catch((err) => {
-    console.error(`[submissions] AI summary failed for ${id}, embedding the raw text`, err);
-    return null;
-  });
-
-  const [embedding, ideaCard] = await Promise.all([
-    embed(summary ?? submission).catch((err) => {
-      console.error(`[submissions] embedding failed for ${id}`, err);
-      return null;
-    }),
-    submission.type === "idea" ? ideaCardFields(submission) : null,
+  const input = await buildInput(submission);
+  const [summary, risk] = await Promise.all([
+    needsSummary
+      ? summarize(input).catch((err) => {
+          console.error(`[submissions] AI summary failed for ${id}, embedding the raw text`, err);
+          return null;
+        })
+      : null,
+    needsRisk
+      ? assessRisk(input).catch((err) => {
+          console.error(`[submissions] risk assessment failed for ${id}`, err);
+          return null;
+        })
+      : null,
   ]);
 
-  if (!summary && !embedding && !ideaCard) return;
+  const [embedding, ideaCard] = needsSummary
+    ? await Promise.all([
+        embed(summary ?? submission).catch((err) => {
+          console.error(`[submissions] embedding failed for ${id}`, err);
+          return null;
+        }),
+        submission.type === "idea" ? ideaCardFields(submission) : null,
+      ])
+    : [null, null];
+
+  if (!summary && !embedding && !ideaCard && !risk) return;
   await getDb()
     .update(submissions)
-    .set({ ...summary, ...embedding, ...ideaCard })
+    .set({ ...summary, ...embedding, ...ideaCard, ...risk })
     .where(eq(submissions.id, id));
 }
 
-async function summarize(submission: Submission): Promise<SummaryFields> {
+// The chat transcript both prompts read; falls back to the raw text the client sent.
+async function buildInput(submission: Submission): Promise<string> {
   const history = await loadHistory(submission.conversationId, MAX_TRANSCRIPT_MESSAGES);
   const transcript = history
     .map((m) => `${m.role === "user" ? "Mieszkaniec" : "Asystent"}: ${m.content}`)
     .join("\n\n");
 
+  return (
+    `Typ zgłoszenia: ${submission.type === "problem" ? "problem" : "pomysł"}\n` +
+    `Lokalizacja: ${submission.location}\n\n` +
+    `Rozmowa:\n${transcript || `Mieszkaniec: ${submission.summary}`}`
+  );
+}
+
+async function summarize(input: string): Promise<SummaryFields> {
   const response = await getOpenAI().responses.parse({
     model: getAiConfig().model,
     instructions: SUBMISSION_SUMMARY_PROMPT,
-    input:
-      `Typ zgłoszenia: ${submission.type === "problem" ? "problem" : "pomysł"}\n` +
-      `Lokalizacja: ${submission.location}\n\n` +
-      `Rozmowa:\n${transcript || `Mieszkaniec: ${submission.summary}`}`,
+    input,
     text: { format: zodTextFormat(SubmissionSummary, "submission_summary") },
+    store: false,
+  });
+
+  if (!response.output_parsed) throw new Error(`No parsed output (status: ${response.status})`);
+  return response.output_parsed;
+}
+
+async function assessRisk(input: string): Promise<RiskFields> {
+  const response = await getOpenAI().responses.parse({
+    model: getAiConfig().model,
+    instructions: RISK_ASSESSMENT_PROMPT,
+    input,
+    text: { format: zodTextFormat(RiskAssessment, "risk_assessment") },
     store: false,
   });
 

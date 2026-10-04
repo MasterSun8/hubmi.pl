@@ -33,6 +33,8 @@ export async function GET(_request: Request, ctx: { params: Promise<{ id: string
           reporterType: data.reporterType,
           aiScore: data.aiScore,
           priorityOverride: data.priorityOverride,
+          riskLevel: data.riskLevel,
+          riskReasoning: data.riskReasoning,
           clusterId: data.clusterId,
           createdAt: data.createdAt,
           updatedAt: data.updatedAt,

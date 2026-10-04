@@ -22,8 +22,8 @@ export type Submission = {
   submittedApplications?: number;
   location: string;
   peopleAffected: number | null;
-  aiScore: number | null;
-  priorityOverride: number | null;
+  // 1–4 from the AI risk assessment; null for ideas and not yet assessed problems.
+  riskLevel: number | null;
   createdAt: string;
 };
 
@@ -53,6 +53,7 @@ export type Filters = {
   type: Submission["type"] | "all";
   category: string;
   location: string;
+  risk: number | null;
   days: number | null;
   // Cutoff timestamp for `days`, fixed when the period is picked.
   since: number | null;
@@ -70,7 +71,7 @@ type SubmissionsState = {
   setQuery: (query: string) => void;
   filters: Filters;
   setFilter: <K extends keyof Filters>(key: K, value: Filters[K]) => void;
-  sort: "score" | "date";
+  sort: "risk" | "date";
   toggleSort: () => void;
   categories: { category: string; count: number }[];
   locations: string[];
@@ -105,8 +106,16 @@ export function SubmissionsProvider({ children }: { children: ReactNode }) {
   const [status, setStatus] = useState<SubmissionsState["status"]>("loading");
   const [all, setAll] = useState<Submission[]>([]);
   const [query, setQueryState] = useState("");
-  const [filters, setFilters] = useState<Filters>({ status: "all", type: "all", category: "", location: "", days: null, since: null });
-  const [sort, setSort] = useState<SubmissionsState["sort"]>("score");
+  const [filters, setFilters] = useState<Filters>({
+    status: "all",
+    type: "all",
+    category: "",
+    location: "",
+    risk: null,
+    days: null,
+    since: null,
+  });
+  const [sort, setSort] = useState<SubmissionsState["sort"]>("risk");
   const [page, setPage] = useState(1);
   const [groups, setGroups] = useState<{ category: string; count: number }[]>([]);
 
@@ -143,14 +152,15 @@ export function SubmissionsProvider({ children }: { children: ReactNode }) {
         (filters.type === "all" || item.type === filters.type) &&
         (!filters.category || item.category === filters.category) &&
         (!filters.location || item.location === filters.location) &&
+        (!filters.risk || item.riskLevel === filters.risk) &&
         (!filters.since || new Date(item.createdAt).getTime() >= filters.since) &&
         (!phrase ||
           `${item.title} ${item.summary} ${submissionNumber(item.id)}`.toLocaleLowerCase("pl").includes(phrase)),
     );
     const byDate = (a: Submission, b: Submission) => b.createdAt.localeCompare(a.createdAt);
-    // A manual priority override wins over the AI score; unscored items go last.
-    const score = (item: Submission) => item.priorityOverride ?? item.aiScore ?? -1;
-    return matching.sort((a, b) => (sort === "score" ? score(b) - score(a) || byDate(a, b) : byDate(a, b)));
+    // Ideas and unassessed problems go last.
+    const risk = (item: Submission) => item.riskLevel ?? 0;
+    return matching.sort((a, b) => (sort === "risk" ? risk(b) - risk(a) || byDate(a, b) : byDate(a, b)));
   }, [all, query, filters, sort]);
 
   const pageCount = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
@@ -177,7 +187,7 @@ export function SubmissionsProvider({ children }: { children: ReactNode }) {
           setPage(1);
         },
         sort,
-        toggleSort: () => setSort((current) => (current === "score" ? "date" : "score")),
+        toggleSort: () => setSort((current) => (current === "risk" ? "date" : "risk")),
         categories:
           groups.length > 0
             ? groups

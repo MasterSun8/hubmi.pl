@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { riskLabels, type RiskLevel } from "./risk-level";
 import { statusLabels, typeLabels, useSubmissions, type Filters, type SubmissionStatus } from "./submissions-provider";
 
 // Figma 15:1483 — "Status: wszystkie ⌄" style filters, built on native selects.
@@ -56,6 +57,18 @@ export function SubmissionsFilters() {
         <option value="all">wszystkie</option>
         <option value="problem">{typeLabels.problem.toLocaleLowerCase("pl")}</option>
         <option value="idea">{typeLabels.idea.toLocaleLowerCase("pl")}</option>
+      </FilterSelect>
+      <FilterSelect
+        label="Ryzyko"
+        value={filters.risk?.toString() ?? ""}
+        onChange={(value) => setFilter("risk", value ? Number(value) : null)}
+      >
+        <option value="">wszystkie</option>
+        {([4, 3, 2, 1] as RiskLevel[]).map((level) => (
+          <option key={level} value={level}>
+            {riskLabels[level]}
+          </option>
+        ))}
       </FilterSelect>
       <FilterSelect label="Kategoria" value={filters.category} onChange={(value) => setFilter("category", value)}>
         <option value="">wszystkie</option>

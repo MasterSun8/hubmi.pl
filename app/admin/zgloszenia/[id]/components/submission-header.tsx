@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { RiskBadge } from "../../components/risk-level";
 import { submissionNumber, typeLabels } from "../../components/submissions-provider";
 import { ResolveButton, StatusSelect } from "./status-control";
 import { useLoadedSubmission } from "./submission-details-provider";
@@ -18,7 +19,6 @@ function formatDateTime(iso: string) {
 // Figma 16:1553–16:1559 — reference, title and the metadata line.
 export function SubmissionHeader() {
   const { submission } = useLoadedSubmission();
-  const score = submission.priorityOverride ?? submission.aiScore;
 
   return (
     <div className="flex flex-col gap-7.5">
@@ -35,8 +35,8 @@ export function SubmissionHeader() {
           <Fact label="Status">
             <StatusSelect />
           </Fact>
-          <Fact label="AI Score">
-            {score === null ? <span className="text-muted">brak oceny</span> : <span className="text-primary">{score} / 100</span>}
+          <Fact label="Ryzyko">
+            <RiskBadge item={submission} />
           </Fact>
           <Fact label="Lokalizacja">{submission.location}</Fact>
           <Fact label="Kategoria">{submission.category ?? <span className="text-muted">nieprzypisana</span>}</Fact>

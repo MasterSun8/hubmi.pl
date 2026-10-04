@@ -12,7 +12,7 @@ export function ResultsBar() {
         {results.length} {plural(results.length, "wynik", "wyniki", "wyników")} · {PAGE_SIZE} na stronie
       </p>
       <button type="button" onClick={toggleSort} className="border-0 bg-transparent p-0 font-medium text-primary">
-        Sortuj: {sort === "score" ? "AI Score — od najwyższego" : "data — od najnowszych"}{" "}
+        Sortuj: {sort === "risk" ? "ryzyko — od najwyższego" : "data — od najnowszych"}{" "}
         <span aria-hidden="true">↓</span>
       </button>
     </div>

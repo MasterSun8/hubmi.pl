@@ -254,6 +254,9 @@ export const submissions = pgTable(
     aiScoredAt: timestamp({ withTimezone: true }),
     // Ręczna korekta priorytetu przez administratora (ma pierwszeństwo przed aiScore).
     priorityOverride: integer(),
+    // AI triage for problems only (null for ideas): 1 low, 2 medium, 3 high, 4 critical.
+    riskLevel: integer(),
+    riskReasoning: text(),
     clusterId: uuid().references(() => problemClusters.id, { onDelete: "set null" }),
     adminNotes: text(),
     ...embeddingColumns,
@@ -269,6 +272,7 @@ export const submissions = pgTable(
     index("submissions_embedding_idx").using("hnsw", t.embedding.op("vector_cosine_ops")),
     check("submissions_ai_score_range", sql`${t.aiScore} between 0 and 100`),
     check("submissions_priority_override_range", sql`${t.priorityOverride} between 0 and 100`),
+    check("submissions_risk_level_range", sql`${t.riskLevel} between 1 and 4`),
   ],
 );
 

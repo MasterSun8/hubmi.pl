@@ -1,9 +1,9 @@
 // Backfills submissions that missed the post-save processing (AI summary,
-// category, embedding), e.g. ones created before it shipped or during an
-// OpenAI outage. Processed rows are skipped, so it is safe to rerun.
+// category, embedding, risk level), e.g. ones created before it shipped or
+// during an OpenAI outage. Processed rows are skipped, so it is safe to rerun.
 //
 // Run: pnpm run enrich:submissions
-import { asc, isNull } from "drizzle-orm";
+import { and, asc, eq, isNull, or } from "drizzle-orm";
 import { enrichSubmission } from "@/lib/server/ai/enrich-submission";
 import { getDb } from "@/server/db/client";
 import { submissions } from "@/server/db/schema";
@@ -14,7 +14,12 @@ const db = getDb();
 const todo = await db
   .select({ id: submissions.id })
   .from(submissions)
-  .where(isNull(submissions.embedding))
+  .where(
+    or(
+      isNull(submissions.embedding),
+      and(eq(submissions.type, "problem"), isNull(submissions.riskLevel)),
+    ),
+  )
   .orderBy(asc(submissions.createdAt));
 
 console.log(`Submissions to backfill: ${todo.length}`);

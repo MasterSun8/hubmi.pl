@@ -155,6 +155,7 @@ export async function listSubmissions(filters: {
       reporterType: submissions.reporterType,
       aiScore: submissions.aiScore,
       priorityOverride: submissions.priorityOverride,
+      riskLevel: submissions.riskLevel,
       clusterId: submissions.clusterId,
       createdAt: submissions.createdAt,
       updatedAt: submissions.updatedAt,

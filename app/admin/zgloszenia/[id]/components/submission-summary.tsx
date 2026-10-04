@@ -1,12 +1,13 @@
 "use client";
 
 import { ideaStageLabels } from "@/shared/components/idea-stage";
+import { RiskBadge } from "../../components/risk-level";
 import { useLoadedSubmission } from "./submission-details-provider";
 
 const labelClass = "text-caption font-medium tracking-label-sm uppercase";
 
-// The AI write-up of the conversation (title, summary, category, target group),
-// generated on the server right after the submission is saved.
+// The AI write-up of the conversation (title, summary, category, target group,
+// risk reasoning), generated on the server right after the submission is saved.
 export function SubmissionSummary() {
   const { submission } = useLoadedSubmission();
 
@@ -37,7 +38,16 @@ export function SubmissionSummary() {
         {submission.peopleAffected !== null && (
           <>
             <dt className={labelClass}>Liczba osób</dt>
-            <dd className="m-0">{submission.peopleAffected}</dd>
+            <dd className="m-0 max-sm:mb-2.5">{submission.peopleAffected}</dd>
+          </>
+        )}
+        {submission.riskReasoning && (
+          <>
+            <dt className={labelClass}>Ocena ryzyka</dt>
+            <dd className="m-0">
+              <RiskBadge item={submission} />
+              <p className="mt-1">{submission.riskReasoning}</p>
+            </dd>
           </>
         )}
       </dl>

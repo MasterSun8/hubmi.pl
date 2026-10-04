@@ -9,6 +9,7 @@ import type { Submission, SubmissionStatus } from "../../components/submissions-
 // GET /api/submissions/[id] does not return contact details yet; when it adds a
 // `submitter` object the contact section picks it up without further changes.
 export type SubmissionDetails = Submission & {
+  riskReasoning: string | null;
   submitter?: { fullName?: string | null; email?: string | null; phone?: string | null } | null;
 };
 

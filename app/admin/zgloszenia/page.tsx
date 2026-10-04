@@ -27,7 +27,7 @@ export default function SubmissionsPage() {
         <SubmissionsTable />
 
         <div className="flex flex-wrap items-center justify-between gap-x-7.5 gap-y-2.5">
-          <p className="text-caption">AI Score to sugestia priorytetu. Ręcznie ustawiony priorytet ma pierwszeństwo.</p>
+          <p className="text-caption">Poziom ryzyka to wstępna ocena AI na podstawie rozmowy. Uzasadnienie jest w szczegółach zgłoszenia.</p>
           <SubmissionsPagination />
         </div>
       </main>

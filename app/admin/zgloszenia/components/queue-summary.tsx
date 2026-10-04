@@ -9,6 +9,10 @@ export function QueueSummary() {
 
   const fresh = all.filter((item) => item.status === "new").length;
   const inProgress = all.filter((item) => item.status === "in_progress").length;
+  // Critical problems that nobody has closed yet.
+  const critical = all.filter(
+    (item) => item.riskLevel === 4 && item.status !== "resolved" && item.status !== "rejected",
+  ).length;
 
   return (
     <div className="flex flex-wrap items-center gap-x-10 gap-y-2.5">
@@ -19,6 +23,11 @@ export function QueueSummary() {
         {fresh} {plural(fresh, "nowe", "nowe", "nowych")}
       </p>
       <p>{inProgress} w trakcie obsługi</p>
+      {critical > 0 && (
+        <p className="font-medium text-error">
+          {critical} o ryzyku krytycznym
+        </p>
+      )}
     </div>
   );
 }

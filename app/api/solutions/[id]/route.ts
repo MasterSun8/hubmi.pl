@@ -2,6 +2,7 @@ import {
   getSolution,
   isSolutionId,
   matchingSubmissions,
+  deleteSolution,
   updateSolutionStatus,
   updateSolutionStatusSchema,
 } from "@/lib/server/solutions";
@@ -46,6 +47,21 @@ export async function PATCH(request: Request, ctx: { params: Promise<{ id: strin
     return Response.json({ data }, { headers: { "Cache-Control": "no-store" } });
   } catch (err) {
     console.error("[solutions] status update failed", err);
+    return Response.json({ error: "Storage unavailable" }, { status: 503 });
+  }
+}
+
+// DELETE → removes the innovation for good (admin panel).
+export async function DELETE(_request: Request, ctx: { params: Promise<{ id: string }> }) {
+  const { id } = await ctx.params;
+  if (!isSolutionId(id)) return Response.json({ error: "Solution not found" }, { status: 404 });
+
+  try {
+    const deleted = await deleteSolution(id);
+    if (!deleted) return Response.json({ error: "Solution not found" }, { status: 404 });
+    return new Response(null, { status: 204 });
+  } catch (err) {
+    console.error("[solutions] delete failed", err);
     return Response.json({ error: "Storage unavailable" }, { status: 503 });
   }
 }

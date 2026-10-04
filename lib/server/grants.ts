@@ -219,3 +219,9 @@ export async function submitApplication(conversationId: string, sections: Record
     .returning();
   return toApplication(row);
 }
+
+// Removes the call with its applications (FK cascade).
+export async function deleteGrantCall(id: string) {
+  const [row] = await getDb().delete(grantCalls).where(eq(grantCalls.id, id)).returning({ id: grantCalls.id });
+  return row ?? null;
+}

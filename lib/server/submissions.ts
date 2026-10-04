@@ -167,3 +167,17 @@ export async function listSubmissions(filters: {
     .limit(filters.limit)
     .offset(filters.offset);
 }
+
+// Removes the submission with everything about it: contact data, matches and grant
+// applications (FK cascade), then its conversation with the messages.
+export async function deleteSubmission(id: string) {
+  return getDb().transaction(async (tx) => {
+    const [row] = await tx
+      .delete(submissions)
+      .where(eq(submissions.id, id))
+      .returning({ id: submissions.id, conversationId: submissions.conversationId });
+    if (!row) return null;
+    await tx.delete(conversations).where(eq(conversations.id, row.conversationId));
+    return { id: row.id };
+  });
+}

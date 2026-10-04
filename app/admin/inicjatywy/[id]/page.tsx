@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { DeleteButton } from "@/shared/components/delete-button";
 import { InitiativeDescription } from "./components/initiative-description";
 import { InitiativeHeader } from "./components/initiative-header";
 import { InitiativeMaterials } from "./components/initiative-materials";
@@ -18,9 +19,17 @@ export default async function InitiativeDetailsPage({ params }: PageProps<"/admi
   return (
     <InitiativeProvider id={id}>
       <main id="main-content" className="flex flex-col gap-5 p-10 max-sm:p-5">
-        <Link href="/admin/inicjatywy" className="self-start text-primary no-underline">
-          <span aria-hidden="true">←</span> Wróć do inicjatyw
-        </Link>
+        <div className="flex flex-wrap items-center justify-between gap-5">
+          <Link href="/admin/inicjatywy" className="text-primary no-underline">
+            <span aria-hidden="true">←</span> Wróć do inicjatyw
+          </Link>
+          <DeleteButton
+            label="Usuń inicjatywę"
+            what="tę inicjatywę z biblioteki razem z jej dopasowaniami do zgłoszeń"
+            endpoint={`/api/solutions/${id}`}
+            redirectTo="/admin/inicjatywy"
+          />
+        </div>
 
         <WhenInitiativeLoaded>
           <InitiativeHeader />

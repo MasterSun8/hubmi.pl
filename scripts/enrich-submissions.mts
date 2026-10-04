@@ -3,20 +3,21 @@
 // during an OpenAI outage. Processed rows are skipped, so it is safe to rerun.
 //
 // Run: pnpm run enrich:submissions
+// With --risk it assesses the risk level of every submission again (e.g. after the rules
+// in lib/server/ai/risk.ts change) and leaves summaries and embeddings alone.
 import { asc, isNull, or } from "drizzle-orm";
-import { enrichSubmission } from "@/lib/server/ai/enrich-submission";
+import { enrichSubmission, reassessRisk } from "@/lib/server/ai/enrich-submission";
 import { getDb } from "@/server/db/client";
 import { submissions } from "@/server/db/schema";
 
 const db = getDb();
+const riskOnly = process.argv.includes("--risk");
 
 // One at a time: a burst of parallel calls would hit OpenAI rate limits.
 const todo = await db
   .select({ id: submissions.id })
   .from(submissions)
-  .where(
-    or(isNull(submissions.embedding), isNull(submissions.riskLevel)),
-  )
+  .where(riskOnly ? undefined : or(isNull(submissions.embedding), isNull(submissions.riskLevel)))
   .orderBy(asc(submissions.createdAt));
 
 console.log(`Submissions to backfill: ${todo.length}`);
@@ -24,7 +25,7 @@ console.log(`Submissions to backfill: ${todo.length}`);
 let failed = 0;
 for (const [i, { id }] of todo.entries()) {
   try {
-    await enrichSubmission(id);
+    await (riskOnly ? reassessRisk(id) : enrichSubmission(id));
     console.log(`  ${i + 1}/${todo.length} ${id}`);
   } catch (err) {
     failed++;

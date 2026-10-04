@@ -10,7 +10,7 @@ import { getEnv } from "@/server/env";
 import { getOpenAI } from "./client";
 import { getAiConfig } from "./config";
 import { getIdeaCard } from "./idea-card";
-import { RISK_ASSESSMENT_PROMPT } from "./prompts/risk-assessment";
+import { assessRisk } from "./risk";
 import { SUBMISSION_CATEGORIES, SUBMISSION_SUMMARY_PROMPT } from "./prompts/submission-summary";
 
 const MAX_TRANSCRIPT_MESSAGES = 50;
@@ -22,13 +22,7 @@ const SubmissionSummary = z.object({
   targetGroup: z.string().nullable(),
 });
 
-const RiskAssessment = z.object({
-  riskLevel: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]),
-  riskReasoning: z.string(),
-});
-
 type SummaryFields = z.infer<typeof SubmissionSummary>;
-type RiskFields = z.infer<typeof RiskAssessment>;
 type Submission = typeof submissions.$inferSelect;
 type EmbeddingFields = Pick<Submission, "embedding" | "embeddingModel" | "embeddingUpdatedAt" | "contentHash">;
 
@@ -110,19 +104,6 @@ async function summarize(input: string): Promise<SummaryFields> {
   return response.output_parsed;
 }
 
-async function assessRisk(input: string): Promise<RiskFields> {
-  const response = await getOpenAI().responses.parse({
-    model: getAiConfig().model,
-    instructions: RISK_ASSESSMENT_PROMPT,
-    input,
-    text: { format: zodTextFormat(RiskAssessment, "risk_assessment") },
-    store: false,
-  });
-
-  if (!response.output_parsed) throw new Error(`No parsed output (status: ${response.status})`);
-  return response.output_parsed;
-}
-
 // The idea card (fiszka) the user watched fill in next to the chat: essence and stage are
 // stored for the admin panel; title, summary and target group come from the summary above.
 async function ideaCardFields(submission: Submission): Promise<Pick<Submission, "essence" | "stage"> | null> {
@@ -163,4 +144,13 @@ async function embed(fields: {
     embeddingUpdatedAt: new Date(),
     contentHash: createHash("sha256").update(`${model}\n${dimensions}\n${text}`).digest("hex"),
   };
+}
+
+// Assesses the risk level again from the conversation (the backfill's --risk run, after the
+// rules in risk.ts change). Leaves the summary and embedding alone.
+export async function reassessRisk(id: string): Promise<void> {
+  const [submission] = await getDb().select().from(submissions).where(eq(submissions.id, id)).limit(1);
+  if (!submission) return;
+  const risk = await assessRisk(await buildInput(submission));
+  await getDb().update(submissions).set(risk).where(eq(submissions.id, id));
 }

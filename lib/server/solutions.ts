@@ -194,3 +194,9 @@ export async function getInnovationTesters(solutionId: string) {
   
   return rows;
 }
+
+// Removes the innovation for good; its matches with submissions go with it (FK cascade).
+export async function deleteSolution(id: string) {
+  const [row] = await getDb().delete(solutions).where(eq(solutions.id, id)).returning({ id: solutions.id });
+  return row ?? null;
+}

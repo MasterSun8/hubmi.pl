@@ -4,15 +4,18 @@ import { useLoadedSubmission } from "./submission-details-provider";
 
 // Figma 16:1566.
 export function ContactDetails() {
-  const { submission } = useLoadedSubmission();
-  const contact = submission.submitter;
+  const { contact } = useLoadedSubmission();
 
   return (
     <section className="flex flex-col gap-5 border border-line bg-surface p-7.5 max-sm:p-5" aria-labelledby="contact-title">
       <h2 id="contact-title" className="text-subtitle font-light text-primary">
         Dane kontaktowe
       </h2>
-      {contact ? (
+      {contact === "unavailable" ? (
+        <p role="alert" className="text-error">
+          Nie udało się pobrać danych kontaktowych. Spróbuj odświeżyć stronę.
+        </p>
+      ) : contact ? (
         <>
           {contact.fullName && <p>{contact.fullName}</p>}
           <p>
@@ -28,9 +31,7 @@ export function ContactDetails() {
           <p className="text-caption">Kontakt podany w formularzu zgłoszenia.</p>
         </>
       ) : (
-        <p className="text-caption">
-          Dane kontaktowe są zapisane w bazie, ale endpoint zgłoszeń jeszcze ich nie udostępnia.
-        </p>
+        <p className="text-caption">Do tego zgłoszenia nie zapisano danych kontaktowych.</p>
       )}
     </section>
   );

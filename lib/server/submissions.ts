@@ -115,6 +115,16 @@ export async function getSubmission(id: string) {
   return submission ?? null;
 }
 
+// The contact the author left in the hand-off form, or null when there is none.
+export async function getSubmissionContact(submissionId: string) {
+  const [contact] = await getDb()
+    .select({ fullName: submitters.fullName, email: submitters.email, phone: submitters.phone })
+    .from(submitters)
+    .where(eq(submitters.submissionId, submissionId))
+    .limit(1);
+  return contact ?? null;
+}
+
 export async function listSubmissions(filters: {
   status?: (typeof submissions.$inferSelect)["status"];
   type?: (typeof submissions.$inferSelect)["type"];

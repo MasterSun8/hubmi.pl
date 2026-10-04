@@ -3,7 +3,7 @@ import "server-only";
 import { eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import { getDb } from "@/server/db/client";
-import { solutions } from "@/server/db/schema";
+import { solutions, innovationTesters } from "@/server/db/schema";
 import { getEnv } from "@/server/env";
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -175,4 +175,22 @@ export async function updateSolutionStatus(id: string, status: z.infer<typeof up
     .where(eq(solutions.id, id))
     .returning({ id: solutions.id, status: solutions.status, updatedAt: solutions.updatedAt });
   return row ?? null;
+}
+
+export async function getInnovationTesters(solutionId: string) {
+  const rows = await getDb()
+    .select({
+      id: innovationTesters.id,
+      fullName: innovationTesters.fullName,
+      email: innovationTesters.email,
+      organization: innovationTesters.organization,
+      motivation: innovationTesters.motivation,
+      status: innovationTesters.status,
+      createdAt: innovationTesters.createdAt,
+    })
+    .from(innovationTesters)
+    .where(eq(innovationTesters.solutionId, solutionId))
+    .orderBy(innovationTesters.createdAt);
+  
+  return rows;
 }

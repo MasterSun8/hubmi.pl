@@ -71,6 +71,13 @@
       "when": 1791076405542,
       "tag": "0009_submission_risk_level",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1791078465763,
+      "tag": "0010_curved_goliath",
+      "breakpoints": true
     }
   ]
 }

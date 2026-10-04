@@ -40,8 +40,8 @@ lockfile whenever dependencies change.
 ```bash
 pnpm dev                 # dev server
 pnpm typecheck && pnpm lint
-pnpm seed                # server/db/seed.ts (wipes embeddings, see below)
-node --env-file=.env scripts/embed-solutions.mts   # embed solutions; run after every seed
+pnpm seed                # imports solutions with embeddings before replacing the library
+pnpm embed:solutions     # repair missing/stale embeddings without reseeding
 pnpm enrich:submissions  # AI title/summary/category/targetGroup for submissions
 ```
 
@@ -103,9 +103,10 @@ pnpm enrich:submissions  # AI title/summary/category/targetGroup for submissions
   confirms (`createSubmission`).
 - Submissions are enriched by AI (`lib/server/ai/enrich-submission.ts`): title, summary, one of 14
   fixed categories, target group, embedding. The admin details page shows the AI summary first.
-- **Solutions (ROPS innovation library, ~115 rows) need embeddings.** `pnpm seed` recreates them
-  without embeddings, which silently breaks chat RAG and all match counts. Always run
-  `scripts/embed-solutions.mts` after seeding.
+- **Solutions need embeddings.** The seed generates them with `withSolutionEmbeddings` before
+  replacing the library in a transaction. If generation fails, the import fails and existing
+  solutions remain intact. Use the same helper for any new solution creation/import path.
+  `pnpm embed:solutions` repairs missing or stale vectors without deleting solutions.
 - Matchmaking (`lib/server/solutions.ts`): for each submission, the 3 closest **published** solutions
   by cosine distance (`<=>`), only if distance `< 0.5` (real matches sit below 0.50, junk/test chats
   start around 0.52). Both directions (submission → solutions, solution → submissions) use the same

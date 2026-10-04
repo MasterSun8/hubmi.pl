@@ -8,7 +8,7 @@ import { SubmissionsProvider } from "./components/submissions-provider";
 import { SubmissionsTable } from "./components/submissions-table";
 
 export const metadata: Metadata = {
-  title: "Zgłoszenia — Panel instytucji Hubmi",
+  title: "Zgłoszenia — Panel Administratora Hubmi",
 };
 
 // Figma 15:1464 — the submissions queue from GET /api/submissions.
@@ -20,7 +20,7 @@ export default async function SubmissionsPage({ searchParams }: PageProps<"/admi
     <SubmissionsProvider initialCounty={isCountyFilter(powiat) ? powiat : ""}>
       <main id="main-content" className="flex flex-col gap-10 p-10 max-sm:gap-7.5 max-sm:p-5">
         <header className="flex flex-col gap-2.5">
-          <p className="text-caption font-medium tracking-label-sm text-primary uppercase">Małopolska / panel instytucji</p>
+          <p className="text-caption font-medium tracking-label-sm text-primary uppercase">Matchmaking społeczny</p>
           <h1 className="font-heading text-section text-primary">Zgłoszenia</h1>
           <p>Przeglądaj potrzeby mieszkańców i oferty pomocy. Ustal priorytet i zaplanuj dalsze działania.</p>
         </header>

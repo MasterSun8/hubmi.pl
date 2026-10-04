@@ -7,6 +7,7 @@ import { enter } from "@/shared/components/motion/enter";
 const paths = [
   {
     id: "problem",
+    module: "Matchmaking społeczny",
     href: "/zglos-problem",
     title: "Zgłoś problem",
     description: "Potrzebujesz wsparcia dla siebie lub innych?",
@@ -14,6 +15,7 @@ const paths = [
   },
   {
     id: "pomoc",
+    module: "Kreator pomysłów",
     href: "/zaoferuj-pomoc",
     title: "Zaoferuj pomoc",
     description: "Masz pomysł, doświadczenie lub gotowe rozwiązanie?",
@@ -29,7 +31,7 @@ export default function Home() {
           <p className="text-caption font-medium tracking-label-sm uppercase">Innowacje społeczne dla Małopolski</p>
           {/* Demo shortcut to the institution panel. */}
           <Link className="text-body font-medium tracking-label text-primary uppercase no-underline" href="/admin">
-            Kliknij tu aby wejść w admin panel
+            Kliknij tu, aby wejść do Panelu Administratora
           </Link>
         </div>
       </SiteHeader>
@@ -53,6 +55,7 @@ export default function Home() {
               aria-labelledby={path.id}
               {...enter(3 + index, { y: 24 })}
             >
+              <p className="-mb-2.5 text-caption font-medium tracking-label-sm text-primary uppercase">{path.module}</p>
               <h2 id={path.id} className="font-heading text-section">
                 {path.title}
               </h2>

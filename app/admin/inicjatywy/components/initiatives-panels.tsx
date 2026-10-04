@@ -12,11 +12,7 @@ export function InitiativesPanels() {
 
   if (tab === "ideas") {
     return (
-      <section id="panel-ideas" role="tabpanel" aria-labelledby="tab-ideas" className="flex flex-col gap-5">
-        <p>
-          Pomysły zgłoszone przez mieszkańców i organizacje w ścieżce „Zaoferuj pomoc”. Kliknij fiszkę, aby zobaczyć kanwę
-          i całą rozmowę.
-        </p>
+      <section className="flex flex-col gap-5">
         <IdeasToolbar />
         <h2 className="mt-5 text-subtitle font-light">Pomysły mieszkańców</h2>
         <IdeasList />
@@ -25,7 +21,7 @@ export function InitiativesPanels() {
   }
 
   return (
-    <section id="panel-library" role="tabpanel" aria-labelledby="tab-library" className="flex flex-col gap-5">
+    <section className="flex flex-col gap-5">
       <LibraryToolbar />
       <LibraryTable />
       <div className="flex flex-wrap items-center justify-between gap-x-7.5 gap-y-2.5">

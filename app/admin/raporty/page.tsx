@@ -5,7 +5,7 @@ import { ReportsLegend, ReportsMap } from "./components/reports-map";
 import { ReportsProvider } from "./components/reports-provider";
 
 export const metadata: Metadata = {
-  title: "Raporty i trendy — Panel instytucji Hubmi",
+  title: "Raporty i trendy — Panel Administratora Hubmi",
 };
 
 // Submissions from residents set against GUS indicators per county, and an AI report on demand
@@ -14,7 +14,7 @@ export default function ReportsPage() {
   return (
     <ReportsProvider>
       <main id="main-content" className="flex flex-col gap-7.5 p-10 max-sm:p-5">
-        <p className="text-caption font-medium tracking-label-sm text-primary uppercase">Małopolska / analiza AI</p>
+        <p className="text-caption font-medium tracking-label-sm text-primary uppercase">Zasobnik wiedzy</p>
         <h1 className="font-heading text-section text-primary">Raporty i trendy</h1>
         <p className="max-w-[60ch]">
           Zestawienie potrzeb zgłaszanych przez mieszkańców z twardymi wskaźnikami Obserwatorium ROPS. Wybierz powiat na

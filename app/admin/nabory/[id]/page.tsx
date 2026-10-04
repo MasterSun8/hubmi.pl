@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { BackLink } from "@/shared/components/back-link";
 import { DeleteButton } from "@/shared/components/delete-button";
 import { CallApplications } from "./components/call-applications";
 import { CallDetailsProvider, WhenCallLoaded } from "./components/call-details-provider";
@@ -17,9 +17,7 @@ export default async function GrantCallPage({ params }: PageProps<"/admin/nabory
     <CallDetailsProvider id={id}>
       <main id="main-content" className="flex flex-col gap-10 p-10 max-sm:gap-7.5 max-sm:p-5">
         <div className="flex flex-wrap items-center justify-between gap-5">
-          <Link href="/admin/nabory" className="text-primary no-underline">
-            <span aria-hidden="true">←</span> Wróć do naborów
-          </Link>
+          <BackLink href="/admin/nabory">Wróć do naborów</BackLink>
 
         </div>
         <WhenCallLoaded>

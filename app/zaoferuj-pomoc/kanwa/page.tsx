@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { BackLink } from "@/shared/components/back-link";
 import { ChatProvider } from "@/shared/components/chat/chat-provider";
 import { SiteHeader } from "@/shared/components/site-header";
 import { CanvasBoard } from "./components/canvas-board";
@@ -25,12 +25,7 @@ export default function CanvasPage() {
             <SiteHeader>
               <p className="text-caption font-medium tracking-label-sm text-primary uppercase">Zaoferuj pomoc</p>
             </SiteHeader>
-            <Link
-              className="self-start text-caption font-medium tracking-label-sm text-ink uppercase no-underline"
-              href="/zaoferuj-pomoc"
-            >
-              <span aria-hidden="true">←</span> Wróć do rozmowy
-            </Link>
+            <BackLink href="/zaoferuj-pomoc">Wróć do rozmowy</BackLink>
           </div>
 
           <main id="main-content" className="flex flex-col gap-7.5 pt-5 print:gap-3 print:pt-0">

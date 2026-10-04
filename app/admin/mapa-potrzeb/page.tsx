@@ -17,7 +17,7 @@ export default function NeedsMapPage() {
         <p className="text-caption font-medium tracking-label-sm text-primary uppercase">
           Małopolska / wskaźniki regionalne
         </p>
-        <h1 className="font-heading text-display text-primary">Mapa potrzeb społecznych</h1>
+        <h1 className="font-heading text-section text-primary">Mapa potrzeb społecznych</h1>
         <p className="max-w-[60ch]">
           Zobacz, jak wskaźniki społeczne rozkładają się w powiatach Małopolski. Wybierz wskaźnik i porównaj obszary.
         </p>

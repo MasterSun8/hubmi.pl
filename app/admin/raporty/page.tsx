@@ -15,7 +15,7 @@ export default function ReportsPage() {
     <ReportsProvider>
       <main id="main-content" className="flex flex-col gap-7.5 p-10 max-sm:p-5">
         <p className="text-caption font-medium tracking-label-sm text-primary uppercase">Małopolska / analiza AI</p>
-        <h1 className="font-heading text-display text-primary">Raporty i trendy</h1>
+        <h1 className="font-heading text-section text-primary">Raporty i trendy</h1>
         <p className="max-w-[60ch]">
           Zestawienie potrzeb zgłaszanych przez mieszkańców z twardymi wskaźnikami Obserwatorium ROPS. Wybierz powiat na
           mapie, a asystent przygotuje syntezę z rekomendacjami.

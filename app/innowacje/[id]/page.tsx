@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { BackLink } from "@/shared/components/back-link";
 import { notFound } from "next/navigation";
 import { getSolution, getInnovationComments } from "@/lib/server/solutions";
 import { SiteHeader } from "@/shared/components/site-header";
@@ -41,9 +41,7 @@ export default async function InnovationPage({ params }: PageProps<"/innowacje/[
     <div className="flex min-h-svh flex-col gap-10 px-page py-10 max-sm:gap-7.5 max-sm:py-7.5">
       <SiteHeader><p className={labelClass}>Baza wiedzy</p></SiteHeader>
       <nav aria-label="Powrót">
-        <Link href="/" className="inline-flex min-h-11 items-center gap-2.5 text-primary">
-          <span aria-hidden="true">←</span> Wróć do strony głównej
-        </Link>
+        <BackLink href="/">Wróć na stronę główną</BackLink>
       </nav>
       <main id="main-content" className="flex flex-col gap-10 max-sm:gap-7.5">
         <header className="flex max-w-[70ch] flex-col gap-5">

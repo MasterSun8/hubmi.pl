@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { BackLink } from "@/shared/components/back-link";
 import { SiteHeader } from "@/shared/components/site-header";
 import { ApplicationPrint } from "./components/application-print";
 import { ApplicationProvider, WhenApplicationLoaded } from "./components/application-provider";
@@ -24,12 +24,7 @@ export default function ApplicationPage() {
           <SiteHeader>
             <p className="text-caption font-medium tracking-label-sm text-primary uppercase">Zaoferuj pomoc</p>
           </SiteHeader>
-          <Link
-            className="self-start text-caption font-medium tracking-label-sm text-ink uppercase no-underline"
-            href="/zaoferuj-pomoc/kanwa"
-          >
-            <span aria-hidden="true">←</span> Wróć do kanwy
-          </Link>
+          <BackLink href="/zaoferuj-pomoc/kanwa">Wróć do kanwy</BackLink>
         </div>
 
         <main id="main-content" className="flex flex-col gap-7.5 pt-5 print:gap-3 print:pt-0">

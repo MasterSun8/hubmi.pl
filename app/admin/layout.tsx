@@ -16,7 +16,7 @@ export default function AdminLayout({ children }: LayoutProps<"/admin">) {
         {/* "Panel instytucji" sits under the logo as its caption, so it does not read as a menu item. */}
         <div className="flex flex-col border-b border-line pb-5">
           <Link className="text-title font-light text-primary no-underline" href="/" aria-label="Hubmi — strona główna">
-            hubmi.pl
+            hubmi
           </Link>
           <p className="text-caption text-muted">Panel instytucji</p>
         </div>

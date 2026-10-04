@@ -25,7 +25,7 @@ dostaliśmy, ale średnia ocen jury była wyraźnie wyższa niż średnia wszyst
 
 ## Demo w minutę
 
-Nigdzie nie trzeba się logować, również do panelu instytucji.
+Nigdzie nie trzeba się logować, również do Panelu Administratora.
 
 1. **`/zglos-problem`**: napisz jedno zdanie o problemie, np. *„Sąsiad z demencją od trzech dni nie
    otwiera drzwi”*. Asystent dopyta o szczegóły, pokaże pasujące innowacje i przygotuje zgłoszenie.
@@ -69,16 +69,16 @@ Nigdzie nie trzeba się logować, również do panelu instytucji.
 | ![Szczegóły innowacji](docs/screenshots/innovation.png) | |
 | **Strona innowacji**: opis, grupa docelowa, materiały do wdrożenia, komentarze i zapis na testera. | |
 
-### Panel instytucji (`/admin`)
+### Panel Administratora (`/admin`)
 
 | | |
 | --- | --- |
 | ![Lista zgłoszeń](docs/screenshots/submissions.png) | ![Szczegóły zgłoszenia](docs/screenshots/submission-details.png) |
 | **Zgłoszenia**: liczniki, wyszukiwarka, filtry i sortowanie po ryzyku. | **Szczegóły zgłoszenia**: podsumowanie AI, status, ryzyko z uzasadnieniem, mapa i dopasowane innowacje. |
-| ![Biblioteka inicjatyw](docs/screenshots/innovations.png) | ![Nabory](docs/screenshots/calls.png) |
-| **Inicjatywy**: 115 innowacji ROPS i pomysły mieszkańców, publikowanie i wycofywanie, liczba dopasowań. | **Nabory**: ogłaszanie naborów na dofinansowanie i przegląd złożonych wniosków. |
-| ![Mapa potrzeb społecznych](docs/screenshots/needs-map.png) | ![Raporty i trendy](docs/screenshots/reports.png) |
-| **Mapa potrzeb**: 149 wskaźników Obserwatorium ROPS w 22 powiatach Małopolski. | **Raporty i trendy**: zgłoszenia mieszkańców na tle wskaźników i synteza AI dla wybranego powiatu. |
+| ![Biblioteka innowacji](docs/screenshots/innovations.png) | ![Nabory i wnioski](docs/screenshots/calls.png) |
+| **Biblioteka innowacji**: 115 innowacji ROPS, publikowanie i wycofywanie, liczba dopasowań. Pomysły mieszkańców mają osobną stronę. | **Nabory i wnioski**: ogłaszanie naborów na dofinansowanie i przegląd złożonych wniosków. |
+| ![Mapa wyzwań społecznych](docs/screenshots/needs-map.png) | ![Raporty i trendy](docs/screenshots/reports.png) |
+| **Mapa wyzwań**: 149 wskaźników Obserwatorium ROPS w 22 powiatach Małopolski. | **Raporty i trendy**: zgłoszenia mieszkańców na tle wskaźników i synteza AI dla wybranego powiatu. |
 
 ## Stack
 
@@ -93,7 +93,7 @@ app/                     trasy (UI po polsku)
   zglos-problem/         czat „Zgłoś problem”
   zaoferuj-pomoc/        czat „Zaoferuj pomoc” → kanwa/ → wniosek/
   innowacje/[id]/        publiczna strona innowacji
-  admin/                 panel instytucji: zgloszenia, inicjatywy, nabory, mapa-potrzeb, raporty
+  admin/                 Panel Administratora: zgloszenia, inicjatywy (+ pomysly), nabory, mapa-potrzeb, raporty
   api/                   cienkie route handlers: walidacja zod → lib/server
 lib/server/              dostęp do danych, AI (czat, RAG, enrichment, raporty), matchmaking
 server/db/               schemat Drizzle, migracje, seed

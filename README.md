@@ -1,98 +1,192 @@
-<div align="center">
-  <br />
-  <h1>hubmi.pl</h1>
-  <p><b>Mały krok. Wspólna zmiana. Razem możemy więcej.</b></p>
-  <p><i>Platforma Innowacji Społecznych dla Małopolski</i></p>
+# hubmi.pl
 
-  <a href="#"><img src="https://img.shields.io/badge/Status-Demo_Proof_of_Concept-FF6B6B?style=for-the-badge" alt="Status: Proof of Concept" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Partner-ROPS_Kraków-0077B6?style=for-the-badge" alt="ROPS Kraków" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Silnik-AI_Assistant_%2B_RAG-7209B7?style=for-the-badge" alt="AI + RAG" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Dostępność-WCAG_Friendly-43AA8B?style=for-the-badge" alt="WCAG Friendly" /></a>
-</div>
+**Platforma innowacji społecznych dla Małopolski**
 
-<br />
+hubmi.pl pomaga mieszkańcom opisać problem, znaleźć adekwatne rozwiązanie społeczne
+albo zgłosić własny pomysł. Konwersacyjny asystent AI porządkuje opis sytuacji,
+dopytuje o najważniejsze informacje i korzysta z bazy sprawdzonych innowacji.
+Zespół instytucji może następnie obsługiwać zgłoszenia, analizować potrzeby
+regionalne i rozwijać inicjatywy w jednym panelu.
 
-> 💡 **hubmi.pl** łączy realne potrzeby mieszkańców Małopolski z gotowymi rozwiązaniami i pomysłami społecznymi za pomocą konwersacyjnego asystenta AI oraz inteligentnego wyszukiwania w bazie wiedzy (RAG).
+> Projekt demonstracyjny przygotowany dla Regionalnego Ośrodka Polityki Społecznej
+> w Krakowie.
 
----
+## Co działa dziś
 
-## 🎯 Problem i Rozwiązanie
+### Dla mieszkańców
 
-<div align="center">
+- **Zgłoś problem** — rozmowa z asystentem prowadząca od swobodnego opisu
+  sytuacji do uporządkowanego zgłoszenia.
+- **Zaoferuj pomoc** — ścieżka dla osób i organizacji, które chcą podzielić się
+  rozwiązaniem, doświadczeniem lub zasobami.
+- **Inteligentne dopasowanie** — wyszukiwanie podobnych, opublikowanych
+  innowacji z wykorzystaniem embeddings i wyszukiwania wektorowego.
+- **Kreator pomysłu** — karta pomysłu, kanwa innowacji i możliwość przygotowania
+  wniosku o dofinansowanie.
+- **Bez logowania** — użytkownik może przejść przez demonstrację bez zakładania
+  konta i bez ekranu logowania.
 
-| ❌ Wyzwania (Problem) | ✅ Rozwiązanie (Hubmi.pl) |
-|:---|:---|
-| **Rozproszona wiedza:** Gotowe innowacje społeczne istnieją, ale są trudne do znalezienia. | **Jedno miejsce:** Centralna baza innowacji społecznych dla całego regionu. |
-| **Brak wsparcia dla gmin:** Małe gminy nie wiedzą, jakie gotowe programy mogą wdrożyć. | **Asystent Konwersacyjny:** Zamiana skomplikowanych formularzy na prosty czat w języku naturalnym. |
-| **Barierowe formularze:** Tradycyjne urzędowe wnioski zniechęcają mieszkańców. | **Wyszukiwanie RAG:** Inteligentne dopasowywanie pomocy na podstawie opisu sytuacji. |
+### Dla instytucji
 
-</div>
+Panel `/admin` obejmuje:
 
----
+- statystyki i podsumowanie zgłoszeń,
+- listę zgłoszeń z filtrowaniem oraz widokiem szczegółów,
+- bibliotekę inicjatyw i ich statusy publikacji,
+- nabory oraz powiązane wnioski,
+- mapę potrzeb społecznych dla Małopolski,
+- raporty i trendy.
 
-## ✨ Kluczowe Funkcje
+Panel jest celowo dostępny bez logowania w wersji demonstracyjnej.
 
-- 💬 **Konwersacyjny Asystent AI (RAG):** Prowadzi użytkownika krok po kroku od swobodnego opisu problemu do konkretnego zgłoszenia bez konieczności wypełniania skomplikowanych pól.
-- 🛤️ **Dwie Dedykowane Ścieżki:**
-  - **Zgłoś problem:** Dla mieszkańców potrzebujących wsparcia dla siebie lub bliskich (np. pomoc dla seniorów, opieka, transport).
-  - **Zaoferuj pomoc:** Dla organizacji i osób prywatnych chcących podzielić się pomysłem, doświadczeniem lub zasobami.
-- 📚 **Inteligentne Rekomendacje:** System wyszukuje w bazie i sugeruje zweryfikowane inicjatywy społeczne pasujące do kontekstu rozmowy.
-- 🗺️ **Panel dla Instytucji i Mapa Potrzeb:** Wizualizacja zgłoszeń na interaktywnej heatmapie Małopolski, ułatwiająca jednostkom samorządowym identyfikację obszarów o najwyższej koncentracji problemów.
-- ♿ **Standard Dostępności (A11y):** Projekt stworzony z myślą o seniorach – zmiana rozmiaru tekstu (A / A+ / A++) i tryb wysokiego kontrastu dostępne jednym kliknięciem.
+### Dostępność
 
----
+Interfejs został przygotowany z myślą o WCAG 2.1 AA. Wspólna belka
+dostępności pozwala zmienić rozmiar tekstu (A, A+, A++) oraz włączyć
+wysoki kontrast. Ustawienia są zapamiętywane w przeglądarce.
 
-## 🔄 Jak to działa? (Workflow)
-[1. Opis sytuacji] ➔ [2. Dopytanie przez AI] ➔ [3. Dopasowanie RAG] ➔ [4. Przekazanie do systemu]
+## Najważniejsze przepływy
 
+### Zgłoszenie problemu
 
-1. **Opis sytuacji:** Użytkownik pisze własnymi słowami w jednym polu tekstowym (np. *"Mam 76 lat, jestem po operacji biodra i mam problem z obiadami"*).
-2. **Doprecyzowanie:** Asystent zadaje krótkie pytania pomocnicze, aby doprecyzować zakres potrzebnej pomocy.
-3. **Dopasowanie z Bazy (RAG):** System wyświetla proste karty z gotowymi rozwiązaniami znajdującymi się w bazie (np. *"Posiłek z dostawą do domu"*).
-4. **Przekazanie Zgłoszenia:** Po podaniu podstawowego kontaktu (e-mail lub telefon) cała historia rozmowy wraz z kontekstem trafia do dalszej obsługi przez właściwe instytucje.
+1. Mieszkaniec opisuje sytuację własnymi słowami.
+2. Asystent zadaje pytania doprecyzowujące.
+3. System wyszukuje pasujące rozwiązania w bazie innowacji.
+4. Użytkownik potwierdza podsumowanie i przekazuje zgłoszenie do obsługi.
 
----
+### Oferta pomocy i pomysł
 
-## 📸 Ekran i Interfejs
+1. Użytkownik opisuje rozwiązanie lub zasób, który chce zaoferować.
+2. Asystent pomaga uporządkować pomysł.
+3. Dane trafiają do kanwy innowacji.
+4. Na podstawie kanwy można przygotować i wysłać wniosek o dofinansowanie.
 
-<div align="center">
+## Galerie widoków
 
-| Ścieżki Działania | Czat z Asystentem |
-|:---:|:---:|
-| <img src="docs/screenshots/main_page.png" width="400" alt="Strona Główna" /><br /><sub>*Wybór ścieżki i opcje dostępności*</sub> | <img src="docs/screenshots/chat_flow.png" width="400" alt="Czat Asystenta" /><br /><sub>*Prosty dialog z doprecyzowaniem potrzeb*</sub> |
+Zrzuty wykonano lokalnie z działającej aplikacji na `http://localhost:3000`.
 
-| Sugestia z Bazy Wiedzy | Mapa Potrzeb Społecznych |
-|:---:|:---:|
-| <img src="docs/screenshots/rag_suggestion.png" width="400" alt="Sugestia RAG" /><br /><sub>*Karta innowacji z bazy wiedzy*</sub> | <img src="docs/screenshots/analytics_map.png" width="400" alt="Panel Instytucji" /><br /><sub>*Heatmapa koncentracji zgłoszeń w Małopolsce*</sub> |
+| Widok | Zrzut |
+| --- | --- |
+| Strona główna / ścieżka rozmowy | [home.png](docs/screenshots/home.png) |
+| Zgłoszenie problemu | [problem.png](docs/screenshots/problem.png) |
+| Oferta pomocy | [offer.png](docs/screenshots/offer.png) |
+| Kanwa innowacji | [canvas.png](docs/screenshots/canvas.png) |
+| Wniosek o dofinansowanie | [application.png](docs/screenshots/application.png) |
+| Panel instytucji | [admin.png](docs/screenshots/admin.png) |
+| Zgłoszenia | [submissions.png](docs/screenshots/submissions.png) |
+| Inicjatywy | [innovations.png](docs/screenshots/innovations.png) |
+| Nabory | [calls.png](docs/screenshots/calls.png) |
+| Mapa potrzeb | [needs-map.png](docs/screenshots/needs-map.png) |
+| Raporty i trendy | [reports.png](docs/screenshots/reports.png) |
 
-</div>
+## Trasy
 
----
+### Publiczne
 
-## 🛠️ Architektura i Technologie
+| Trasa | Przeznaczenie |
+| --- | --- |
+| `/` | Strona startowa i wybór ścieżki |
+| `/zglos-problem` | Rozmowa o problemie |
+| `/zaoferuj-pomoc` | Rozmowa o ofercie pomocy |
+| `/zaoferuj-pomoc/kanwa` | Kanwa innowacji |
+| `/zaoferuj-pomoc/wniosek` | Wniosek o dofinansowanie |
+| `/innowacje/[id]` | Szczegóły opublikowanej innowacji |
 
-- **AI & RAG:** Retrieval-Augmented Generation pozwalający asystentowi na udzielanie odpowiedzi i rekomendacji wyłącznie w oparciu o zweryfikowaną bazę innowacji społecznych.
-- **Frontend / UX:** Interfejs zoptymalizowany pod kątem wytycznych **WCAG / A11y** (wysoki kontrast, skalowanie czcionek, zapamiętywanie ustawień).
-- **Analityka & GIS:** Silnik mapowy z geowizualizacją i agregacją danych (heatmapa zgłoszeń wg powiatów i gmin).
+### Panel instytucji
 
----
+| Trasa | Przeznaczenie |
+| --- | --- |
+| `/admin` | Statystyki i nawigacja panelu |
+| `/admin/zgloszenia` | Lista zgłoszeń |
+| `/admin/zgloszenia/[id]` | Szczegóły zgłoszenia i dopasowania |
+| `/admin/inicjatywy` | Biblioteka inicjatyw |
+| `/admin/inicjatywy/[id]` | Szczegóły inicjatywy |
+| `/admin/nabory` | Lista naborów |
+| `/admin/nabory/[id]` | Szczegóły naboru |
+| `/admin/mapa-potrzeb` | Regionalna mapa potrzeb |
+| `/admin/raporty` | Raporty i trendy |
 
-## 🚀 Plany Rozwoju (Roadmap)
+## Stack technologiczny
 
-- [x] **01. Czat z RAG:** Działający asystent konwersacyjny spięty ze sprawdzoną bazą rozwiązań.
-- [ ] **02. Panel Zgłoszeń:** Rozbudowany panel administratora z historią rozmów, kategoryzacją i priorytetyzacją zgłoszeń.
-- [ ] **03. Rozszerzenie Bazy:** Dalsze zasilanie systemu nowymi innowacjami społecznymi z całego regionu.
+- **Next.js 16.3.8** z App Routerem i React 19,
+- **TypeScript**,
+- **Tailwind CSS v4**,
+- **Drizzle ORM** i PostgreSQL z rozszerzeniem pgvector,
+- **OpenAI Responses API** do rozmów i enrichmentu zgłoszeń,
+- **Embeddings** `text-embedding-3-small` do wyszukiwania podobnych innowacji,
+- **Zod** do walidacji danych wejściowych,
+- **react-markdown** do renderowania wiadomości asystenta,
+- **Motion** do animacji interfejsu.
 
----
+## Wymagania
 
-## 🏛️ Partnerzy i Inicjatorzy
+- Node.js zgodny z lokalną wersją projektu,
+- pnpm `12.8.1`,
+- dostęp do PostgreSQL z pgvector,
+- klucze i konfiguracja OpenAI zapisane lokalnie w `.env`.
 
-Projekt realizowany z myślą o rozwoju innowacji społecznych w regionie Małopolski:
-* **ROPS Kraków** (Regionalny Ośrodek Polityki Społecznej w Krakowie)
-* **Województwo Małopolskie**
+## Uruchomienie
 
----
+```bash
+pnpm install
+pnpm dev
+```
 
-<div align="center">
-  <sub><b>hubmi.pl</b> — Platforma Innowacji Społecznych dla Małopolski</sub>
-</div>
+Aplikacja będzie dostępna pod adresem [http://localhost:3000](http://localhost:3000).
+
+Przed uruchomieniem sprawdź `.env.example` i uzupełnij lokalny `.env`.
+Nie umieszczaj wartości sekretów w repozytorium.
+
+## Przydatne polecenia
+
+```bash
+pnpm dev                 # serwer developerski
+pnpm build               # build produkcyjny
+pnpm start               # uruchomienie zbudowanej aplikacji
+pnpm typecheck           # sprawdzenie typów
+pnpm lint                # lintowanie
+pnpm seed                # import innowacji wraz z embeddings
+pnpm embed:solutions     # uzupełnienie brakujących embeddings
+pnpm enrich:submissions  # wzbogacenie zgłoszeń przez AI
+```
+
+## Konfiguracja danych i AI
+
+Rozmowy są obsługiwane przez `/api/chat`, który zwraca strumień SSE.
+Po stronie serwera asystent korzysta z promptów w `lib/server/ai/prompts/`
+oraz wyszukiwania RAG w `lib/server/ai/rag/`.
+
+Najważniejsze endpointy obejmują:
+
+- `/api/chat` i `/api/conversations/[id]`,
+- `/api/submissions` oraz `/api/submissions/[id]`,
+- `/api/submissions/[id]/matches`,
+- `/api/solutions` oraz `/api/solutions/[id]`,
+- `/api/regional-statistics`,
+- `/api/groups`,
+- `/api/grant-calls` oraz `/api/grant-calls/[id]`,
+- endpointy kanwy i wniosku dla `/api/conversations/[id]`.
+
+## Struktura projektu
+
+```text
+app/                 trasy App Routera i komponenty ekranów
+app/api/             cienkie route handlers API
+lib/server/          dostęp do danych, AI, chat i matchmaking
+server/db/           schemat Drizzle, migracje i seed
+shared/components/   komponenty współdzielone, w tym accessibility bar
+app/data/             dane źródłowe i przykładowe
+docs/                dokumentacja przepływów i screenshoty
+```
+
+`page.tsx` zawiera szkielet strony, a komponenty specyficzne dla danej trasy
+znajdują się w odpowiadającym jej katalogu `components/`. Dostęp do bazy
+i logikę serwerową należy utrzymywać poza komponentami klienckimi.
+
+## Stan projektu
+
+Hubmi jest działającym prototypem demonstracyjnym. Najważniejsze ścieżki
+zgłaszania problemu, oferowania pomocy, dopasowania innowacji i obsługi
+administracyjnej są dostępne. Dalszy rozwój może objąć między innymi testowanie
+innowacji, komunikację zwrotną z autorem zgłoszenia oraz rekomendacje wdrożenia
+rozwiązania w konkretnej gminie.

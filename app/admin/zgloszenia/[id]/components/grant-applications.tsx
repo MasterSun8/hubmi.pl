@@ -11,8 +11,8 @@ export function GrantApplications() {
   if (applications.length === 0) return null;
 
   return (
-    <section className="flex flex-col gap-5 border-b border-line pb-7.5" aria-labelledby="applications-title">
-      <h2 id="applications-title" className="text-subtitle font-light">
+    <section className="flex flex-col gap-5 border border-line bg-surface p-7.5 max-sm:p-5" aria-labelledby="applications-title">
+      <h2 id="applications-title" className="text-subtitle font-light text-primary">
         Wnioski w naborach
       </h2>
       <ul className="m-0 flex list-none flex-col gap-2.5 p-0">

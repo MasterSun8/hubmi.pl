@@ -10,9 +10,9 @@ export function InnovationCanvas() {
   if (!canvas || filled.length === 0) return null;
 
   return (
-    <section className="flex flex-col gap-5 border-b border-line pb-7.5" aria-labelledby="canvas-title">
+    <section className="flex flex-col gap-5 border border-line bg-surface p-7.5 max-sm:p-5" aria-labelledby="canvas-title">
       <div className="flex flex-col gap-1">
-        <h2 id="canvas-title" className="text-subtitle font-light">
+        <h2 id="canvas-title" className="text-subtitle font-light text-primary">
           Kanwa innowacji
         </h2>
         <p className="text-caption">

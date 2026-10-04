@@ -35,7 +35,7 @@ export function SubmissionsTable() {
 
   return (
     <div role="table" aria-label="Zgłoszenia" aria-busy={status === "loading"}>
-      <div role="row" className={`${columns} border-b border-line py-2.5 max-lg:hidden`}>
+      <div role="row" className={`${columns} border-b border-line bg-surface px-5 py-2.5 max-lg:hidden`}>
         <span role="columnheader" className={headerClass}>Zgłoszenie</span>
         <span role="columnheader" className={headerClass}>Lokalizacja / temat</span>
         <span role="columnheader" className={headerClass}>Status</span>
@@ -46,7 +46,7 @@ export function SubmissionsTable() {
       </div>
 
       {pageItems.map((item) => (
-        <div key={item.id} role="row" className={`${columns} relative items-center gap-y-2.5 border-b border-line py-5`}>
+        <div key={item.id} role="row" className={`${columns} relative items-center gap-y-2.5 border-b border-line px-5 py-5 transition-colors hover:bg-surface focus-within:bg-surface`}>
           <div role="cell">
             {/* The link covers the whole row, so any part of it opens the details. */}
             <Link href={`/admin/zgloszenia/${item.id}`} className="text-lead font-light text-ink no-underline after:absolute after:inset-0">

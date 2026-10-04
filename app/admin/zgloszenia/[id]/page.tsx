@@ -21,34 +21,38 @@ export default async function SubmissionDetailsPage({ params }: PageProps<"/admi
 
   return (
     <SubmissionDetailsProvider id={id}>
-      <main id="main-content" className="flex flex-col gap-5 p-10 max-sm:p-5">
+      <main id="main-content" className="flex flex-col gap-10 p-10 max-sm:gap-7.5 max-sm:p-5">
         <div className="flex flex-wrap items-center justify-between gap-5">
           <Link href="/admin/zgloszenia" className="text-primary no-underline">
             <span aria-hidden="true">←</span> Wróć do zgłoszeń
           </Link>
-          <DeleteButton
-            label="Usuń zgłoszenie"
-            what="to zgłoszenie razem z rozmową, danymi kontaktowymi, kanwą i wnioskami w naborach"
-            endpoint={`/api/submissions/${id}`}
-            redirectTo="/admin/zgloszenia"
-          />
         </div>
 
         <WhenLoaded>
           <SubmissionHeader />
-          <div className="mt-5 grid grid-cols-[minmax(0,1fr)_430px] items-start gap-x-15 gap-y-10 max-xl:grid-cols-1">
-            <div className="flex flex-col gap-7.5">
+          <div className="grid grid-cols-1 items-start gap-7.5 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+            <div className="flex min-w-0 flex-col gap-7.5">
               <SubmissionSummary />
               <InnovationCanvas />
               <GrantApplications />
               <MatchingSolutions />
-              <section className="flex flex-col gap-5" aria-label="Historia rozmowy">
+              <section className="flex flex-col gap-5 border border-line bg-surface p-7.5 max-sm:p-5" aria-label="Historia rozmowy">
                 <ConversationHistory />
               </section>
             </div>
-            <div className="flex flex-col gap-7.5">
+            <div className="flex min-w-0 flex-col gap-7.5">
               <ContactDetails />
               <LocationMap />
+              <section aria-labelledby="manage-submission-title" className="flex flex-col items-start gap-5 border border-line bg-surface p-7.5 max-sm:p-5">
+                <h2 id="manage-submission-title" className="text-lead font-medium text-primary">Zarządzanie zgłoszeniem</h2>
+                <p className="text-caption text-muted">Trwale usuń zgłoszenie wraz z powiązanymi danymi.</p>
+                <DeleteButton
+                  label="Usuń zgłoszenie"
+                  what="to zgłoszenie razem z rozmową, danymi kontaktowymi, kanwą i wnioskami w naborach"
+                  endpoint={`/api/submissions/${id}`}
+                  redirectTo="/admin/zgloszenia"
+                />
+              </section>
             </div>
           </div>
         </WhenLoaded>

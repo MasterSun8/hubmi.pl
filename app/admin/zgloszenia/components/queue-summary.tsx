@@ -1,6 +1,6 @@
 "use client";
 
-import { plural, useSubmissions } from "./submissions-provider";
+import { useSubmissions } from "./submissions-provider";
 
 // Figma 15:1474 — totals for the whole queue, not just the filtered results.
 export function QueueSummary() {
@@ -14,20 +14,23 @@ export function QueueSummary() {
     (item) => item.riskLevel === 4 && item.status !== "resolved" && item.status !== "rejected",
   ).length;
 
+  const metrics = [
+    { label: "Wszystkie zgłoszenia", count: all.length, color: "text-ink", border: "border-line" },
+    { label: "Nowe", count: fresh, color: "text-primary", border: "border-primary" },
+    { label: "W trakcie obsługi", count: inProgress, color: "text-ink", border: "border-line" },
+    { label: "Ryzyko krytyczne · otwarte", count: critical, color: "text-error hc:text-ink", border: "border-error hc:border-line" },
+  ];
+
   return (
-    <div className="flex flex-wrap items-center gap-x-10 gap-y-2.5">
-      <p className="text-lead font-light">
-        {all.length} {plural(all.length, "zgłoszenie", "zgłoszenia", "zgłoszeń")}
-      </p>
-      <p className="font-medium text-primary">
-        {fresh} {plural(fresh, "nowe", "nowe", "nowych")}
-      </p>
-      <p>{inProgress} w trakcie obsługi</p>
-      {critical > 0 && (
-        <p className="font-medium text-error">
-          {critical} o ryzyku krytycznym
-        </p>
-      )}
-    </div>
+    <section aria-label="Podsumowanie zgłoszeń">
+      <dl className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        {metrics.map(({ label, count, color, border }) => (
+          <div key={label} className={`flex flex-col gap-2.5 border-t-2 bg-surface p-5 ${border}`}>
+            <dt className="text-caption font-medium text-muted">{label}</dt>
+            <dd className={`text-section font-light tabular-nums ${color}`}>{count}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
   );
 }

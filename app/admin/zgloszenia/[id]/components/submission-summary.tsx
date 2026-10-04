@@ -4,7 +4,7 @@ import { ideaStageLabels } from "@/shared/components/idea-stage";
 import { RiskBadge } from "../../components/risk-level";
 import { useLoadedSubmission } from "./submission-details-provider";
 
-const labelClass = "text-caption font-medium tracking-label-sm uppercase";
+const labelClass = "text-caption font-medium tracking-label-sm text-primary uppercase";
 
 // The AI write-up of the conversation (title, summary, category, target group,
 // risk reasoning), generated on the server right after the submission is saved.
@@ -12,15 +12,15 @@ export function SubmissionSummary() {
   const { submission } = useLoadedSubmission();
 
   return (
-    <section className="flex flex-col gap-5 border-b border-line pb-7.5" aria-labelledby="summary-title">
+    <section className="flex flex-col gap-5 border border-line bg-surface p-7.5 max-sm:p-5" aria-labelledby="summary-title">
       <div className="flex flex-col gap-1">
-        <h2 id="summary-title" className="text-subtitle font-light">
+        <h2 id="summary-title" className="text-subtitle font-light text-primary">
           Podsumowanie
         </h2>
         <p className="text-caption">Przygotowane przez AI na podstawie rozmowy. Pełny zapis poniżej.</p>
       </div>
       <p className="max-w-[60ch] whitespace-pre-wrap">{submission.summary}</p>
-      <dl className="m-0 grid max-w-[60ch] grid-cols-[auto_1fr] gap-x-7.5 gap-y-2.5 max-sm:grid-cols-1 max-sm:gap-y-1">
+      <dl className="m-0 grid max-w-[60ch] grid-cols-[auto_1fr] gap-x-7.5 gap-y-5 border-t border-line pt-5 max-sm:grid-cols-1 max-sm:gap-y-1">
         <dt className={labelClass}>Kogo dotyczy</dt>
         <dd className="m-0 max-sm:mb-2.5">{submission.targetGroup ?? <span className="text-muted">nie wynika z rozmowy</span>}</dd>
         {submission.essence && (

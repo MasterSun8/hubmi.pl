@@ -27,12 +27,12 @@ export function SubmissionHeader() {
         <p className="text-caption font-medium tracking-label-sm text-primary uppercase">
           Zgłoszenie {submissionNumber(submission.id)} / {typeLabels[submission.type]}
         </p>
-        <h1 className="font-heading text-section text-primary">{submission.title}</h1>
+        <h1 className="font-heading text-title text-ink">{submission.title}</h1>
       </div>
 
       {/* One row of labelled facts with the main action on the right. */}
-      <div className="flex flex-wrap items-center justify-between gap-x-10 gap-y-5 border-y border-line py-5">
-        <dl className="m-0 flex flex-wrap gap-x-10 gap-y-5">
+      <div className="flex flex-wrap items-center justify-between gap-7.5 border border-line bg-surface p-7.5 max-sm:p-5">
+        <dl className="m-0 grid min-w-0 flex-1 grid-cols-2 gap-x-7.5 gap-y-5 sm:grid-cols-3 3xl:grid-cols-5">
           <Fact label="Status">
             <StatusSelect />
           </Fact>
@@ -54,7 +54,7 @@ export function SubmissionHeader() {
 function Fact({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="flex flex-col gap-1">
-      <dt className="text-caption font-medium tracking-label-sm text-muted uppercase">{label}</dt>
+      <dt className="text-caption font-medium tracking-label-sm text-primary uppercase">{label}</dt>
       <dd className="m-0">{children}</dd>
     </div>
   );

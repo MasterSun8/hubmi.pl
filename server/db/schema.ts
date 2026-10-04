@@ -1,6 +1,7 @@
 import { sql } from "drizzle-orm";
 import {
   check,
+  date,
   foreignKey,
   index,
   integer,
@@ -58,6 +59,7 @@ export const reporterType = pgEnum("reporter_type", [
 export const contentStatus = pgEnum("content_status", ["draft", "published", "retired"]);
 // Etap realizacji pomysłu z fiszki (moduł Kreator pomysłów).
 export const ideaStage = pgEnum("idea_stage", ["idea", "prototype", "pilot", "running"]);
+export const grantApplicationStatus = pgEnum("grant_application_status", ["draft", "submitted"]);
 
 // ---------- Rozmowy ----------
 
@@ -332,4 +334,46 @@ export const implementationRecommendations = pgTable(
     }).onDelete("cascade"),
     index().on(t.conversationId),
   ],
+);
+
+// ---------- Nabory i wnioski (moduł 3, generator wniosków) ----------
+
+// Sekcja wniosku w naborze: klucz, nazwa i pytanie pomocnicze dla autora i AI.
+export type GrantCallSection = { key: string; label: string; question: string };
+
+export const grantCalls = pgTable(
+  "grant_calls",
+  {
+    id: uuid().primaryKey().defaultRandom(),
+    title: text().notNull(),
+    description: text().notNull().default(""),
+    // Nabór trwa od startsOn do endsOn włącznie; tylko wtedy autor pomysłu widzi „Przygotuj wniosek”.
+    startsOn: date().notNull(),
+    endsOn: date().notNull(),
+    maxAmount: integer(),
+    sections: jsonb().$type<GrantCallSection[]>().notNull(),
+    // Kryteria oceny – AI bierze je pod uwagę, pisząc wniosek.
+    criteria: text().notNull().default(""),
+    ...timestamps,
+  },
+  (t) => [index().on(t.startsOn, t.endsOn), check("grant_calls_dates", sql`${t.endsOn} >= ${t.startsOn}`)],
+);
+
+export const grantApplications = pgTable(
+  "grant_applications",
+  {
+    id: uuid().primaryKey().defaultRandom(),
+    callId: uuid()
+      .notNull()
+      .references(() => grantCalls.id, { onDelete: "cascade" }),
+    submissionId: uuid()
+      .notNull()
+      .references(() => submissions.id, { onDelete: "cascade" }),
+    // Treść sekcji wniosku: klucz sekcji naboru → tekst.
+    sections: jsonb().$type<Record<string, string>>().notNull().default({}),
+    status: grantApplicationStatus().notNull().default("draft"),
+    submittedAt: timestamp({ withTimezone: true }),
+    ...timestamps,
+  },
+  (t) => [uniqueIndex().on(t.callId, t.submissionId), index().on(t.submissionId)],
 );

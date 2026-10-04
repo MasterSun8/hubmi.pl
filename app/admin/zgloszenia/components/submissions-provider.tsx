@@ -18,6 +18,8 @@ export type Submission = {
   stage?: IdeaStage | null;
   // Filled innovation canvas fields (list only).
   canvasFilled?: number;
+  // Grant applications submitted for the idea (list only).
+  submittedApplications?: number;
   location: string;
   peopleAffected: number | null;
   aiScore: number | null;

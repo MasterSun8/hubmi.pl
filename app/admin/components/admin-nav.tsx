@@ -8,6 +8,7 @@ const items = [
   { label: "Mapa potrzeb", href: "/admin/mapa-potrzeb" },
   { label: "Zgłoszenia", href: "/admin/zgloszenia" },
   { label: "Inicjatywy", href: "/admin/inicjatywy" },
+  { label: "Nabory", href: "/admin/nabory" },
   { label: "Baza wiedzy" },
   { label: "Ustawienia" },
 ] as const;

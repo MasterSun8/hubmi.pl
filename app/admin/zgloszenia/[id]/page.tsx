@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ContactDetails } from "./components/contact-details";
 import { ConversationHistory } from "./components/conversation-history";
+import { GrantApplications } from "./components/grant-applications";
 import { InnovationCanvas } from "./components/innovation-canvas";
 import { LocationMap } from "./components/location-map";
 import { MatchingSolutions } from "./components/matching-solutions";
@@ -30,6 +31,7 @@ export default async function SubmissionDetailsPage({ params }: PageProps<"/admi
             <div className="flex flex-col gap-7.5">
               <SubmissionSummary />
               <InnovationCanvas />
+              <GrantApplications />
               <MatchingSolutions />
               <section className="flex flex-col gap-5" aria-label="Historia rozmowy">
                 <ConversationHistory />

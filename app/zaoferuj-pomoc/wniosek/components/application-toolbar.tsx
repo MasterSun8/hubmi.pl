@@ -3,7 +3,7 @@
 import { useApplication, type DraftState, type SaveState } from "./application-provider";
 
 const actionClass =
-  "cursor-pointer border border-primary bg-transparent px-5 py-2.5 text-caption font-medium tracking-label-sm text-primary uppercase transition-colors hover:bg-primary hover:text-on-primary disabled:opacity-50";
+  "cursor-pointer border border-primary bg-transparent px-5 py-2.5 text-caption font-medium tracking-label-sm text-primary uppercase disabled:opacity-50";
 
 const saveLabels: Record<SaveState, string> = {
   idle: "Zmiany zapisują się automatycznie",

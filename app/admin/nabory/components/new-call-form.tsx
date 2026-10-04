@@ -8,7 +8,7 @@ const inputClass =
   "min-h-10 rounded-input border border-field bg-transparent px-5 py-1.75 text-ink transition-colors placeholder:text-muted focus:border-primary focus:outline-none aria-invalid:border-error";
 const labelClass = "text-caption font-medium tracking-label-sm uppercase";
 const actionClass =
-  "cursor-pointer border border-primary bg-transparent px-5 py-2.5 text-caption font-medium tracking-label-sm text-primary uppercase transition-colors hover:bg-primary hover:text-on-primary disabled:opacity-50";
+  "cursor-pointer border border-primary bg-transparent px-5 py-2.5 text-caption font-medium tracking-label-sm text-primary uppercase disabled:opacity-50";
 const linkButtonClass = "cursor-pointer border-0 bg-transparent p-0 text-caption font-medium text-primary";
 
 const today = () => new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Warsaw" }).format(new Date());

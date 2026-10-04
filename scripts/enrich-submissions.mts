@@ -3,7 +3,7 @@
 // during an OpenAI outage. Processed rows are skipped, so it is safe to rerun.
 //
 // Run: pnpm run enrich:submissions
-import { and, asc, eq, isNull, or } from "drizzle-orm";
+import { asc, isNull, or } from "drizzle-orm";
 import { enrichSubmission } from "@/lib/server/ai/enrich-submission";
 import { getDb } from "@/server/db/client";
 import { submissions } from "@/server/db/schema";
@@ -15,10 +15,7 @@ const todo = await db
   .select({ id: submissions.id })
   .from(submissions)
   .where(
-    or(
-      isNull(submissions.embedding),
-      and(eq(submissions.type, "problem"), isNull(submissions.riskLevel)),
-    ),
+    or(isNull(submissions.embedding), isNull(submissions.riskLevel)),
   )
   .orderBy(asc(submissions.createdAt));
 

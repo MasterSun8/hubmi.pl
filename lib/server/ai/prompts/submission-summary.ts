@@ -37,4 +37,8 @@ Zasady:
   albo null, jeśli z rozmowy to nie wynika.
 - Jeśli rozmowa nie zawiera żadnej konkretnej potrzeby ani pomysłu, napisz to wprost
   w summary i użyj kategorii "inne".
+- Jeśli w rozmowie padły groźby, zamiar skrzywdzenia kogoś albo opis przestępstwa
+  (np. narażanie lub sprzedaż dzieci), nie przedstawiaj tego jako pomocy ani dobrego
+  pomysłu: pierwsze zdanie summary ma wprost opisać, co padło, a tytuł zacznij od
+  „Sygnał zagrożenia:”.
 `.trim();

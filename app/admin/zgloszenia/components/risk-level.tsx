@@ -15,7 +15,6 @@ const barHeights: Record<RiskLevel, string> = { 1: "h-1", 2: "h-2", 3: "h-3", 4:
 // A signal-strength meter next to the label. The text carries the meaning
 // (WCAG 1.4.1); the bars and the red for "krytyczne" only reinforce it.
 export function RiskBadge({ item }: { item: Pick<Submission, "type" | "riskLevel"> }) {
-  if (item.type === "idea") return <span className="text-muted">nie dotyczy</span>;
   if (item.riskLevel === null) return <span className="text-muted">brak oceny</span>;
 
   const level = item.riskLevel as RiskLevel;

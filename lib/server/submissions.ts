@@ -1,6 +1,6 @@
 import "server-only";
 
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import { getDb } from "@/server/db/client";
 import { conversations, submissions, submitters } from "@/server/db/schema";
@@ -138,6 +138,13 @@ export async function listSubmissions(filters: {
       summary: submissions.summary,
       category: submissions.category,
       targetGroup: submissions.targetGroup,
+      essence: submissions.essence,
+      stage: submissions.stage,
+      // How many innovation canvas fields the author filled in (0 when there is no canvas).
+      canvasFilled: sql<number>`(
+        select count(*)::int from jsonb_each_text(coalesce(${conversations.canvas}, '{}'::jsonb))
+        where length(trim(value)) > 0
+      )`,
       location: submissions.location,
       peopleAffected: submissions.peopleAffected,
       reporterType: submissions.reporterType,
@@ -148,6 +155,7 @@ export async function listSubmissions(filters: {
       updatedAt: submissions.updatedAt,
     })
     .from(submissions)
+    .leftJoin(conversations, eq(conversations.id, submissions.conversationId))
     .where(conditions.length > 0 ? and(...conditions) : undefined)
     .orderBy(desc(submissions.createdAt))
     .limit(filters.limit)

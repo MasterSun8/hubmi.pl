@@ -1,6 +1,7 @@
 "use client";
 
 import { IdeasList } from "./ideas-list";
+import { IdeasToolbar } from "./ideas-toolbar";
 import { useInitiatives } from "./initiatives-provider";
 import { LibraryPagination } from "./library-pagination";
 import { LibraryTable } from "./library-table";
@@ -12,7 +13,11 @@ export function InitiativesPanels() {
   if (tab === "ideas") {
     return (
       <section id="panel-ideas" role="tabpanel" aria-labelledby="tab-ideas" className="flex flex-col gap-5">
-        <p>Pomysły zgłoszone przez mieszkańców i organizacje w ścieżce „Zaoferuj pomoc”. Kliknij, aby zobaczyć całą rozmowę.</p>
+        <p>
+          Pomysły zgłoszone przez mieszkańców i organizacje w ścieżce „Zaoferuj pomoc”. Kliknij fiszkę, aby zobaczyć kanwę
+          i całą rozmowę.
+        </p>
+        <IdeasToolbar />
         <IdeasList />
       </section>
     );

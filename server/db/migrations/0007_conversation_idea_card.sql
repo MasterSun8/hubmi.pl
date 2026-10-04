@@ -1,0 +1,1 @@
+ALTER TABLE "conversations" ADD COLUMN "idea_card" jsonb;

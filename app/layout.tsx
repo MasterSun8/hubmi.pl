@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { MotionProvider } from "@/shared/components/motion/motion-provider";
 import { a11yInlineScript } from "@/shared/components/accessibility-preferences";
@@ -14,6 +14,12 @@ const roboto = localFont({
     { path: "./fonts/roboto-500.ttf", weight: "500", style: "normal" },
   ],
 });
+// The on-screen keyboard shrinks the page instead of covering the chat input.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  interactiveWidget: "resizes-content",
+};
 export const metadata: Metadata = {
   title: "Hubmi — razem możemy więcej",
   description: "Zgłoś problem lub zaoferuj pomoc. Łączymy potrzeby mieszkańców Małopolski z pomysłami i rozwiązaniami społecznymi.",

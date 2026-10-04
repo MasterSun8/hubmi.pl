@@ -115,6 +115,12 @@
   --font-weight-heading: 300;
 }
 
+/* "Pobierz PDF" on the canvas page prints one landscape A4 sheet. */
+@page {
+  size: A4 landscape;
+  margin: 12mm;
+}
+
 @layer base {
   body {
     @apply bg-background font-sans text-body font-normal text-ink;

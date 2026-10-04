@@ -1,5 +1,6 @@
 "use client";
 
+import { ideaStageLabels } from "@/shared/components/idea-stage";
 import { useLoadedSubmission } from "./submission-details-provider";
 
 const labelClass = "text-caption font-medium tracking-label-sm uppercase";
@@ -21,6 +22,18 @@ export function SubmissionSummary() {
       <dl className="m-0 grid max-w-[60ch] grid-cols-[auto_1fr] gap-x-7.5 gap-y-2.5 max-sm:grid-cols-1 max-sm:gap-y-1">
         <dt className={labelClass}>Kogo dotyczy</dt>
         <dd className="m-0 max-sm:mb-2.5">{submission.targetGroup ?? <span className="text-muted">nie wynika z rozmowy</span>}</dd>
+        {submission.essence && (
+          <>
+            <dt className={labelClass}>Istota pomysłu</dt>
+            <dd className="m-0 max-sm:mb-2.5">{submission.essence}</dd>
+          </>
+        )}
+        {submission.stage && (
+          <>
+            <dt className={labelClass}>Etap</dt>
+            <dd className="m-0 max-sm:mb-2.5">{ideaStageLabels[submission.stage]}</dd>
+          </>
+        )}
         {submission.peopleAffected !== null && (
           <>
             <dt className={labelClass}>Liczba osób</dt>

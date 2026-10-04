@@ -36,9 +36,9 @@ export function MessageList() {
   return (
     <>
       {/* Screen readers hear finished turns only, not every streamed token. */}
-      <ol className="m-0 flex list-none flex-col gap-5 p-0" aria-live="polite" aria-busy={waiting}>
+      <ol className="m-0 flex list-none flex-col gap-7.5 p-0" aria-live="polite" aria-busy={waiting}>
         {messages.map((message, index) => (
-          <motion.li key={message.id} className="flex flex-col items-start" {...enter()}>
+          <motion.li key={message.id} className="flex flex-col items-start gap-2.5" {...enter()}>
             <p className={`${authorClass} ${message.role === "assistant" ? "text-primary" : ""}`}>
               {message.role === "assistant" ? "Asystent Hubmi" : "Ty"}
             </p>
@@ -80,7 +80,7 @@ export function MessageList() {
           )}
         </AnimatePresence>
       </ol>
-      <div ref={endRef} className="max-lg:scroll-mb-28" />
+      <div ref={endRef} className="scroll-mb-60 max-lg:scroll-mb-28" />
     </>
   );
 }

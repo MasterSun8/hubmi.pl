@@ -1,7 +1,6 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useChat } from "@/shared/components/chat/chat-provider";
 import { IdeaStageBar, ideaStageLabels, type IdeaStage } from "@/shared/components/idea-stage";
@@ -75,7 +74,7 @@ export function IdeaCardPanel() {
 
   return (
     <section
-      className="flex w-full flex-col gap-5 border border-primary bg-surface p-5"
+      className="flex w-full flex-col gap-5 border-b border-line pb-7.5"
       aria-labelledby="idea-card-title"
       aria-busy={updating}
     >
@@ -119,14 +118,6 @@ export function IdeaCardPanel() {
           <StageMeter stage={visibleCard?.stage ?? null} />
         </div>
       </dl>
-      {conversationId && (
-        <div className="flex flex-col gap-1 border-t border-line pt-4">
-          <Link href="/zaoferuj-pomoc/kanwa" className="font-medium text-primary">
-            Rozpisz pomysł na kanwie <span aria-hidden="true">→</span>
-          </Link>
-          <p className="text-caption text-muted">Asystent wypełni ją z rozmowy, a Ty poprawisz każde pole.</p>
-        </div>
-      )}
     </section>
   );
 }

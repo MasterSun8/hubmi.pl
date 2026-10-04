@@ -56,16 +56,16 @@ export default function OfferHelpPage() {
         <ChatStage stage="conversation">
           <main
             id="main-content"
-            className="grid flex-1 grid-cols-[minmax(0,1fr)_380px] grid-rows-[1fr_auto] gap-x-15 gap-y-5 pt-5 max-lg:grid-cols-1 max-lg:grid-rows-none"
+            className="grid flex-1 grid-cols-[minmax(0,1fr)_380px] grid-rows-[1fr_auto] gap-x-15 gap-y-7.5 pt-7.5 max-lg:grid-cols-1 max-lg:grid-rows-none"
           >
-            <section className="flex flex-col gap-5" aria-labelledby="conversation-title">
+            <section className="flex min-w-0 flex-col gap-7.5 pb-5" aria-labelledby="conversation-title">
               <h1 id="conversation-title" className="font-heading text-title text-primary">
                 Twoja rozmowa
               </h1>
               <MessageList />
             </section>
             <motion.aside
-              className="row-span-2 flex flex-col items-start gap-5 self-start border-t border-line py-7.5 max-lg:row-span-1 max-lg:row-start-3"
+              className="row-span-2 flex flex-col items-start gap-7.5 self-start border-t border-line pt-7.5 max-lg:row-span-1 max-lg:row-start-3"
               aria-label="Przekazanie oferty pomocy"
               {...enter(2, { y: 0, x: 24 })}
             >
@@ -79,9 +79,9 @@ export default function OfferHelpPage() {
                 }}
               />
             </motion.aside>
-            {/* The input sticks to the bottom, so it stays in reach however tall the idea card column grows. */}
+            {/* Keep the composer available while reading the conversation. */}
             <motion.div
-              className="sticky bottom-0 z-10 col-start-1 bg-background py-5 max-lg:row-start-2 max-lg:-mx-page max-lg:border-t max-lg:border-line max-lg:px-page max-lg:py-2.5"
+              className="sticky bottom-0 z-10 col-start-1 border-t border-line bg-background py-5 max-lg:row-start-2 max-lg:-mx-page max-lg:px-page max-lg:py-2.5"
               {...enter(1)}
             >
               <MessageComposer

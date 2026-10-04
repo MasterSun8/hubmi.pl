@@ -34,28 +34,34 @@ export function MessageComposer({ placeholder, hint, autoFocus }: MessageCompose
 
   return (
     <form className="flex flex-col gap-2.5" onSubmit={submit}>
-      <label className="text-caption font-medium tracking-label-sm uppercase max-lg:sr-only" htmlFor={fieldId}>
+      <label className="text-caption font-medium tracking-label-sm text-primary uppercase" htmlFor={fieldId}>
         Twoja wiadomość
       </label>
-      <div className="flex items-center gap-5 max-lg:gap-2.5">
+      <div className="flex flex-col gap-2.5">
         <textarea
           id={fieldId}
-          className="field-sizing-content max-h-65 min-h-22.5 flex-1 resize-none rounded-input border border-field bg-transparent p-5 text-ink max-lg:max-h-32 max-lg:min-h-12 max-lg:px-4 max-lg:py-2.5 transition-colors placeholder:text-muted focus:border-primary focus:outline-none"
+          className="field-sizing-content max-h-40 min-h-20 w-full resize-none rounded-input border border-field bg-surface p-5 text-ink max-lg:max-h-32 max-lg:min-h-12 max-lg:px-4 max-lg:py-2.5 transition-colors placeholder:text-muted focus:border-primary focus:outline-none"
           value={text}
           placeholder={placeholder}
           rows={2}
+          disabled={sent}
           autoFocus={autoFocus}
           aria-describedby={hintId}
           onChange={(event) => setText(event.target.value)}
           onKeyDown={handleKeyDown}
         />
-        <button type="submit" className="flex cursor-pointer flex-col items-start gap-2.5 border-0 bg-transparent p-0 text-caption font-medium tracking-label-sm text-primary uppercase disabled:opacity-50" disabled={!canSend}>
-          <svg className="size-17.5 max-lg:size-12" viewBox="0 0 70 70" fill="none" aria-hidden="true" focusable="false">
-            <path d="M35 69.5C54.0538 69.5 69.5 54.0538 69.5 35C69.5 15.9462 54.0538 0.5 35 0.5C15.9462 0.5 0.5 15.9462 0.5 35C0.5 54.0538 15.9462 69.5 35 69.5Z" stroke="currentColor" />
-            <path d="M20 35H50M42 43L50 35L42 27" stroke="currentColor" />
-          </svg>
-          <span className="max-lg:sr-only">Wyślij</span>
-        </button>
+        <div className="flex flex-wrap items-center justify-between gap-2.5">
+          <button
+            type="submit"
+            className="ml-auto inline-flex min-h-11 items-center justify-center gap-2.5 rounded-input border-0 bg-primary px-5 py-2.5 text-body font-medium text-on-primary hover:opacity-100! disabled:bg-muted disabled:opacity-60"
+            disabled={!canSend}
+          >
+            {sent ? "Rozmowa przekazana" : waiting ? "Asystent odpowiada…" : "Wyślij wiadomość"}
+            <svg className="size-4 shrink-0" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10M8 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+        </div>
       </div>
       <p id={hintId} className="text-caption max-lg:sr-only">
         {sent ? "Rozmowa została przekazana." : hint}

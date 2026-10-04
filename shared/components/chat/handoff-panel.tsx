@@ -2,6 +2,7 @@
 
 import { ArrowButton } from "@/shared/components/arrow-button";
 import { useChat } from "./chat-provider";
+import { NewConversationButton } from "./new-conversation-button";
 
 // The "Gotowe do przekazania?" column next to the conversation (Figma 11:587).
 export function HandoffPanel({ description }: { description: string }) {
@@ -37,6 +38,7 @@ export function HandoffPanel({ description }: { description: string }) {
           {"Przekaż\nzgłoszenie"}
         </ArrowButton>
       </div>
+      <NewConversationButton />
     </>
   );
 }

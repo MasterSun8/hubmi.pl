@@ -11,15 +11,19 @@ export const metadata: Metadata = {
 export default function InitiativesPage() {
   return (
     <InitiativesProvider>
-      <main id="main-content" className="flex flex-col gap-5 p-10 max-sm:p-5">
-        <p className="text-caption font-medium tracking-label-sm text-primary uppercase">Małopolska / panel instytucji</p>
-        <h1 className="font-heading text-display text-primary">Inicjatywy</h1>
-        <p className="max-w-[70ch]">
-          Biblioteka sprawdzonych innowacji społecznych ROPS i pomysły mieszkańców. Zobacz, które rozwiązania odpowiadają na
-          zgłaszane potrzeby, i decyduj, co asystent proponuje mieszkańcom.
-        </p>
-        <InitiativesTabs />
-        <InitiativesPanels />
+      <main id="main-content" className="flex flex-col gap-10 p-10 max-sm:gap-7.5 max-sm:p-5">
+        <header className="flex flex-col gap-2.5">
+          <p className="text-caption font-medium tracking-label-sm text-primary uppercase">Małopolska / panel instytucji</p>
+          <h1 className="font-heading text-section text-primary">Inicjatywy</h1>
+          <p className="max-w-[70ch]">
+            Biblioteka sprawdzonych innowacji społecznych ROPS i pomysły mieszkańców. Zobacz, które rozwiązania odpowiadają na
+            zgłaszane potrzeby, i decyduj, co asystent proponuje mieszkańcom.
+          </p>
+        </header>
+        <div className="flex flex-col gap-5">
+          <InitiativesTabs />
+          <InitiativesPanels />
+        </div>
       </main>
     </InitiativesProvider>
   );

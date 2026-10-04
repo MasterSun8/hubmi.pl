@@ -18,6 +18,7 @@ export function InitiativesPanels() {
           i całą rozmowę.
         </p>
         <IdeasToolbar />
+        <h2 className="mt-5 text-subtitle font-light">Pomysły mieszkańców</h2>
         <IdeasList />
       </section>
     );

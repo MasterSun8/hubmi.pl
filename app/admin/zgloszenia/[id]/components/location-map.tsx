@@ -38,8 +38,8 @@ export function LocationMap() {
       : null;
 
   return (
-    <section className="flex flex-col gap-5" aria-labelledby="location-title">
-      <h2 id="location-title" className="text-subtitle font-light">
+    <section className="flex flex-col gap-5 border border-line bg-surface p-7.5 max-sm:p-5" aria-labelledby="location-title">
+      <h2 id="location-title" className="text-subtitle font-light text-primary">
         Lokalizacja
       </h2>
       <p className="font-medium">{submission.location} · woj. małopolskie</p>

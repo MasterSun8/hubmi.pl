@@ -21,7 +21,7 @@ export function IdeasList() {
   }
 
   return (
-    <ul className="m-0 grid list-none grid-cols-[repeat(auto-fill,minmax(320px,1fr))] gap-5 p-0">
+    <ul className="m-0 grid list-none grid-cols-[repeat(auto-fill,minmax(min(100%,320px),1fr))] gap-5 p-0">
       {ideaResults.map((idea) => (
         <li key={idea.id} className="relative flex flex-col gap-4 border border-line bg-surface p-5">
           <p className="text-caption font-medium tracking-label-sm text-primary uppercase">

@@ -8,8 +8,8 @@ export function ContactDetails() {
   const contact = submission.submitter;
 
   return (
-    <section className="flex flex-col gap-5 border-y border-line py-5" aria-labelledby="contact-title">
-      <h2 id="contact-title" className="text-subtitle font-light">
+    <section className="flex flex-col gap-5 border border-line bg-surface p-7.5 max-sm:p-5" aria-labelledby="contact-title">
+      <h2 id="contact-title" className="text-subtitle font-light text-primary">
         Dane kontaktowe
       </h2>
       {contact ? (

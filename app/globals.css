@@ -132,7 +132,7 @@
     @apply bg-background font-sans text-body font-normal text-ink;
   }
   :focus-visible {
-    outline: 3px dotted var(--color-ink);
+    outline: 2px solid var(--color-ink);
     outline-offset: 3px;
   }
   /* Everything clickable always shows the pointer on hover, disabled or not;

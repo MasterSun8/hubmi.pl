@@ -14,7 +14,7 @@ export function ConversationHistory() {
   if (!conversation || conversation.messages.length === 0) {
     return (
       <>
-        <h2 className="text-subtitle font-light">Historia rozmowy</h2>
+        <h2 className="text-subtitle font-light text-primary">Historia rozmowy</h2>
         <p className="text-caption">Brak zapisanej rozmowy. Opis z formularza:</p>
         <p className="max-w-[60ch] whitespace-pre-wrap">{submission.summary}</p>
       </>
@@ -26,7 +26,7 @@ export function ConversationHistory() {
 
   return (
     <>
-      <h2 className="text-subtitle font-light">Historia rozmowy</h2>
+      <h2 className="text-subtitle font-light text-primary">Historia rozmowy</h2>
       <p className="text-caption">
         {messages.length} {plural(messages.length, "wiadomość", "wiadomości", "wiadomości")} · {date(messages[0].createdAt)}
         {ended}

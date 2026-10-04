@@ -23,9 +23,9 @@ export function MatchingSolutions() {
   }, [submission.id]);
 
   return (
-    <section className="flex flex-col gap-5 border-b border-line pb-7.5" aria-labelledby="solutions-title">
+    <section className="flex flex-col gap-5 border border-line bg-surface p-7.5 max-sm:p-5" aria-labelledby="solutions-title">
       <div className="flex flex-col gap-1">
-        <h2 id="solutions-title" className="text-subtitle font-light">
+        <h2 id="solutions-title" className="text-subtitle font-light text-primary">
           Pasujące innowacje
         </h2>
         <p className="text-caption">Sprawdzone rozwiązania z Biblioteki ROPS, które AI dopasowało do tego zgłoszenia.</p>
@@ -35,7 +35,7 @@ export function MatchingSolutions() {
       ) : matches.length === 0 ? (
         <p className="text-muted">Brak dopasowań. Zgłoszenie mogło jeszcze nie zostać przetworzone przez AI.</p>
       ) : (
-        <ul className="m-0 grid list-none grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-5 p-0">
+        <ul className="m-0 grid list-none grid-cols-[repeat(auto-fill,minmax(min(100%,240px),1fr))] gap-5 p-0">
           {matches.map((match) => (
             <li key={match.id} className="relative flex flex-col gap-2.5 border border-line bg-surface p-5">
               <Link href={`/admin/inicjatywy/${match.id}`} className="text-lead font-light text-ink no-underline after:absolute after:inset-0">

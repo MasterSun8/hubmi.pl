@@ -52,7 +52,7 @@ Stosuj duże nagłówki według ich klasy wizualnej, nie samego poziomu h1–h6.
 
 ## 6. Components
 - **CTA:** przezroczyste tło; po lewej obrys koła i linia wychodząca z jego środka w prawo, potem napis z odstępem `20px`. SVG desktop `105 × 70px`, mobile `60 × 40px`. Hover używa magenty; szczegóły animacji wypełnienia (szacunkowo). Osobnego wyglądu active nie ustalono. Disabled strzałek slidera: `opacity: .4`, brak interakcji; przyciski kwadratowe `.2`.
-- **Input / textarea:** input wysokości `40px`, padding `0 20px`, tekst `16px`, tło przezroczyste. Textarea `90px`, padding `7px 20px`, tekst `16/24px`. Błąd: obrys `1px #F05A56`, komunikat `12/26px`. Focus klawiatury: `3px dotted #1C1C1C`, offset `3px`. Hover i disabled inputów nie ustalono.
+- **Input / textarea:** input wysokości `40px`, padding `0 20px`, tekst `16px`, tło przezroczyste. Textarea `90px`, padding `7px 20px`, tekst `16/24px`. Błąd: obrys `1px #F05A56`, komunikat `12/26px`. Focus klawiatury: ciągły obrys `2px solid #1C1C1C`, offset `3px`; w trybie wysokiego kontrastu używa koloru tekstu. Hover i disabled inputów nie ustalono.
 - **Checkbox:** okrąg `40 × 40px`; zaznaczony magenta z białym znakiem `20 × 20px`. Tekst zgody uppercase `14/18px`.
 - **Karta wydarzenia:** zdjęcie około `3:2`, tytuł pod nim z odstępem `10px`. Bez panelu tła, cienia i ramki. Przy 1280px karta około `354px`, odstęp około `30px`; lista przewijana poziomo.
 - **Kalendarium:** wiersze z linią dolną `1px #9A9A9A`, padding `20px 0`; data magenta `56/64px`, waga 100. Hover rozszerza dekoracyjną linię do `100%`.

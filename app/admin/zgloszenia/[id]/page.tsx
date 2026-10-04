@@ -12,7 +12,7 @@ import { SubmissionHeader } from "./components/submission-header";
 import { SubmissionSummary } from "./components/submission-summary";
 
 export const metadata: Metadata = {
-  title: "Szczegóły zgłoszenia — Panel instytucji Hubmi",
+  title: "Szczegóły zgłoszenia — Panel Administratora Hubmi",
 };
 
 // Figma 16:1545 — one submission from GET /api/submissions/[id] with its conversation.

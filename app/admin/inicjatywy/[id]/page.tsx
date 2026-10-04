@@ -9,7 +9,7 @@ import { MatchingSubmissions } from "./components/matching-submissions";
 import { InitiativeTesters } from "./components/initiative-testers";
 
 export const metadata: Metadata = {
-  title: "Szczegóły innowacji — Panel instytucji Hubmi",
+  title: "Szczegóły innowacji — Panel Administratora Hubmi",
 };
 
 // One innovation from GET /api/solutions/[id] with the submissions it matches.
@@ -20,7 +20,7 @@ export default async function InitiativeDetailsPage({ params }: PageProps<"/admi
     <InitiativeProvider id={id}>
       <main id="main-content" className="flex flex-col gap-10 p-10 max-sm:gap-7.5 max-sm:p-5">
         <div className="flex flex-wrap items-center justify-between gap-5">
-          <BackLink href="/admin/inicjatywy">Wróć do inicjatyw</BackLink>
+          <BackLink href="/admin/inicjatywy">Wróć do biblioteki innowacji</BackLink>
 
         </div>
 

@@ -4,7 +4,7 @@ import { AccessibilityBar } from "@/shared/components/accessibility-bar";
 import { AdminNav } from "./components/admin-nav";
 
 export const metadata: Metadata = {
-  title: "Panel instytucji — Hubmi",
+  title: "Panel Administratora — Hubmi",
   robots: { index: false, follow: false },
 };
 
@@ -13,12 +13,12 @@ export default function AdminLayout({ children }: LayoutProps<"/admin">) {
   return (
     <div className="flex min-h-svh max-lg:flex-col">
       <aside className="flex w-57.5 flex-none flex-col gap-7.5 border-r border-line bg-surface px-7.5 py-10 max-lg:w-auto max-lg:border-r-0 max-lg:border-b max-lg:px-5 max-lg:py-5">
-        {/* "Panel instytucji" sits under the logo as its caption, so it does not read as a menu item. */}
+        {/* "Panel Administratora" sits under the logo as its caption, so it does not read as a menu item. */}
         <div className="flex flex-col border-b border-line pb-5">
           <Link className="text-title font-light text-primary no-underline" href="/" aria-label="Hubmi — strona główna">
             hubmi
           </Link>
-          <p className="text-caption text-muted">Panel instytucji</p>
+          <p className="text-caption text-muted">Panel Administratora</p>
         </div>
         <AdminNav />
       </aside>

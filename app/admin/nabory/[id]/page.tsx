@@ -6,7 +6,7 @@ import { CallDetailsProvider, WhenCallLoaded } from "./components/call-details-p
 import { CallHeader } from "./components/call-header";
 
 export const metadata: Metadata = {
-  title: "Nabór — Panel instytucji Hubmi",
+  title: "Nabór — Panel Administratora Hubmi",
 };
 
 // One grant call (GET /api/grant-calls/[id]) with the applications submitted in it.

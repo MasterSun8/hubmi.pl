@@ -32,7 +32,6 @@ export type IdeaStageFilter = IdeaStage | "unknown" | "all";
 type InitiativesState = {
   status: "loading" | "ready" | "error";
   tab: "library" | "ideas";
-  setTab: (tab: "library" | "ideas") => void;
   solutions: Solution[];
   ideas: Submission[];
   // Ideas after the stage filter; "unknown" = the conversation did not say.
@@ -60,9 +59,9 @@ export function useInitiatives() {
   return state;
 }
 
-export function InitiativesProvider({ children }: { children: ReactNode }) {
+// Library (Zasobnik wiedzy) and ideas (Kreator pomysłów) are separate pages sharing this data.
+export function InitiativesProvider({ tab, children }: { tab: InitiativesState["tab"]; children: ReactNode }) {
   const [status, setStatus] = useState<InitiativesState["status"]>("loading");
-  const [tab, setTab] = useState<InitiativesState["tab"]>("library");
   const [solutions, setSolutions] = useState<Solution[]>([]);
   const [ideas, setIdeas] = useState<Submission[]>([]);
   const [query, setQueryState] = useState("");
@@ -130,7 +129,6 @@ export function InitiativesProvider({ children }: { children: ReactNode }) {
       value={{
         status,
         tab,
-        setTab,
         solutions,
         ideas,
         ideaResults,

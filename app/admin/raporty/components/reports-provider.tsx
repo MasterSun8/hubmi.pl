@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, use, useMemo, useState, type ReactNode } from "react";
+import { createContext, use, useEffect, useMemo, useState, type ReactNode } from "react";
 import { countyOfLocation } from "@/lib/geo/county-of-location";
 import type { RegionStat, TrendsData } from "@/lib/server/reports";
 
@@ -19,6 +19,7 @@ export type ReportState =
   | { status: "error"; region: string | null; message: string };
 
 type ReportsState = {
+  status: "loading" | "ready" | "error";
   byCounty: Record<string, CountyTrend>;
   // The whole region, including submissions whose town could not be matched to a county.
   overall: CountyTrend;
@@ -80,8 +81,30 @@ function groupByCounty(data: TrendsData) {
   };
 }
 
-export function ReportsProvider({ data, children }: { data: TrendsData; children: ReactNode }) {
+const emptyData: TrendsData = { trends: {}, contextStats: {} };
+
+// Loads GET /api/reports/trends in the browser, so the page shows at once and fills in when ready.
+export function ReportsProvider({ children }: { children: ReactNode }) {
+  const [status, setStatus] = useState<ReportsState["status"]>("loading");
+  const [data, setData] = useState<TrendsData>(emptyData);
   const { byCounty, overall, unassigned } = useMemo(() => groupByCounty(data), [data]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    fetch("/api/reports/trends", { signal: controller.signal })
+      .then(async (response) => {
+        const body = (await response.json().catch(() => null)) as { success?: boolean; data?: TrendsData } | null;
+        if (!response.ok || !body?.data) throw new Error(`Trends request failed: ${response.status}`);
+        setData(body.data);
+        setStatus("ready");
+      })
+      .catch((error: unknown) => {
+        if (controller.signal.aborted) return;
+        console.error(error);
+        setStatus("error");
+      });
+    return () => controller.abort();
+  }, []);
   const [selectedCounty, setSelectedCounty] = useState<string | null>(null);
   const [hoveredCounty, setHoveredCounty] = useState<string | null>(null);
   const [report, setReport] = useState<ReportState>({ status: "idle" });
@@ -111,6 +134,7 @@ export function ReportsProvider({ data, children }: { data: TrendsData; children
   return (
     <ReportsContext
       value={{
+        status,
         byCounty,
         overall,
         unassigned,

@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { connection } from "next/server";
-import { getTrendsData } from "@/lib/server/reports";
 import { RegionSummary } from "./components/region-summary";
 import { ReportPanel } from "./components/report-panel";
 import { ReportsLegend, ReportsMap } from "./components/reports-map";
@@ -11,14 +9,10 @@ export const metadata: Metadata = {
 };
 
 // Submissions from residents set against GUS indicators per county, and an AI report on demand
-// (POST /api/reports/generate). The data is read on the server for the first render.
-export default async function ReportsPage() {
-  // Fresh submissions on every visit; also keeps the build from querying the database.
-  await connection();
-  const data = await getTrendsData();
-
+// (POST /api/reports/generate). The data loads in the browser, so the page opens at once.
+export default function ReportsPage() {
   return (
-    <ReportsProvider data={data}>
+    <ReportsProvider>
       <main id="main-content" className="flex flex-col gap-7.5 p-10 max-sm:p-5">
         <p className="text-caption font-medium tracking-label-sm text-primary uppercase">Małopolska / analiza AI</p>
         <h1 className="font-heading text-display text-primary">Raporty i trendy</h1>

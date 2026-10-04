@@ -32,10 +32,16 @@ const countLabel = (total: number) => `${total} ${plural(total, "zgłoszenie", "
 
 // Counties colored by the number of submissions; click (or Enter / Space) selects a county.
 export function ReportsMap() {
-  const { byCounty, maxCountyTotal, selectedCounty, toggleCounty, hoveredCounty, setHoveredCounty } = useReports();
+  const { status, byCounty, maxCountyTotal, selectedCounty, toggleCounty, hoveredCounty, setHoveredCounty } = useReports();
 
   return (
-    <svg viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`} className="h-auto max-h-137.5 w-full" role="group" aria-label="Zgłoszenia w powiatach Małopolski">
+    <svg
+      viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`}
+      className={`h-auto max-h-137.5 w-full transition-opacity duration-300 ${status === "loading" ? "animate-typing-fade" : ""}`}
+      role="group"
+      aria-label="Zgłoszenia w powiatach Małopolski"
+      aria-busy={status === "loading"}
+    >
       {counties.map((county) => {
         const total = byCounty[county.name]?.total ?? 0;
         const selected = selectedCounty === county.name;

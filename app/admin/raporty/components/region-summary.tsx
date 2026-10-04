@@ -49,7 +49,16 @@ function SubmissionsBlock({ trend }: { trend: CountyTrend | undefined }) {
 
 // The column next to the map: the selected county, or the whole region when none is selected.
 export function RegionSummary() {
-  const { selectedCounty, clearCounty, byCounty, overall, unassigned, statsFor } = useReports();
+  const { status, selectedCounty, clearCounty, byCounty, overall, unassigned, statsFor } = useReports();
+
+  if (status === "loading") return <p aria-live="polite">Ładowanie zgłoszeń i wskaźników…</p>;
+  if (status === "error") {
+    return (
+      <p role="alert" className="text-error">
+        Nie udało się pobrać danych do raportu. Spróbuj odświeżyć stronę.
+      </p>
+    );
+  }
 
   if (!selectedCounty) {
     const top = Object.entries(byCounty)

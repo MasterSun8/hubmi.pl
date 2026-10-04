@@ -133,4 +133,5 @@ Szczegółowy przebieg ścieżki „Zaoferuj pomoc” (fiszka → kanwa → prze
 - Mikołaj_Mołodecki[**MiniowaPM**]
 - Paweł_Dutkiewicz[**DudeQ7**]
 - Scarlet_Dorożalska[**MasterSun8**]
+- Aleksy_Chojnowski[**ZekqKeku**]
 

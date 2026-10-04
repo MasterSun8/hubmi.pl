@@ -18,17 +18,12 @@ export default async function InitiativeDetailsPage({ params }: PageProps<"/admi
 
   return (
     <InitiativeProvider id={id}>
-      <main id="main-content" className="flex flex-col gap-5 p-10 max-sm:p-5">
+      <main id="main-content" className="flex flex-col gap-10 p-10 max-sm:gap-7.5 max-sm:p-5">
         <div className="flex flex-wrap items-center justify-between gap-5">
           <Link href="/admin/inicjatywy" className="text-primary no-underline">
             <span aria-hidden="true">←</span> Wróć do inicjatyw
           </Link>
-          <DeleteButton
-            label="Usuń inicjatywę"
-            what="tę inicjatywę z biblioteki razem z jej dopasowaniami do zgłoszeń"
-            endpoint={`/api/solutions/${id}`}
-            redirectTo="/admin/inicjatywy"
-          />
+
         </div>
 
         <WhenInitiativeLoaded>
@@ -39,6 +34,15 @@ export default async function InitiativeDetailsPage({ params }: PageProps<"/admi
               <InitiativeTesters solutionId={id} />
               <MatchingSubmissions />
               <InitiativeMaterials />
+              <section aria-labelledby="manage-initiative-title" className="flex flex-col items-start gap-5 border-t border-line pt-7.5">
+                <h2 id="manage-initiative-title" className="text-lead font-medium text-primary">Zarządzanie inicjatywą</h2>
+                <DeleteButton
+                  label="Usuń inicjatywę"
+                  what="tę inicjatywę z biblioteki razem z jej dopasowaniami do zgłoszeń"
+                  endpoint={`/api/solutions/${id}`}
+                  redirectTo="/admin/inicjatywy"
+                />
+              </section>
             </div>
           </div>
         </WhenInitiativeLoaded>

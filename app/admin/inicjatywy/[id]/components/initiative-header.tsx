@@ -7,9 +7,9 @@ import { useLoadedInitiative, useUpdateInitiativeStatus } from "./initiative-pro
 
 function Fact({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="flex flex-col gap-1">
-      <dt className="text-caption font-medium tracking-label-sm text-muted uppercase">{label}</dt>
-      <dd className="m-0">{children}</dd>
+    <div className="flex min-w-0 flex-col gap-1">
+      <dt className="text-caption font-medium tracking-label-sm text-primary uppercase">{label}</dt>
+      <dd className="m-0 flex min-h-11 items-center">{children}</dd>
     </div>
   );
 }
@@ -32,13 +32,13 @@ export function InitiativeHeader() {
     <div className="flex flex-col gap-7.5">
       <div className="flex flex-col gap-2.5">
         <p className="text-caption font-medium tracking-label-sm text-primary uppercase">
-          Biblioteka innowacji {initiative.sourceName ? `· ${initiative.sourceName}` : "ROPS"}
+          {initiative.sourceName || "Biblioteka innowacji ROPS"}
         </p>
-        <h1 className="font-heading text-section text-primary">{initiative.title}</h1>
+        <h1 className="max-w-[40ch] font-heading text-title text-ink">{initiative.title}</h1>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-x-10 gap-y-5 border-y border-line py-5">
-        <dl className="m-0 flex flex-wrap gap-x-10 gap-y-5">
+      <div className="flex flex-col items-start gap-5 border-y border-line py-7.5">
+        <dl className="m-0 grid w-full grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-[160px_140px_minmax(0,1fr)]">
           <Fact label="Status">
             <label className="relative flex items-center">
               <span className="sr-only">Status innowacji</span>
@@ -46,7 +46,7 @@ export function InitiativeHeader() {
                 value={initiative.status}
                 disabled={saving}
                 onChange={(event) => change(event.target.value as SolutionStatus)}
-                className="field-sizing-content appearance-none bg-transparent pr-5 font-medium text-ink focus:outline-none focus-visible:underline disabled:opacity-50"
+                className="min-h-11 appearance-none rounded-input border border-field bg-surface py-2 pr-10 pl-4 font-medium text-ink disabled:opacity-50"
               >
                 {(Object.keys(solutionStatusLabels) as SolutionStatus[]).map((status) => (
                   <option key={status} value={status}>
@@ -54,7 +54,7 @@ export function InitiativeHeader() {
                   </option>
                 ))}
               </select>
-              <svg viewBox="0 0 12 12" fill="none" className="pointer-events-none absolute right-0 size-3" aria-hidden="true">
+              <svg viewBox="0 0 12 12" fill="none" className="pointer-events-none absolute right-4 size-3" aria-hidden="true">
                 <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </label>
@@ -73,6 +73,11 @@ export function InitiativeHeader() {
           )}
           {initiative.programName && <Fact label="Program">{initiative.programName}</Fact>}
         </dl>
+        <p className="text-caption text-muted">
+          {initiative.status === "published"
+            ? "Opublikowana: asystent może proponować ją mieszkańcom."
+            : "Nieopublikowana: asystent nie proponuje jej mieszkańcom."}
+        </p>
         {initiative.sourceUrl && (
           <a
             href={initiative.sourceUrl}
@@ -85,11 +90,6 @@ export function InitiativeHeader() {
           </a>
         )}
       </div>
-      <p className="-mt-5 text-caption">
-        {initiative.status === "published"
-          ? "Opublikowana: asystent może proponować ją mieszkańcom."
-          : "Nieopublikowana: asystent nie proponuje jej mieszkańcom."}
-      </p>
       {error && (
         <p role="alert" className="-mt-5 text-caption text-error">
           {error}

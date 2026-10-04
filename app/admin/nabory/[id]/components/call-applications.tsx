@@ -15,7 +15,7 @@ export function CallApplications() {
   return (
     <section className="flex flex-col gap-5" aria-labelledby="applications-title">
       <div className="flex flex-col gap-1">
-        <h2 id="applications-title" className="text-subtitle font-light">
+        <h2 id="applications-title" className="text-subtitle font-light text-primary">
           Złożone wnioski
         </h2>
         <p className="text-caption">

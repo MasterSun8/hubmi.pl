@@ -15,21 +15,25 @@ export default async function GrantCallPage({ params }: PageProps<"/admin/nabory
 
   return (
     <CallDetailsProvider id={id}>
-      <main id="main-content" className="flex flex-col gap-5 p-10 max-sm:p-5">
+      <main id="main-content" className="flex flex-col gap-10 p-10 max-sm:gap-7.5 max-sm:p-5">
         <div className="flex flex-wrap items-center justify-between gap-5">
           <Link href="/admin/nabory" className="text-primary no-underline">
             <span aria-hidden="true">←</span> Wróć do naborów
           </Link>
-          <DeleteButton
-            label="Usuń nabór"
-            what="ten nabór razem ze wszystkimi złożonymi w nim wnioskami"
-            endpoint={`/api/grant-calls/${id}`}
-            redirectTo="/admin/nabory"
-          />
+
         </div>
         <WhenCallLoaded>
           <CallHeader />
           <CallApplications />
+          <section aria-labelledby="manage-call-title" className="flex flex-col items-start gap-5 border-t border-line pt-7.5">
+            <h2 id="manage-call-title" className="text-lead font-medium text-primary">Zarządzanie naborem</h2>
+            <DeleteButton
+              label="Usuń nabór"
+              what="ten nabór razem ze wszystkimi złożonymi w nim wnioskami"
+              endpoint={`/api/grant-calls/${id}`}
+              redirectTo="/admin/nabory"
+            />
+          </section>
         </WhenCallLoaded>
       </main>
     </CallDetailsProvider>

@@ -64,7 +64,7 @@ export default function ReportProblemPage() {
               <MessageList />
             </section>
             <motion.aside
-              className="row-span-2 flex flex-col items-start gap-7.5 self-start border-t border-line pt-7.5 max-lg:row-span-1 max-lg:row-start-3"
+              className="sticky top-5 row-span-2 flex max-h-[calc(100svh-40px)] flex-col items-start gap-7.5 self-start overflow-y-auto overscroll-contain border-t border-line py-7.5 [&>*]:shrink-0 max-lg:static max-lg:row-span-1 max-lg:row-start-3 max-lg:max-h-none max-lg:overflow-visible"
               aria-label="Przekazanie zgłoszenia"
               {...enter(2, { y: 0, x: 24 })}
             >

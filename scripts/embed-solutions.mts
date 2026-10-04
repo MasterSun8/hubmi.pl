@@ -1,70 +1,38 @@
-// Liczy embeddingi dla tabeli solutions. Przelicza tylko wiersze bez wektora
-// albo takie, w których zmieniła się treść lub model (porównanie content_hash),
-// więc można go puszczać wielokrotnie.
-//
-// Uruchomienie: node --env-file=.env scripts/embed-solutions.mts
-import { createHash } from "node:crypto";
-import OpenAI from "openai";
-import postgres from "postgres";
+// Backfill missing or stale vectors without recreating the library.
+// Run: pnpm embed:solutions
+import { and, eq, sql } from "drizzle-orm";
+import { getDb } from "../server/db/client";
+import { solutions } from "../server/db/schema";
+import { solutionEmbeddingInput, withSolutionEmbeddings } from "../lib/server/ai/solution-embeddings";
 
-const BATCH_SIZE = 50;
-// ~3k tokenów; najdłuższy opis w bazie ma ~4k znaków, limit modelu to 8192 tokeny.
-const MAX_INPUT_CHARS = 12_000;
-// Pozostałość po scrapowaniu przycisków ze strony ROPS – szum dla embeddingu.
-const UI_NOISE = /dowiedz się więcej zobacz film pobierz materiały sprawdź zasady wykorzystania otwórz w telefonie/gi;
-
-const { DATABASE_URL, OPENAI_EMBEDDING_MODEL: model } = process.env;
-const dimensions = Number(process.env.OPENAI_EMBEDDING_DIMENSIONS) || 1536;
-if (!DATABASE_URL || !model) throw new Error("Missing DATABASE_URL or OPENAI_EMBEDDING_MODEL in .env");
-
-const sql = postgres(DATABASE_URL, { max: 1 });
-const openai = new OpenAI();
-
-type Row = { id: string; title: string; description: string; content_hash: string | null };
-
-function embeddingText(row: Row): string {
-  const description = row.description.replace(UI_NOISE, " ").replace(/\s+/g, " ").trim();
-  return `${row.title}\n\n${description}`.slice(0, MAX_INPUT_CHARS);
-}
-
-// Model w hashu: zmiana OPENAI_EMBEDDING_MODEL wymusza przeliczenie wszystkiego.
-function contentHash(text: string): string {
-  return createHash("sha256").update(`${model}\n${dimensions}\n${text}`).digest("hex");
-}
-
+const db = getDb();
 try {
-  const rows = await sql<Row[]>`select id, title, description, content_hash from solutions`;
-  const todo = rows
-    .map((row) => {
-      const text = embeddingText(row);
-      return { id: row.id, text, hash: contentHash(text), current: row.content_hash };
-    })
-    .filter((r) => r.hash !== r.current);
-
-  console.log(`solutions: ${rows.length}, do przeliczenia: ${todo.length} (model ${model})`);
-
-  for (let i = 0; i < todo.length; i += BATCH_SIZE) {
-    const batch = todo.slice(i, i + BATCH_SIZE);
-    const { data } = await openai.embeddings.create({
-      model,
-      input: batch.map((r) => r.text),
-      dimensions,
-    });
-
-    await sql.begin(async (tx) => {
-      for (const { index, embedding } of data) {
-        const r = batch[index];
-        await tx`
-          update solutions set
-            embedding = ${JSON.stringify(embedding)}::vector,
-            embedding_model = ${model},
-            embedding_updated_at = now(),
-            content_hash = ${r.hash}
-          where id = ${r.id}`;
-      }
-    });
-    console.log(`  ${Math.min(i + BATCH_SIZE, todo.length)}/${todo.length}`);
-  }
+  const rows = await db.select({
+    id: solutions.id, title: solutions.title, description: solutions.description,
+    contentHash: solutions.contentHash, embeddingModel: solutions.embeddingModel,
+    hasEmbedding: sql<boolean>`${solutions.embedding} is not null`,
+  }).from(solutions);
+  const todo = rows.filter((row) => {
+    const input = solutionEmbeddingInput(row);
+    return !row.hasEmbedding || row.embeddingModel !== input.model || row.contentHash !== input.contentHash;
+  });
+  console.log(`solutions: ${rows.length}, to embed: ${todo.length}`);
+  const embedded = await withSolutionEmbeddings(todo);
+  let updated = 0;
+  await db.transaction(async (tx) => {
+    for (const row of embedded) {
+      const saved = await tx.update(solutions).set({
+        embedding: row.embedding, embeddingModel: row.embeddingModel,
+        embeddingUpdatedAt: row.embeddingUpdatedAt, contentHash: row.contentHash,
+      }).where(and(
+        eq(solutions.id, row.id), eq(solutions.title, row.title), eq(solutions.description, row.description),
+      )).returning({ id: solutions.id });
+      updated += saved.length;
+    }
+  });
+  console.log(`Embedded: ${updated}; changed or deleted during processing: ${todo.length - updated}`);
 } finally {
-  await sql.end();
+  // The shared client is also used by the seed and the application.
+  const globals = globalThis as typeof globalThis & { hubmiDbClient?: { end(): Promise<void> } };
+  await globals.hubmiDbClient?.end();
 }

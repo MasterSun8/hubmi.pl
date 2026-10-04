@@ -2,138 +2,100 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSolution, getInnovationComments } from "@/lib/server/solutions";
+import { SiteHeader } from "@/shared/components/site-header";
 import { InnovationComments } from "./components/comments";
 import { PublicTesterForm } from "./components/public-tester-form";
+import { InnovationDescription } from "./components/innovation-description";
 
-export const metadata: Metadata = {
-  title: "Baza Wiedzy — Innowacje Społeczne",
-};
+export const metadata: Metadata = { title: "Baza wiedzy — Innowacje społeczne" };
 
 function youtubeId(url: string) {
   try {
     const { hostname, pathname, searchParams } = new URL(url);
-    if (hostname.endsWith("youtu.be")) return pathname.slice(1) || null;
-    if (hostname.endsWith("youtube.com")) return searchParams.get("v") ?? pathname.match(/\/embed\/([\w-]+)/)?.[1] ?? null;
+    if (hostname === "youtu.be") return pathname.slice(1) || null;
+    if (hostname === "youtube.com" || hostname.endsWith(".youtube.com")) {
+      return searchParams.get("v") ?? pathname.match(/\/(?:embed|shorts)\/([\w-]+)/)?.[1] ?? null;
+    }
   } catch {}
   return null;
 }
+const labelClass = "text-caption font-medium tracking-label-sm text-primary uppercase";
+const linkClass = "inline-flex min-h-11 items-center gap-2.5 text-primary underline underline-offset-4 break-words";
 
-export default async function InnovationPage(props: { params: Promise<{ id: string }> }) {
-  const params = await props.params;
-  const { id } = params;
+function materialLabel(url: string, index: number) {
+  try {
+    if (new URL(url).pathname.toLowerCase().endsWith(".zip")) return "Pakiet do wdrożenia (ZIP)";
+  } catch {}
+  return `Materiał do pobrania ${index + 1}`;
+}
 
+export default async function InnovationPage({ params }: PageProps<"/innowacje/[id]">) {
+  const { id } = await params;
   const solution = await getSolution(id);
-  
-  if (!solution || solution.status !== "published") {
-    notFound();
-  }
-
+  if (!solution || solution.status !== "published") notFound();
   const comments = await getInnovationComments(id);
   const videoId = solution.videoUrls.map(youtubeId).find(Boolean) ?? null;
+  const author = solution.authorName || solution.organization;
 
   return (
-    <main className="mx-auto max-w-5xl p-10 max-sm:p-5 flex flex-col gap-10">
-      <nav>
-        <Link href="/" className="text-primary font-medium tracking-label hover:underline">
+    <div className="flex min-h-svh flex-col gap-10 px-page py-10 max-sm:gap-7.5 max-sm:py-7.5">
+      <SiteHeader><p className={labelClass}>Baza wiedzy</p></SiteHeader>
+      <nav aria-label="Powrót">
+        <Link href="/" className="inline-flex min-h-11 items-center gap-2.5 text-primary">
           <span aria-hidden="true">←</span> Wróć do strony głównej
         </Link>
       </nav>
-
-      <header className="flex flex-col gap-4">
-        <p className="text-caption font-medium tracking-label-sm text-primary uppercase">Baza Innowacji Społeczych</p>
-        <h1 className="font-heading text-display text-ink">{solution.title}</h1>
-        {solution.authorName && (
-          <p className="text-lg text-muted">
-            Autor: <span className="font-semibold text-ink">{solution.authorName}</span>
-            {solution.organization && ` (${solution.organization})`}
-          </p>
-        )}
-      </header>
-
-      {videoId && (
-        <figure className="relative aspect-video w-full max-w-3xl overflow-hidden bg-ink rounded-lg shadow-sm">
-          <iframe
-            className="absolute inset-0 size-full border-0"
-            src={`https://www.youtube-nocookie.com/embed/${videoId}`}
-            title={`Film o innowacji: ${solution.title}`}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        </figure>
-      )}
-
-      <div className="grid grid-cols-[minmax(0,1fr)_350px] gap-10 items-start max-md:grid-cols-1">
-        {/* Lewa kolumna: Opis innowacji */}
-        <section className="flex flex-col gap-6 text-base text-ink">
-          <div>
-            <h2 className="font-heading text-xl text-primary mb-2">Opis innowacji</h2>
-            <p className="leading-relaxed">{solution.description}</p>
+      <main id="main-content" className="flex flex-col gap-10 max-sm:gap-7.5">
+        <header className="flex max-w-[70ch] flex-col gap-5">
+          <p className={labelClass}>Innowacja społeczna</p>
+          <h1 className="font-heading text-section text-primary text-balance">{solution.title}</h1>
+          {author && <p className="text-primary">Autor: <span className="text-ink">{author}</span></p>}
+          {solution.organization && solution.organization !== author && <p>{solution.organization}</p>}
+        </header>
+        <div className="grid grid-cols-[minmax(0,1fr)_minmax(280px,360px)] items-start gap-x-15 gap-y-10 max-lg:grid-cols-1">
+          <div className="flex min-w-0 flex-col gap-10 max-sm:gap-7.5">
+            {videoId && (
+              <section className="flex flex-col gap-5 border-t border-line pt-7.5" aria-labelledby="video-title">
+                <h2 id="video-title" className="font-light text-subtitle text-primary">Zobacz, jak to działa</h2>
+                <figure className="relative m-0 aspect-video w-full overflow-hidden bg-ink">
+                  <iframe className="absolute inset-0 size-full border-0" src={`https://www.youtube-nocookie.com/embed/${videoId}`}
+                    title={`Film o innowacji: ${solution.title}`} loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen />
+                </figure>
+              </section>
+            )}
+            <InnovationDescription description={solution.description} />
+            {solution.problem && <section className="flex flex-col gap-5 border-t border-line pt-7.5"><h2 className="font-light text-subtitle text-primary">Rozwiązywany problem</h2><p className="max-w-[65ch] whitespace-pre-wrap">{solution.problem}</p></section>}
+            {solution.effectiveness && <section className="flex flex-col gap-5 border-t border-line pt-7.5"><h2 className="font-light text-subtitle text-primary">Efektywność i rezultaty</h2><p className="max-w-[65ch] whitespace-pre-wrap">{solution.effectiveness}</p></section>}
+            <InnovationComments solutionId={id} initialComments={comments} />
           </div>
-          
-          {solution.problem && (
-            <div>
-              <h2 className="font-heading text-xl text-primary mb-2">Rozwiązywany problem</h2>
-              <p className="leading-relaxed">{solution.problem}</p>
-            </div>
-          )}
-
-          {solution.effectiveness && (
-            <div>
-              <h2 className="font-heading text-xl text-primary mb-2">Efektywność i rezultaty</h2>
-              <p className="leading-relaxed">{solution.effectiveness}</p>
-            </div>
-          )}
-          
-          <hr className="border-t border-line my-4" />
-          
-          <InnovationComments solutionId={id} initialComments={comments} />
-        </section>
-
-        {/* Prawa kolumna: Metadane i pliki */}
-        <aside className="flex flex-col gap-6 bg-surface p-6 rounded-lg border border-line">
-          {solution.categories.length > 0 && (
-            <div className="flex flex-col gap-2">
-              <h3 className="text-caption font-bold text-muted uppercase">Kategorie</h3>
-              <div className="flex flex-wrap gap-2">
-                {solution.categories.map((cat) => (
-                  <span key={cat} className="bg-white border border-field px-3 py-1 rounded-full text-xs font-medium">
-                    {cat}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-          
-          {solution.targetGroups.length > 0 && (
-            <div className="flex flex-col gap-2">
-              <h3 className="text-caption font-bold text-muted uppercase">Odbiorcy</h3>
-              <p className="text-sm font-medium">{solution.targetGroups.join(", ")}</p>
-            </div>
-          )}
-
-          {solution.materialsUrls.length > 0 && (
-            <div className="flex flex-col gap-2 pt-4 border-t border-line">
-              <h3 className="text-caption font-bold text-muted uppercase">Materiały do pobrania</h3>
-              <ul className="flex flex-col gap-2 list-none p-0 m-0">
-                {solution.materialsUrls.map((url, i) => {
-                  const isZip = url.toLowerCase().endsWith(".zip");
-                  return (
-                    <li key={url}>
-                      <a href={url} target="_blank" rel="noreferrer" className="text-primary hover:underline text-sm font-medium flex items-center gap-2">
-                        {isZip ? "📦 Pakiet do wdrożenia (ZIP)" : `📄 Materiał PDF ${i + 1}`}
-                      </a>
-                    </li>
-                  )
-                })}
-              </ul>
-            </div>
-          )}
-          
-          <div className="pt-4 border-t border-line">
+          <aside className="flex min-w-0 flex-col gap-10" aria-label="Odbiorcy, materiały i pilotaż">
+            {(solution.targetGroups.length > 0 || solution.categories.length > 0) && (
+              <section className="flex flex-col gap-5 border-t border-line pt-7.5">
+                <h2 className="font-light text-subtitle text-primary">Dla kogo?</h2>
+                {solution.targetGroups.length > 0 && <p>{solution.targetGroups.join(", ")}</p>}
+                {solution.categories.length > 0 && <div className="flex flex-col gap-2.5"><h3 className={labelClass}>Tematy</h3><p>{solution.categories.join(" · ")}</p></div>}
+              </section>
+            )}
+            {(solution.materialsUrls.length > 0 || solution.sourceUrl || solution.termsOfUseUrl) && (
+              <section className="flex flex-col gap-5 border-t border-line pt-7.5" aria-labelledby="materials-title">
+                <h2 id="materials-title" className="font-light text-subtitle text-primary">Materiały i źródło</h2>
+                <ul className="m-0 flex list-none flex-col gap-2.5 p-0">
+                  {solution.materialsUrls.map((url, index) => (
+                    <li key={url}><a href={url} target="_blank" rel="noreferrer" className={linkClass}>
+                      {materialLabel(url, index)}<span aria-hidden="true">↗</span>
+                    </a></li>
+                  ))}
+                  {solution.termsOfUseUrl && <li><a className={linkClass} href={solution.termsOfUseUrl} target="_blank" rel="noreferrer">Zasady wykorzystania <span aria-hidden="true">↗</span></a></li>}
+                  {solution.sourceUrl && <li><a className={linkClass} href={solution.sourceUrl} target="_blank" rel="noreferrer">Zobacz w bibliotece ROPS <span aria-hidden="true">↗</span></a></li>}
+                </ul>
+                <p className="text-caption text-muted">Linki otwierają się w nowej karcie.</p>
+              </section>
+            )}
             <PublicTesterForm solutionId={id} />
-          </div>
-        </aside>
-      </div>
-    </main>
+          </aside>
+        </div>
+      </main>
+    </div>
   );
 }

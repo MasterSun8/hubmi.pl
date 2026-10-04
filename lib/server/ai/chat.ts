@@ -21,8 +21,9 @@ const SEARCH_SOLUTIONS_TOOL: FunctionTool = {
   description:
     "Wyszukuje w bazie sprawdzonych innowacji społecznych (ROPS) rozwiązania pasujące do problemu " +
     "lub pomysłu użytkownika. Użyj, gdy wiesz już, czego dotyczy problem i kogo. " +
-    "Proponuj użytkownikowi wyłącznie rozwiązania zwrócone przez to narzędzie; " +
-    "jeśli żadne nie pasuje, powiedz to wprost.",
+    "Jako istniejące inicjatywy z biblioteki ROPS przedstawiaj wyłącznie wyniki tego narzędzia. " +
+    "Jeśli żadne nie pasuje, powiedz to wprost; możesz też zaproponować własne działania, " +
+    "wyraźnie odróżniając je od ofert z biblioteki.",
   parameters: {
     type: "object",
     properties: {

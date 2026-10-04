@@ -3,7 +3,7 @@ import "server-only";
 import { and, desc, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import { getDb } from "@/server/db/client";
-import { conversations, submissions, submitters } from "@/server/db/schema";
+import { conversations, grantApplications, submissions, submitters } from "@/server/db/schema";
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -144,6 +144,11 @@ export async function listSubmissions(filters: {
       canvasFilled: sql<number>`(
         select count(*)::int from jsonb_each_text(coalesce(${conversations.canvas}, '{}'::jsonb))
         where length(trim(value)) > 0
+      )`,
+      // Grant applications submitted for this idea (module III, generator wniosków).
+      submittedApplications: sql<number>`(
+        select count(*)::int from ${grantApplications}
+        where ${grantApplications.submissionId} = ${submissions.id} and ${grantApplications.status} = 'submitted'
       )`,
       location: submissions.location,
       peopleAffected: submissions.peopleAffected,

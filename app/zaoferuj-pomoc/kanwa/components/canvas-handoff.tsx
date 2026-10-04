@@ -7,6 +7,7 @@ import { createSubmission } from "@/lib/chat/chat-client";
 import { ArrowButton } from "@/shared/components/arrow-button";
 import { useChat } from "@/shared/components/chat/chat-provider";
 import { validateContact, type ContactDetails, type ContactErrors } from "@/shared/components/chat/contact-dialog";
+import { GrantCallBanner } from "./grant-call-banner";
 
 const contactFields: { key: keyof ContactDetails; label: string; hint: string; placeholder: string; type: string; autoComplete: string }[] = [
   { key: "location", label: "Miejscowość lub gmina", hint: "Gdzie ma działać pomysł?", placeholder: "np. Słomniki", type: "text", autoComplete: "address-level2" },
@@ -62,21 +63,24 @@ export function CanvasHandoff() {
 
   if (sent) {
     return (
-      <section className="flex flex-col items-start gap-2.5 border-t border-line pt-7.5 print:hidden" aria-labelledby="handoff-title">
-        <h2 id="handoff-title" className="font-heading text-title text-primary" tabIndex={-1}>
-          Pomysł przekazany
-        </h2>
-        <p className="max-w-[60ch]">
-          Dziękujemy. Rozmowa i kanwa trafiły do Hubu. Odezwiemy się, gdy pomysł zostanie przejrzany. Kanwę możesz
-          dalej poprawiać, zmiany też do nas dotrą.
-        </p>
-        <div className="pt-2.5">
-          <ArrowButton onClick={startNew}>{newConversationLabel}</ArrowButton>
-        </div>
-        <Link href="/" className="text-caption font-medium tracking-label-sm text-ink uppercase no-underline">
-          Wróć na stronę główną
-        </Link>
-      </section>
+      <>
+        <section className="flex flex-col items-start gap-2.5 border-t border-line pt-7.5 print:hidden" aria-labelledby="handoff-title">
+          <h2 id="handoff-title" className="font-heading text-title text-primary" tabIndex={-1}>
+            Pomysł przekazany
+          </h2>
+          <p className="max-w-[60ch]">
+            Dziękujemy. Rozmowa i kanwa trafiły do Hubu. Odezwiemy się, gdy pomysł zostanie przejrzany. Kanwę możesz
+            dalej poprawiać, zmiany też do nas dotrą.
+          </p>
+          <div className="pt-2.5">
+            <ArrowButton onClick={startNew}>{newConversationLabel}</ArrowButton>
+          </div>
+          <Link href="/" className="text-caption font-medium tracking-label-sm text-ink uppercase no-underline">
+            Wróć na stronę główną
+          </Link>
+        </section>
+        <GrantCallBanner />
+      </>
     );
   }
 

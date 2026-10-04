@@ -3,6 +3,7 @@
 import { createContext, use, useEffect, useState, type ReactNode } from "react";
 import type { Canvas } from "@/types/canvas";
 import type { ConversationResponse } from "@/types/chat";
+import type { GrantApplicationListItem } from "@/types/grants";
 import type { Submission, SubmissionStatus } from "../../components/submissions-provider";
 
 // GET /api/submissions/[id] does not return contact details yet; when it adds a
@@ -21,6 +22,8 @@ type DetailsState =
       conversation: ConversationResponse | null;
       // Innovation canvas the author filled in (ideas only), or null.
       canvas: Canvas | null;
+      // Grant applications the author submitted for this idea.
+      applications: GrantApplicationListItem[];
     };
 
 type DetailsContextValue = {
@@ -53,6 +56,13 @@ async function loadCanvas(conversationId: string, signal: AbortSignal) {
   return data;
 }
 
+async function loadApplications(submissionId: string, signal: AbortSignal) {
+  const response = await fetch(`/api/submissions/${submissionId}/applications`, { signal });
+  if (!response.ok) return [];
+  const { data } = (await response.json()) as { data: GrantApplicationListItem[] };
+  return data;
+}
+
 export function SubmissionDetailsProvider({ id, children }: { id: string; children: ReactNode }) {
   const [state, setState] = useState<DetailsState>({ status: "loading" });
 
@@ -69,8 +79,11 @@ export function SubmissionDetailsProvider({ id, children }: { id: string; childr
       // The conversation is extra context; the page still works without it.
       const conversationResponse = await fetch(`/api/conversations/${submission.conversationId}`, { signal });
       const conversation = conversationResponse.ok ? ((await conversationResponse.json()) as ConversationResponse) : null;
-      const canvas = submission.type === "idea" ? await loadCanvas(submission.conversationId, signal) : null;
-      setState({ status: "ready", submission, conversation, canvas });
+      const [canvas, applications] =
+        submission.type === "idea"
+          ? await Promise.all([loadCanvas(submission.conversationId, signal), loadApplications(submission.id, signal)])
+          : [null, []];
+      setState({ status: "ready", submission, conversation, canvas, applications });
     }
 
     load().catch((error: unknown) => {

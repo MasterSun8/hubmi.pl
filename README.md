@@ -25,6 +25,8 @@ dostaliśmy, ale średnia ocen jury była wyraźnie wyższa niż średnia wszyst
 
 ## Demo w minutę
 
+[Obejrzyj demo na YouTube](https://www.youtube.com/watch?v=q_ZCYjqOdYQ).
+
 Nigdzie nie trzeba się logować, również do Panelu Administratora.
 
 1. **`/zglos-problem`**: napisz jedno zdanie o problemie, np. *„Sąsiad z demencją od trzech dni nie
@@ -33,6 +35,12 @@ Nigdzie nie trzeba się logować, również do Panelu Administratora.
    do kanwy innowacji i wniosku o dofinansowanie, który pisze AI.
 3. **`/admin`**: zobacz, jak to samo zgłoszenie wygląda po stronie instytucji: podsumowanie AI,
    kategoria, poziom ryzyka, lokalizacja na mapie i trzy najbliższe innowacje.
+
+## Materiały z HackYeah 2026
+
+- Prezentacje: [Hubmi HackYeah 2026](Hubmi_HackYeah2026.pptx) i [Pitch Hubmi](Pitch%20Hubmi.pptx).
+- Nagrania demo: [hubmi-demo.mp4](demo/hubmi-demo.mp4) i [wersja 120 s](demo/hubmi-demo-120s.mp4).
+- Karty ocen: [HUBMI](CRITERIA%20Wojewodztwo%20Malopolskie%20HUBMI.pdf) i [HUBMI-1](CRITERIA%20Wojewodztwo%20Malopolskie%20HUBMI-1.pdf).
 
 ## Jak to działa
 
@@ -112,4 +120,3 @@ Szczegółowy przebieg ścieżki „Zaoferuj pomoc” (fiszka → kanwa → prze
 - Paweł_Dutkiewicz[**DudeQ7**]
 - Scarlet_Dorożalska[**MasterSun8**]
 - Aleksy_Chojnowski[**ZekqKeku**]
-

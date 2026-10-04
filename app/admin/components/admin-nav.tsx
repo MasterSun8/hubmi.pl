@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-// Available admin sections.
 const items = [
   { label: "Mapa potrzeb", href: "/admin/mapa-potrzeb" },
   { label: "Zgłoszenia", href: "/admin/zgloszenia" },

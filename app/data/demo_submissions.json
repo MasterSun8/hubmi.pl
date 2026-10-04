@@ -1,0 +1,360 @@
+[
+  {
+    "key": "miechow-seniorka-dojazd",
+    "type": "problem",
+    "status": "in_review",
+    "daysAgo": 3,
+    "location": "Miechów",
+    "peopleAffected": 1,
+    "reporterType": "individual",
+    "submitter": { "fullName": "Anna Nowicka", "email": "anna.nowicka@example.com", "age": 52 },
+    "messages": [
+      { "role": "user", "content": "Moja mama ma 81 lat i mieszka sama we wsi pod Miechowem. Autobus jeździ tylko dwa razy dziennie i nie ma jak dojechać do lekarza ani do apteki. Ja pracuję w Krakowie i przyjeżdżam tylko w weekendy." },
+      { "role": "assistant", "content": "Dziękuję, że Pani pisze. To trudna sytuacja, zwłaszcza na odległość.\n\nŻeby dobrze zrozumieć potrzebę: czy mama porusza się samodzielnie? I czego najbardziej brakuje: dojazdu do lekarza, zakupów, a może kontaktu z ludźmi?" },
+      { "role": "user", "content": "Chodzi o kulach, ale sama do autobusu nie dojdzie, przystanek jest 2 km dalej. Najbardziej martwi mnie, że coraz mniej rozmawia z ludźmi, cały dzień siedzi sama w domu. Sąsiedzi są starsi i też nie mają samochodu." },
+      { "role": "assistant", "content": "Rozumiem. Podsumuję:\n\n81-letnia mieszkanka wsi w gminie Miechów mieszka sama, porusza się o kulach i nie ma jak dojechać do lekarza, apteki ani sklepu. Przystanek jest 2 km od domu, a autobus kursuje dwa razy dziennie. Coraz bardziej się izoluje, a w okolicy mieszkają głównie starsze osoby bez samochodu.\n\nCzy podsumowanie się zgadza?" },
+      { "role": "user", "content": "Tak, zgadza się. Myślę, że w naszej wsi jest więcej takich osób." }
+    ]
+  },
+  {
+    "key": "ksiaz-wielki-seniorzy-przychodnia",
+    "type": "problem",
+    "status": "new",
+    "daysAgo": 1,
+    "location": "Książ Wielki",
+    "peopleAffected": 25,
+    "reporterType": "ngo",
+    "submitter": { "fullName": "Teresa Mazur", "email": "pogodna.jesien@example.com", "socialGroup": "stowarzyszenie seniorów" },
+    "messages": [
+      { "role": "user", "content": "Piszę w imieniu stowarzyszenia seniorów z gminy Książ Wielki. Od kiedy zlikwidowano linię PKS, około 25 naszych członków nie ma jak dojechać do przychodni i na rehabilitację do Miechowa." },
+      { "role": "assistant", "content": "Dziękuję za zgłoszenie w imieniu stowarzyszenia.\n\nCzy te osoby mają jakiekolwiek wsparcie w dojazdach, np. od rodziny, gminy albo wolontariuszy? I od kiedy trwa ten problem?" },
+      { "role": "user", "content": "Linię zamknięto pół roku temu. Część osób prosi sąsiadów, ale wiele rezygnuje z wizyt. Dwie panie przestały chodzić na rehabilitację po operacji biodra. Gmina ma jeden bus, ale tylko dla dzieci szkolnych." },
+      { "role": "assistant", "content": "Podsumuję:\n\nW gminie Książ Wielki około 25 seniorów ze stowarzyszenia od pół roku, po likwidacji linii PKS, nie ma jak dojechać do przychodni i na rehabilitację w Miechowie. Część osób rezygnuje z wizyt, a gminny bus wozi tylko dzieci.\n\nCzy się zgadza?" },
+      { "role": "user", "content": "Tak. Może dałoby się wykorzystać ten bus w godzinach, kiedy nie wozi dzieci?" }
+    ]
+  },
+  {
+    "key": "proszowice-uslugi-opiekuncze",
+    "type": "problem",
+    "status": "in_progress",
+    "daysAgo": 12,
+    "location": "Proszowice",
+    "peopleAffected": 40,
+    "reporterType": "municipality",
+    "submitter": { "fullName": "Marek Wójcik", "email": "ops.proszowice@example.com", "socialGroup": "pracownik ośrodka pomocy społecznej" },
+    "messages": [
+      { "role": "user", "content": "Jestem pracownikiem OPS w Proszowicach. Mamy na liście około 40 osób powyżej 75. roku życia, które mieszkają same i potrzebują usług opiekuńczych, a mamy tylko 3 opiekunki." },
+      { "role": "assistant", "content": "Dziękuję. Jak długo te osoby czekają na usługi i czego najbardziej potrzebują: pomocy w codziennych czynnościach, zakupów, towarzystwa?" },
+      { "role": "user", "content": "Czas oczekiwania to nawet 4 miesiące. Najczęściej chodzi o zakupy, leki, sprzątanie i po prostu kontakt, bo wiele osób przez cały tydzień z nikim nie rozmawia. Nie możemy zatrudnić więcej opiekunek, bo nie ma chętnych." },
+      { "role": "assistant", "content": "Podsumowanie:\n\nOPS w Proszowicach ma około 40 samotnych osób 75+ oczekujących na usługi opiekuńcze nawet 4 miesiące. Pracują tylko 3 opiekunki i brakuje kandydatek do pracy. Potrzeby to zakupy, leki, pomoc w domu i kontakt z drugim człowiekiem.\n\nCzy tak?" },
+      { "role": "user", "content": "Tak. Szukamy rozwiązania, które odciąży opiekunki, np. z udziałem wolontariuszy albo sąsiadów." }
+    ]
+  },
+  {
+    "key": "krakow-uczniowie-zdrowie-psychiczne",
+    "type": "problem",
+    "status": "new",
+    "daysAgo": 2,
+    "location": "Kraków",
+    "peopleAffected": 12,
+    "reporterType": "individual",
+    "submitter": { "fullName": "Katarzyna Lis", "email": "k.lis@example.com", "socialGroup": "pedagog szkolny" },
+    "messages": [
+      { "role": "user", "content": "Jestem pedagożką w szkole podstawowej w Krakowie. W tym roku mamy już kilkunastu uczniów z objawami depresji i stanami lękowymi, a na wizytę u psychiatry dziecięcego na NFZ czeka się 5 miesięcy." },
+      { "role": "assistant", "content": "Dziękuję, że Pani o tym pisze.\n\nIle mniej więcej osób dotyczy problem i w jakim wieku są uczniowie? Czy szkoła ma psychologa na miejscu?" },
+      { "role": "user", "content": "To około 12 osób z klas 6–8. Psycholog jest u nas na pół etatu, więc nie daje rady. Rodzice często nie wiedzą, gdzie szukać pomocy, a prywatnie ich nie stać." },
+      { "role": "assistant", "content": "Podsumowanie:\n\nW krakowskiej szkole podstawowej około 12 uczniów klas 6–8 ma objawy depresji i lęku. Na psychiatrę dziecięcego w NFZ czeka się 5 miesięcy, psycholog szkolny pracuje na pół etatu, a rodzice nie wiedzą, gdzie szukać pomocy, i nie stać ich na prywatne wizyty.\n\nCzy się zgadza?" },
+      { "role": "user", "content": "Tak, dokładnie tak." }
+    ]
+  },
+  {
+    "key": "nowy-sacz-mlodziez-w-kryzysie",
+    "type": "problem",
+    "status": "in_review",
+    "daysAgo": 6,
+    "location": "Nowy Sącz",
+    "peopleAffected": 8,
+    "reporterType": "ngo",
+    "submitter": { "fullName": "Paweł Zając", "email": "fundacja.most@example.com", "socialGroup": "fundacja pracująca z młodzieżą" },
+    "messages": [
+      { "role": "user", "content": "Prowadzimy fundację w Nowym Sączu i pracujemy z młodzieżą w kryzysie. W ostatnich miesiącach mieliśmy kilka osób po próbach samobójczych, które po wyjściu ze szpitala nie mają żadnej opieki dziennej." },
+      { "role": "assistant", "content": "To bardzo poważna sytuacja, dziękuję za zgłoszenie. Jeśli któraś z tych osób jest teraz w bezpośrednim zagrożeniu, proszę dzwonić pod 112. Młodzież może też korzystać z bezpłatnego telefonu zaufania 116 111.\n\nIle osób dotyczy problem i czego najbardziej brakuje po wypisie ze szpitala?" },
+      { "role": "user", "content": "Teraz to ośmioro nastolatków. Brakuje oddziału dziennego albo miejsca, gdzie mogliby przychodzić po szkole, i wsparcia dla rodziców. Najbliższy oddział dzienny jest w Krakowie." },
+      { "role": "assistant", "content": "Podsumowanie:\n\nFundacja z Nowego Sącza wspiera ośmioro nastolatków po próbach samobójczych, którzy po wypisie ze szpitala nie mają opieki dziennej. Brakuje oddziału dziennego lub miejsca wsparcia po szkole oraz pomocy dla rodziców. Najbliższy oddział dzienny jest w Krakowie.\n\nCzy się zgadza?" },
+      { "role": "user", "content": "Tak." }
+    ]
+  },
+  {
+    "key": "wadowice-sasiad-z-demencja",
+    "type": "problem",
+    "status": "new",
+    "daysAgo": 0.1,
+    "location": "Wadowice",
+    "peopleAffected": 1,
+    "reporterType": "individual",
+    "submitter": { "fullName": "Joanna Pawlak", "email": "j.pawlak@example.com", "age": 44 },
+    "messages": [
+      { "role": "user", "content": "Mój sąsiad, starszy pan z demencją, od trzech dni nie otwiera drzwi. Słyszę, że jest w domu, ale w mieszkaniu jest chyba zimno, bo nie pali w piecu. Nie ma rodziny w pobliżu." },
+      { "role": "assistant", "content": "To może być zagrożenie zdrowia lub życia. Proszę teraz zadzwonić pod numer alarmowy 112 i powiedzieć, że starsza osoba z demencją od trzech dni nie otwiera drzwi i może być wychłodzona.\n\nCzy udało się wezwać pomoc?" },
+      { "role": "user", "content": "Dzwoniłam, przyjechała straż i pogotowie, zabrali go do szpitala. Ale za kilka dni wróci i znowu będzie sam. Kto się nim zajmie?" },
+      { "role": "assistant", "content": "Dobrze, że udało się wezwać pomoc. Podsumuję:\n\nW Wadowicach starszy mężczyzna z demencją mieszka sam, nie ma rodziny w pobliżu i nie radzi sobie z ogrzewaniem domu. Po pobycie w szpitalu wróci do mieszkania bez żadnej opieki.\n\nCzy się zgadza?" },
+      { "role": "user", "content": "Tak. Ośrodek pomocy chyba o nim nie wie." }
+    ]
+  },
+  {
+    "key": "oswiecim-dzienny-dom-otepienie",
+    "type": "problem",
+    "status": "in_progress",
+    "daysAgo": 20,
+    "location": "Oświęcim",
+    "peopleAffected": 18,
+    "reporterType": "municipality",
+    "submitter": { "fullName": "Ewa Krawczyk", "email": "dds.oswiecim@example.com", "socialGroup": "kierowniczka dziennego domu seniora" },
+    "messages": [
+      { "role": "user", "content": "Prowadzę dzienny dom seniora w Oświęcimiu. Coraz więcej naszych podopiecznych ma wczesne objawy otępienia, a my nie mamy narzędzi ani scenariuszy zajęć, które ćwiczą pamięć i sprawność rąk." },
+      { "role": "assistant", "content": "Dziękuję. Ilu podopiecznych to dotyczy i kto prowadzi zajęcia: terapeuta zajęciowy, fizjoterapeuta, opiekunowie?" },
+      { "role": "user", "content": "To około 18 osób. Zajęcia prowadzi jedna terapeutka zajęciowa i dwie opiekunki. Budżet na sprzęt mamy niewielki." },
+      { "role": "assistant", "content": "Podsumowanie:\n\nDzienny dom seniora w Oświęcimiu ma około 18 podopiecznych z wczesnymi objawami otępienia. Zespół, czyli terapeutka zajęciowa i dwie opiekunki, nie ma narzędzi ani scenariuszy zajęć wspierających pamięć i sprawność manualną, a budżet na sprzęt jest niewielki.\n\nCzy się zgadza?" },
+      { "role": "user", "content": "Tak, szukamy czegoś prostego, co da się zrobić niewielkim kosztem." }
+    ]
+  },
+  {
+    "key": "tarnow-niewidomy-w-urzedzie",
+    "type": "problem",
+    "status": "resolved",
+    "daysAgo": 30,
+    "location": "Tarnów",
+    "peopleAffected": 1,
+    "reporterType": "individual",
+    "submitter": { "fullName": "Tomasz Sikora", "email": "t.sikora@example.com", "age": 58, "socialGroup": "osoba niewidoma" },
+    "messages": [
+      { "role": "user", "content": "Jestem osobą niewidomą z Tarnowa. Mam problem z załatwianiem spraw w urzędach i przychodni. Pisma są tylko w druku, a automaty z numerkami nie mają komunikatów głosowych." },
+      { "role": "assistant", "content": "Dziękuję za zgłoszenie.\n\nCzy korzysta Pan z jakiegoś wsparcia, np. asystenta osoby niepełnosprawnej? I które miejsca sprawiają najwięcej trudności?" },
+      { "role": "user", "content": "Asystenta nie mam. Najgorzej jest w przychodni i w urzędzie miasta. Muszę prosić obcych ludzi, żeby przeczytali mi dokumenty, co jest krępujące." },
+      { "role": "assistant", "content": "Podsumowanie:\n\nNiewidomy mieszkaniec Tarnowa nie może samodzielnie załatwiać spraw w przychodni i urzędzie miasta. Dokumenty są dostępne tylko w druku, a biletomaty nie mają komunikatów głosowych. Nie ma asystenta i musi prosić o pomoc obce osoby.\n\nCzy się zgadza?" },
+      { "role": "user", "content": "Tak." }
+    ]
+  },
+  {
+    "key": "zakopane-wozek-dojazd-do-pracy",
+    "type": "problem",
+    "status": "new",
+    "daysAgo": 4,
+    "location": "Zakopane",
+    "peopleAffected": 1,
+    "reporterType": "individual",
+    "submitter": { "fullName": "Michał Górski", "email": "m.gorski@example.com", "age": 34, "socialGroup": "osoba poruszająca się na wózku" },
+    "messages": [
+      { "role": "user", "content": "Poruszam się na wózku i mieszkam w Zakopanem. Nie mam jak dostać się do pracy. Busy nie mają podjazdów, a chodniki zimą są nieodśnieżone i pełne krawężników." },
+      { "role": "assistant", "content": "Dziękuję. Jak daleko ma Pan do pracy i jak teraz sobie radzi? Czy ktoś pomaga w dojazdach?" },
+      { "role": "user", "content": "To około 4 km. Teraz płacę za taksówkę, co miesięcznie zjada dużą część pensji. Zimą czasem w ogóle nie wychodzę z domu przez tydzień." },
+      { "role": "assistant", "content": "Podsumowanie:\n\nMieszkaniec Zakopanego poruszający się na wózku nie ma dostępnego transportu do pracy oddalonej o 4 km. Busy nie mają podjazdów, a chodniki zimą są nieodśnieżone i mają wysokie krawężniki. Taksówki pochłaniają dużą część pensji, a zimą zdarza się, że przez tydzień nie wychodzi z domu.\n\nCzy się zgadza?" },
+      { "role": "user", "content": "Tak." }
+    ]
+  },
+  {
+    "key": "wieliczka-rodziny-z-ukrainy",
+    "type": "problem",
+    "status": "in_review",
+    "daysAgo": 9,
+    "location": "Wieliczka",
+    "peopleAffected": 15,
+    "reporterType": "ngo",
+    "submitter": { "fullName": "Olena Bondar", "email": "razem.wieliczka@example.com", "socialGroup": "stowarzyszenie wspierające cudzoziemców" },
+    "messages": [
+      { "role": "user", "content": "Działamy w stowarzyszeniu w Wieliczce. Mamy pod opieką 15 rodzin z Ukrainy. Dzieci słabo mówią po polsku i mają problemy w szkole, a mamy nie mogą znaleźć pracy, bo nie mają z kim zostawić najmłodszych." },
+      { "role": "assistant", "content": "Dziękuję. Ile dzieci jest w tych rodzinach i w jakim są wieku? Czy szkoły oferują jakieś zajęcia z języka polskiego?" },
+      { "role": "user", "content": "Około 25 dzieci, od przedszkola do 8 klasy. Szkoła daje 2 godziny polskiego tygodniowo, to za mało. Brakuje też kogoś, kto pomoże mamom w sprawach urzędowych." },
+      { "role": "assistant", "content": "Podsumowanie:\n\nStowarzyszenie z Wieliczki wspiera 15 rodzin z Ukrainy z około 25 dziećmi w wieku przedszkolnym i szkolnym. Dzieci mają trudności w nauce przez słabą znajomość polskiego, a szkoła zapewnia 2 godziny języka tygodniowo. Matki nie mogą podjąć pracy z powodu braku opieki nad najmłodszymi i potrzebują pomocy w sprawach urzędowych.\n\nCzy się zgadza?" },
+      { "role": "user", "content": "Tak, zgadza się." }
+    ]
+  },
+  {
+    "key": "krakow-usamodzielniany-wychowanek",
+    "type": "problem",
+    "status": "new",
+    "daysAgo": 1,
+    "location": "Kraków",
+    "peopleAffected": 1,
+    "reporterType": "individual",
+    "submitter": { "fullName": "Kacper Wrona", "email": "kacper.wrona@example.com", "age": 19 },
+    "messages": [
+      { "role": "user", "content": "Mam 19 lat, w zeszłym roku skończyłem pobyt w placówce opiekuńczej. Od dwóch miesięcy nie mam gdzie mieszkać, śpię u znajomych w Krakowie, ale niedługo muszę się wyprowadzić." },
+      { "role": "assistant", "content": "Dziękuję, że piszesz. Czy masz teraz bezpieczne miejsce na najbliższe noce? Czy pracujesz albo się uczysz?" },
+      { "role": "user", "content": "Jeszcze przez tydzień mogę zostać u kolegi. Pracuję dorywczo w magazynie, ale nie stać mnie na kaucję za pokój. Nie wiem, gdzie szukać pomocy, nie chcę iść do noclegowni." },
+      { "role": "assistant", "content": "Podsumowanie:\n\n19-letni mieszkaniec Krakowa, usamodzielniający się wychowanek placówki opiekuńczej, od dwóch miesięcy nie ma stałego miejsca zamieszkania i za tydzień straci tymczasowy nocleg u znajomych. Pracuje dorywczo, ale nie stać go na kaucję za pokój, i nie wie, gdzie szukać pomocy.\n\nCzy się zgadza?" },
+      { "role": "user", "content": "Tak." }
+    ]
+  },
+  {
+    "key": "limanowa-seniorzy-e-recepta",
+    "type": "problem",
+    "status": "new",
+    "daysAgo": 15,
+    "location": "Limanowa",
+    "peopleAffected": 60,
+    "reporterType": "municipality",
+    "submitter": { "fullName": "Agnieszka Kubiak", "email": "biblioteka.limanowa@example.com", "socialGroup": "bibliotekarka" },
+    "messages": [
+      { "role": "user", "content": "Pracuję w bibliotece w Limanowej. Codziennie przychodzą do nas seniorzy, którzy nie umieją odebrać e-recepty, zalogować się do mObywatela ani umówić wizyty przez internet." },
+      { "role": "assistant", "content": "Dziękuję. Ile mniej więcej osób zgłasza się z takimi sprawami? Czy biblioteka prowadzi już jakieś zajęcia komputerowe?" },
+      { "role": "user", "content": "To około 60 osób miesięcznie. Zajęć nie mamy, pomagamy na bieżąco, ale nie mamy na to czasu ani sprzętu do ćwiczeń." },
+      { "role": "assistant", "content": "Podsumowanie:\n\nDo biblioteki w Limanowej zgłasza się około 60 seniorów miesięcznie, którzy nie radzą sobie z e-receptą, mObywatelem i internetową rejestracją do lekarza. Biblioteka pomaga doraźnie, ale nie ma czasu, zajęć ani sprzętu do nauki.\n\nCzy się zgadza?" },
+      { "role": "user", "content": "Tak." }
+    ]
+  },
+  {
+    "key": "olkusz-powrot-na-rynek-pracy",
+    "type": "problem",
+    "status": "in_review",
+    "daysAgo": 25,
+    "location": "Olkusz",
+    "peopleAffected": 1,
+    "reporterType": "individual",
+    "submitter": { "fullName": "Beata Szulc", "email": "beata.szulc@example.com", "age": 54 },
+    "messages": [
+      { "role": "user", "content": "Przez 6 lat opiekowałam się chorą mamą i nie pracowałam. Mama zmarła pół roku temu, a ja w wieku 54 lat nie mogę znaleźć pracy w Olkuszu. Na rozmowach słyszę, że mam lukę w CV." },
+      { "role": "assistant", "content": "Przykro mi z powodu straty mamy.\n\nJakie ma Pani wykształcenie lub doświadczenie zawodowe? Czy jest Pani zarejestrowana w urzędzie pracy?" },
+      { "role": "user", "content": "Jestem księgową, ale od lat nie pracowałam w programach. Jestem zarejestrowana, ale oferty są głównie na produkcji na zmiany." },
+      { "role": "assistant", "content": "Podsumowanie:\n\n54-letnia mieszkanka Olkusza, księgowa, po sześciu latach opieki nad chorą mamą nie może wrócić na rynek pracy. Pracodawcy zwracają uwagę na przerwę w zatrudnieniu, jej znajomość programów księgowych się zdezaktualizowała, a urząd pracy proponuje głównie pracę zmianową na produkcji.\n\nCzy się zgadza?" },
+      { "role": "user", "content": "Tak." }
+    ]
+  },
+  {
+    "key": "gorlice-przemoc-domowa",
+    "type": "problem",
+    "status": "in_progress",
+    "daysAgo": 5,
+    "location": "Gorlice",
+    "peopleAffected": 3,
+    "reporterType": "individual",
+    "submitter": { "fullName": "Monika D.", "email": "bezpieczny.kontakt@example.com" },
+    "messages": [
+      { "role": "user", "content": "Partner od kilku miesięcy krzyczy na mnie i na dzieci, rzuca rzeczami, raz mnie popchnął. Dzieci się go boją. Mieszkamy w Gorlicach, nie wiem, co robić." },
+      { "role": "assistant", "content": "Dziękuję, że Pani o tym pisze, to wymaga odwagi. Jeśli Pani lub dzieci są w niebezpieczeństwie, proszę dzwonić pod 112. Pomoc i rozmowę daje też bezpłatny telefon „Niebieskiej Linii” 800 120 002.\n\nCzy jest Pani teraz z dziećmi w bezpiecznym miejscu?" },
+      { "role": "user", "content": "Teraz tak, jestem u siostry. Ale nie mam własnych pieniędzy i nie wiem, czy mogę zostać tu dłużej. Dzieci mają 6 i 9 lat." },
+      { "role": "assistant", "content": "Podsumowanie:\n\nMieszkanka Gorlic i jej dwoje dzieci (6 i 9 lat) od kilku miesięcy doświadczają przemocy psychicznej i fizycznej ze strony partnera. Obecnie przebywają tymczasowo u siostry, ale kobieta nie ma własnych środków i nie wie, gdzie szukać trwałego wsparcia.\n\nCzy się zgadza?" },
+      { "role": "user", "content": "Tak." }
+    ]
+  },
+  {
+    "key": "chrzanow-hustawka-na-osiedlu",
+    "type": "problem",
+    "status": "rejected",
+    "daysAgo": 22,
+    "location": "Chrzanów",
+    "peopleAffected": null,
+    "reporterType": "individual",
+    "submitter": { "fullName": "Łukasz Piątek", "email": "l.piatek@example.com" },
+    "messages": [
+      { "role": "user", "content": "Na naszym osiedlu w Chrzanowie od pół roku zepsuta jest huśtawka na placu zabaw i nikt jej nie naprawia." },
+      { "role": "assistant", "content": "Dziękuję za zgłoszenie. Czy zgłaszał Pan to zarządcy osiedla albo spółdzielni? Czy zepsuta huśtawka stwarza zagrożenie dla dzieci?" },
+      { "role": "user", "content": "Pisałem do spółdzielni, ale nie odpowiadają. Huśtawka jest zabezpieczona taśmą, więc dzieci z niej nie korzystają." },
+      { "role": "assistant", "content": "Podsumowanie:\n\nNa osiedlu w Chrzanowie od pół roku nie naprawiono huśtawki na placu zabaw. Jest wyłączona z użytku, a spółdzielnia nie odpowiada na zgłoszenia. Naprawa należy do zarządcy terenu, dlatego warto ponowić zgłoszenie w spółdzielni lub w urzędzie miasta.\n\nCzy się zgadza?" },
+      { "role": "user", "content": "Tak." }
+    ]
+  },
+  {
+    "key": "slomniki-obiady-z-mlodzieza",
+    "type": "idea",
+    "status": "new",
+    "daysAgo": 2,
+    "location": "Słomniki",
+    "peopleAffected": 30,
+    "reporterType": "individual",
+    "submitter": { "fullName": "Zofia Kaczmarek", "email": "zofia.kaczmarek@example.com", "age": 38 },
+    "canvas": {
+      "problem": "Samotni seniorzy w gminie Słomniki nie mają regularnych ciepłych posiłków i rzadko z kimś rozmawiają.",
+      "audience": "Około 30 samotnych seniorów oraz licealiści, którzy szukają wolontariatu.",
+      "solution": "Licealiści dowożą obiady przygotowane przez lokalny bar lub koło gospodyń i zostają chwilę na rozmowę.",
+      "partners": "Liceum w Słomnikach, koło gospodyń wiejskich, lokalny bar, OPS.",
+      "costs": "Obiady i pojemniki termiczne; szukamy dofinansowania z gminy lub grantu."
+    },
+    "messages": [
+      { "role": "user", "content": "Mam pomysł: w Słomnikach młodzież z liceum mogłaby w ramach wolontariatu dowozić obiady starszym, samotnym sąsiadom i przy okazji chwilę z nimi porozmawiać. Obiady mógłby gotować lokalny bar albo koło gospodyń." },
+      { "role": "assistant", "content": "Ciekawy pomysł, który łączy dwie potrzeby.\n\nIlu seniorów mogłoby z tego skorzystać i na jakim etapie jest pomysł? Czy rozmawiała już Pani ze szkołą albo kołem gospodyń?" },
+      { "role": "user", "content": "Myślę, że około 30 osób. To na razie pomysł, rozmawiałam tylko wstępnie z dyrektorką liceum, która jest na tak. Potrzebowalibyśmy pieniędzy na obiady i pojemniki." },
+      { "role": "assistant", "content": "Podsumowanie pomysłu:\n\nW Słomnikach licealiści jako wolontariusze dowożą obiady około 30 samotnym seniorom i spędzają z nimi chwilę na rozmowie. Posiłki przygotowuje lokalny bar lub koło gospodyń. Pomysł jest na wczesnym etapie, dyrekcja liceum wstępnie go popiera. Potrzebne jest finansowanie posiłków i pojemników.\n\nCzy się zgadza?" },
+      { "role": "user", "content": "Tak, zgadza się." }
+    ]
+  },
+  {
+    "key": "nowy-targ-kawiarenka-cyfrowa",
+    "type": "idea",
+    "status": "in_review",
+    "daysAgo": 7,
+    "location": "Nowy Targ",
+    "peopleAffected": 40,
+    "reporterType": "ngo",
+    "submitter": { "fullName": "Jakub Nowak", "email": "mlodzi.dla.podhala@example.com", "socialGroup": "stowarzyszenie młodzieżowe" },
+    "canvas": {
+      "problem": "Seniorzy z Podhala nie radzą sobie z e-receptą, bankowością i komunikatorami, przez co są zależni od innych i odcięci od rodziny.",
+      "audience": "Seniorzy 65+ z Nowego Targu i dwóch sąsiednich gmin; młodzież szkół średnich jako wolontariusze.",
+      "solution": "Cotygodniowa „Kawiarenka cyfrowa”: młodzież uczy seniorów obsługi smartfonów w małych grupach, na ich własnych telefonach i tabletach do ćwiczeń.",
+      "value": "Seniorzy samodzielnie odbierają e-receptę i rozmawiają z bliskimi przez wideo; młodzież zdobywa doświadczenie wolontariackie.",
+      "resources": "Sala w bibliotece, 10 tabletów do ćwiczeń, 8 wolontariuszy, koordynator na pół etatu.",
+      "partners": "Biblioteka miejska, dwa licea, OPS w sąsiednich gminach.",
+      "costs": "Tablety (ok. 10 sztuk), dojazdy wolontariuszy do sąsiednich gmin, materiały drukowane.",
+      "impact": "Liczba seniorów, którzy samodzielnie korzystają z e-recepty i komunikatora po 3 miesiącach.",
+      "risks": "Rotacja wolontariuszy w okresie matur; wdrażamy system par i grafik."
+    },
+    "messages": [
+      { "role": "user", "content": "Prowadzimy w Nowym Targu „Kawiarenkę cyfrową”: raz w tygodniu młodzież uczy seniorów obsługi smartfonów, czyli WhatsAppa, e-recepty, bankowości. Przetestowaliśmy to przez 3 miesiące na 12 seniorach i chcemy rozszerzyć działanie." },
+      { "role": "assistant", "content": "Brzmi świetnie.\n\nCo pokazał test: ilu seniorów nauczyło się samodzielnie korzystać z tych usług? I czego potrzebujecie, żeby rozszerzyć działanie?" },
+      { "role": "user", "content": "10 z 12 osób samodzielnie odbiera e-receptę, a wszyscy rozmawiają z wnukami przez wideo. Chcemy objąć 40 osób i dwie kolejne gminy. Potrzebujemy tabletów do ćwiczeń i pieniędzy na dojazdy wolontariuszy." },
+      { "role": "assistant", "content": "Podsumowanie pomysłu:\n\n„Kawiarenka cyfrowa” w Nowym Targu, w której młodzież co tydzień uczy seniorów korzystania ze smartfonów. Po 3-miesięcznym teście na 12 osobach 10 samodzielnie odbiera e-receptę. Organizatorzy chcą objąć 40 seniorów w dwóch kolejnych gminach i potrzebują tabletów oraz środków na dojazdy wolontariuszy.\n\nCzy się zgadza?" },
+      { "role": "user", "content": "Tak." }
+    ]
+  },
+  {
+    "key": "bochnia-sasiedzki-bank-czasu",
+    "type": "idea",
+    "status": "new",
+    "daysAgo": 10,
+    "location": "Bochnia",
+    "peopleAffected": null,
+    "reporterType": "individual",
+    "submitter": { "fullName": "Robert Malinowski", "email": "r.malinowski@example.com", "age": 45 },
+    "messages": [
+      { "role": "user", "content": "Chciałbym założyć w Bochni sąsiedzki bank czasu: ktoś pomoże w naprawie kranu, a w zamian dostanie godzinę, którą wymieni np. na korepetycje dla dziecka. Mam już prostą tabelę w arkuszu i 15 chętnych sąsiadów." },
+      { "role": "assistant", "content": "Dziękuję. Komu przede wszystkim ma pomóc bank czasu i jak ma działać zapisywanie usług: na papierze, w arkuszu, w aplikacji?" },
+      { "role": "user", "content": "Głównie samotnym seniorom i młodym rodzinom, które nie mają rodziny na miejscu. Na razie zapisujemy w arkuszu, ale seniorzy wolą tablicę w świetlicy. Potrzebujemy miejsca na spotkania i kogoś, kto będzie koordynował." },
+      { "role": "assistant", "content": "Podsumowanie pomysłu:\n\nSąsiedzki bank czasu w Bochni, w którym mieszkańcy wymieniają się usługami rozliczanymi w godzinach. Ma wspierać samotnych seniorów i młode rodziny bez bliskich w pobliżu. Działa prototyp z arkuszem i 15 chętnymi osobami. Potrzebne są miejsce spotkań, tablica ogłoszeń dla seniorów i koordynator.\n\nCzy się zgadza?" },
+      { "role": "user", "content": "Tak." }
+    ]
+  },
+  {
+    "key": "myslenice-wypozyczalnia-sprzetu",
+    "type": "idea",
+    "status": "in_progress",
+    "daysAgo": 18,
+    "location": "Myślenice",
+    "peopleAffected": 120,
+    "reporterType": "municipality",
+    "submitter": { "fullName": "Iwona Baran", "email": "cus.myslenice@example.com", "socialGroup": "pracownik centrum usług społecznych" },
+    "messages": [
+      { "role": "user", "content": "W Centrum Usług Społecznych w Myślenicach od roku działa wypożyczalnia sprzętu rehabilitacyjnego: łóżka, wózki, balkoniki. Skorzystało już 120 osób. Chcemy pokazać to innym gminom i rozszerzyć o sprzęt dla dzieci." },
+      { "role": "assistant", "content": "Gratuluję efektów.\n\nJak finansujecie wypożyczalnię i kto nią zarządza? Czego potrzebowałyby inne gminy, żeby to powtórzyć?" },
+      { "role": "user", "content": "Sprzęt kupiliśmy z grantu, a obsługuje go jedna osoba na pół etatu i wolontariusze. Inne gminy potrzebują regulaminu, wzoru umowy użyczenia i miejsca na magazyn. Możemy się tym podzielić." },
+      { "role": "assistant", "content": "Podsumowanie:\n\nDziałająca od roku wypożyczalnia sprzętu rehabilitacyjnego przy CUS w Myślenicach, z której skorzystało 120 osób. Sprzęt sfinansowano z grantu, a obsługę zapewniają pół etatu i wolontariusze. Centrum chce rozszerzyć ofertę o sprzęt dla dzieci i udostępnić innym gminom regulamin oraz wzór umowy użyczenia.\n\nCzy się zgadza?" },
+      { "role": "user", "content": "Tak, zgadza się." }
+    ]
+  },
+  {
+    "key": "brzesko-grupa-wsparcia-opiekunow",
+    "type": "idea",
+    "status": "new",
+    "daysAgo": 0.3,
+    "location": "Brzesko",
+    "peopleAffected": 20,
+    "reporterType": "individual",
+    "submitter": { "fullName": "Halina Wróbel", "email": "h.wrobel@example.com", "age": 61, "socialGroup": "opiekunka osoby z demencją" },
+    "messages": [
+      { "role": "user", "content": "Od czterech lat opiekuję się mężem z chorobą Alzheimera. Chciałabym założyć w Brzesku grupę wsparcia dla opiekunów: spotkania raz w tygodniu, a dla tych, którzy nie mogą wyjść z domu, spotkania online." },
+      { "role": "assistant", "content": "Dziękuję, że dzieli się Pani pomysłem.\n\nIlu opiekunów w okolicy mogłoby dołączyć? Kto mógłby prowadzić spotkania: Pani, psycholog, ktoś z ośrodka pomocy?" },
+      { "role": "user", "content": "Znam co najmniej 20 osób w podobnej sytuacji. Chciałabym, żeby raz w miesiącu przychodził psycholog. Potrzebowałybyśmy sali i kogoś, kto zajmie się chorymi w czasie spotkania." },
+      { "role": "assistant", "content": "Podsumowanie pomysłu:\n\nGrupa wsparcia dla opiekunów osób z demencją w Brzesku: cotygodniowe spotkania stacjonarne i online, raz w miesiącu z psychologiem. Mogłoby z niej skorzystać co najmniej 20 opiekunów. Potrzebna jest sala oraz opieka nad chorymi w czasie spotkań. Pomysł jest na początkowym etapie.\n\nCzy się zgadza?" },
+      { "role": "user", "content": "Tak." }
+    ]
+  }
+]

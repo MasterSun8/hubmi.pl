@@ -1,98 +1,137 @@
-<div align="center">
-  <br />
-  <h1>hubmi.pl</h1>
-  <p><b>Mały krok. Wspólna zmiana. Razem możemy więcej.</b></p>
-  <p><i>Platforma Innowacji Społecznych dla Małopolski</i></p>
+# hubmi.pl — Małopolski Hub Innowacji Społecznych
 
-  <a href="#"><img src="https://img.shields.io/badge/Status-Demo_Proof_of_Concept-FF6B6B?style=for-the-badge" alt="Status: Proof of Concept" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Partner-ROPS_Kraków-0077B6?style=for-the-badge" alt="ROPS Kraków" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Silnik-AI_Assistant_%2B_RAG-7209B7?style=for-the-badge" alt="AI + RAG" /></a>
-  <a href="#"><img src="https://img.shields.io/badge/Dostępność-WCAG_Friendly-43AA8B?style=for-the-badge" alt="WCAG Friendly" /></a>
-</div>
+Mieszkaniec opisuje problem albo pomysł zwykłymi słowami, a asystent AI zamienia to w uporządkowane
+zgłoszenie i od razu podpowiada sprawdzone innowacje z biblioteki ROPS. Instytucja dostaje gotowe
+zgłoszenia z oceną ryzyka, dopasowaniami i mapą potrzeb regionu.
 
-<br />
+Prototyp przygotowany na HackYeah dla **Regionalnego Ośrodka Polityki Społecznej w Krakowie**.
 
-> 💡 **hubmi.pl** łączy realne potrzeby mieszkańców Małopolski z gotowymi rozwiązaniami i pomysłami społecznymi za pomocą konwersacyjnego asystenta AI oraz inteligentnego wyszukiwania w bazie wiedzy (RAG).
+![Strona główna: dwie ścieżki — „Zgłoś problem” i „Zaoferuj pomoc”](docs/screenshots/home.png)
 
----
+## Demo w minutę
 
-## 🎯 Problem i Rozwiązanie
+Nigdzie nie trzeba się logować, również do panelu instytucji.
 
-<div align="center">
+1. **`/zglos-problem`**: napisz jedno zdanie o problemie, np. *„Sąsiad z demencją od trzech dni nie
+   otwiera drzwi”*. Asystent dopyta o szczegóły, pokaże pasujące innowacje i przygotuje zgłoszenie.
+2. **`/zaoferuj-pomoc`**: opisz pomysł. Obok rozmowy wypełnia się fiszka pomysłu. Potem przejdź
+   do kanwy innowacji i wniosku o dofinansowanie, który pisze AI.
+3. **`/admin`**: zobacz, jak to samo zgłoszenie wygląda po stronie instytucji: podsumowanie AI,
+   kategoria, poziom ryzyka, lokalizacja na mapie i trzy najbliższe innowacje.
 
-| ❌ Wyzwania (Problem) | ✅ Rozwiązanie (Hubmi.pl) |
-|:---|:---|
-| **Rozproszona wiedza:** Gotowe innowacje społeczne istnieją, ale są trudne do znalezienia. | **Jedno miejsce:** Centralna baza innowacji społecznych dla całego regionu. |
-| **Brak wsparcia dla gmin:** Małe gminy nie wiedzą, jakie gotowe programy mogą wdrożyć. | **Asystent Konwersacyjny:** Zamiana skomplikowanych formularzy na prosty czat w języku naturalnym. |
-| **Barierowe formularze:** Tradycyjne urzędowe wnioski zniechęcają mieszkańców. | **Wyszukiwanie RAG:** Inteligentne dopasowywanie pomocy na podstawie opisu sytuacji. |
+## Jak to działa
 
-</div>
+```text
+ Mieszkaniec                         hubmi.pl                                Instytucja (ROPS)
+ ───────────                         ────────                                ─────────────────
+ „Zgłoś problem”    ──► czat AI (SSE) ──► RAG po bibliotece innowacji ──►  Zgłoszenia + ryzyko
+ „Zaoferuj pomoc”   ──► fiszka ──► kanwa ──► wniosek w naborze        ──►  Inicjatywy i nabory
+                               │
+                               └─► enrichment: tytuł, podsumowanie, kategoria,
+                                   grupa docelowa, embedding ──► dopasowania ──►  Mapa potrzeb, raporty
+```
 
----
+- **Rozmowa**: OpenAI Responses API, odpowiedzi strumieniowane przez SSE. Asystent ma dwa tryby:
+  problem i oferta pomocy. W trakcie rozmowy szuka podobnych rozwiązań w bazie innowacji ROPS.
+- **Enrichment**: każde zgłoszenie dostaje od AI tytuł, podsumowanie, jedną z 14 kategorii, grupę
+  docelową, poziom ryzyka i embedding.
+- **Matchmaking**: dla każdego zgłoszenia system wybiera 3 najbliższe *opublikowane* innowacje
+  Te same pary liczą się w obie strony, więc licznik
+  „pasuje do N zgłoszeń” przy innowacji zgadza się z dopasowaniami w zgłoszeniach.
+- **Dostępność**: WCAG 2.1 AA. Belka dostępności pozwala powiększyć tekst (A / A+ / A++) i włączyć
+  wysoki kontrast; ustawienia zostają zapamiętane w przeglądarce.
 
-## ✨ Kluczowe Funkcje
+## Widoki
 
-- 💬 **Konwersacyjny Asystent AI (RAG):** Prowadzi użytkownika krok po kroku od swobodnego opisu problemu do konkretnego zgłoszenia bez konieczności wypełniania skomplikowanych pól.
-- 🛤️ **Dwie Dedykowane Ścieżki:**
-  - **Zgłoś problem:** Dla mieszkańców potrzebujących wsparcia dla siebie lub bliskich (np. pomoc dla seniorów, opieka, transport).
-  - **Zaoferuj pomoc:** Dla organizacji i osób prywatnych chcących podzielić się pomysłem, doświadczeniem lub zasobami.
-- 📚 **Inteligentne Rekomendacje:** System wyszukuje w bazie i sugeruje zweryfikowane inicjatywy społeczne pasujące do kontekstu rozmowy.
-- 🗺️ **Panel dla Instytucji i Mapa Potrzeb:** Wizualizacja zgłoszeń na interaktywnej heatmapie Małopolski, ułatwiająca jednostkom samorządowym identyfikację obszarów o najwyższej koncentracji problemów.
-- ♿ **Standard Dostępności (A11y):** Projekt stworzony z myślą o seniorach – zmiana rozmiaru tekstu (A / A+ / A++) i tryb wysokiego kontrastu dostępne jednym kliknięciem.
+### Dla mieszkańców
 
----
+| | |
+| --- | --- |
+| ![Rozmowa o problemie](docs/screenshots/problem.png) | ![Start rozmowy o ofercie pomocy](docs/screenshots/offer.png) |
+| **Zgłoś problem**: rozmowa kończy się zgłoszeniem, które mieszkaniec potwierdza. Przy zagrożeniu życia asystent najpierw kieruje pod 112. | **Zaoferuj pomoc**: rozmowa o pomyśle, z fiszką uzupełnianą na bieżąco. |
+| ![Kanwa innowacji społecznej](docs/screenshots/canvas.png) | ![Wniosek o dofinansowanie](docs/screenshots/application.png) |
+| **Kanwa innowacji**: 9 pól wstępnie wypełnionych z rozmowy, zapis automatyczny, eksport do PDF. | **Wniosek o dofinansowanie**: AI pisze go z kanwy pod sekcje i kryteria konkretnego naboru. |
+| ![Szczegóły innowacji](docs/screenshots/innovation.png) | |
+| **Strona innowacji**: opis, grupa docelowa, materiały do wdrożenia, komentarze i zapis na testera. | |
 
-## 🔄 Jak to działa? (Workflow)
-[1. Opis sytuacji] ➔ [2. Dopytanie przez AI] ➔ [3. Dopasowanie RAG] ➔ [4. Przekazanie do systemu]
+### Panel instytucji (`/admin`)
 
+| | |
+| --- | --- |
+| ![Lista zgłoszeń](docs/screenshots/submissions.png) | ![Szczegóły zgłoszenia](docs/screenshots/submission-details.png) |
+| **Zgłoszenia**: liczniki, wyszukiwarka, filtry i sortowanie po ryzyku. | **Szczegóły zgłoszenia**: podsumowanie AI, status, ryzyko z uzasadnieniem, mapa i dopasowane innowacje. |
+| ![Biblioteka inicjatyw](docs/screenshots/innovations.png) | ![Nabory](docs/screenshots/calls.png) |
+| **Inicjatywy**: 115 innowacji ROPS i pomysły mieszkańców, publikowanie i wycofywanie, liczba dopasowań. | **Nabory**: ogłaszanie naborów na dofinansowanie i przegląd złożonych wniosków. |
+| ![Mapa potrzeb społecznych](docs/screenshots/needs-map.png) | ![Raporty i trendy](docs/screenshots/reports.png) |
+| **Mapa potrzeb**: 149 wskaźników Obserwatorium ROPS w 22 powiatach Małopolski. | **Raporty i trendy**: zgłoszenia mieszkańców na tle wskaźników i synteza AI dla wybranego powiatu. |
 
-1. **Opis sytuacji:** Użytkownik pisze własnymi słowami w jednym polu tekstowym (np. *"Mam 76 lat, jestem po operacji biodra i mam problem z obiadami"*).
-2. **Doprecyzowanie:** Asystent zadaje krótkie pytania pomocnicze, aby doprecyzować zakres potrzebnej pomocy.
-3. **Dopasowanie z Bazy (RAG):** System wyświetla proste karty z gotowymi rozwiązaniami znajdującymi się w bazie (np. *"Posiłek z dostawą do domu"*).
-4. **Przekazanie Zgłoszenia:** Po podaniu podstawowego kontaktu (e-mail lub telefon) cała historia rozmowy wraz z kontekstem trafia do dalszej obsługi przez właściwe instytucje.
+## Uruchomienie lokalne
 
----
+Wymagania: Node.js 20.9+, pnpm 12.8.1 (wersja przypięta w `packageManager`) i PostgreSQL z rozszerzeniem
+[pgvector](https://github.com/pgvector/pgvector).
 
-## 📸 Ekran i Interfejs
+```bash
+pnpm install
+# utwórz .env ze zmiennymi z tabeli niżej
+pnpm db:migrate          # schemat bazy i rozszerzenie pgvector
+pnpm seed                # biblioteka innowacji ROPS wraz z embeddingami
+pnpm dev                 # http://localhost:3000
+```
 
-<div align="center">
+| Zmienna | Opis |
+| --- | --- |
+| `DATABASE_URL` | Połączenie z PostgreSQL (z pgvector) |
+| `OPENAI_API_KEY` | Klucz OpenAI |
+| `OPENAI_MODEL` | Model czatu, enrichmentu i raportów (`OPENAI_CHAT_MODEL` nadpisuje go tylko dla czatu) |
+| `OPENAI_EMBEDDING_MODEL` | Model embeddingów, np. `text-embedding-3-small` |
+| `OPENAI_EMBEDDING_DIMENSIONS` | Opcjonalnie; domyślnie `1536`, musi zgadzać się ze schematem bazy |
+| `OPENAI_TIMEOUT_MS` | Opcjonalnie; domyślnie `30000` |
 
-| Ścieżki Działania | Czat z Asystentem |
-|:---:|:---:|
-| <img src="docs/screenshots/main_page.png" width="400" alt="Strona Główna" /><br /><sub>*Wybór ścieżki i opcje dostępności*</sub> | <img src="docs/screenshots/chat_flow.png" width="400" alt="Czat Asystenta" /><br /><sub>*Prosty dialog z doprecyzowaniem potrzeb*</sub> |
+Nie commituj `.env`.
 
-| Sugestia z Bazy Wiedzy | Mapa Potrzeb Społecznych |
-|:---:|:---:|
-| <img src="docs/screenshots/rag_suggestion.png" width="400" alt="Sugestia RAG" /><br /><sub>*Karta innowacji z bazy wiedzy*</sub> | <img src="docs/screenshots/analytics_map.png" width="400" alt="Panel Instytucji" /><br /><sub>*Heatmapa koncentracji zgłoszeń w Małopolsce*</sub> |
+### Polecenia
 
-</div>
+```bash
+pnpm dev                 # serwer deweloperski
+pnpm build && pnpm start # build produkcyjny
+pnpm typecheck && pnpm lint
+pnpm db:generate         # nowa migracja po zmianie server/db/schema.ts
+pnpm db:migrate          # zastosowanie migracji
+pnpm seed                # ponowny import biblioteki innowacji (z embeddingami)
+pnpm embed:solutions     # uzupełnienie brakujących lub nieaktualnych embeddingów
+pnpm enrich:submissions  # ponowny enrichment zgłoszeń przez AI
+```
 
----
+## Stack
 
-## 🛠️ Architektura i Technologie
+Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Motion · Drizzle ORM ·
+PostgreSQL + pgvector · OpenAI (Responses API, `text-embedding-3-small`) · Zod · OpenStreetMap +
+Nominatim (mapa lokalizacji, bez klucza API).
 
-- **AI & RAG:** Retrieval-Augmented Generation pozwalający asystentowi na udzielanie odpowiedzi i rekomendacji wyłącznie w oparciu o zweryfikowaną bazę innowacji społecznych.
-- **Frontend / UX:** Interfejs zoptymalizowany pod kątem wytycznych **WCAG / A11y** (wysoki kontrast, skalowanie czcionek, zapamiętywanie ustawień).
-- **Analityka & GIS:** Silnik mapowy z geowizualizacją i agregacją danych (heatmapa zgłoszeń wg powiatów i gmin).
+## Struktura
 
----
+```text
+app/                     trasy (UI po polsku)
+  zglos-problem/         czat „Zgłoś problem”
+  zaoferuj-pomoc/        czat „Zaoferuj pomoc” → kanwa/ → wniosek/
+  innowacje/[id]/        publiczna strona innowacji
+  admin/                 panel instytucji: zgloszenia, inicjatywy, nabory, mapa-potrzeb, raporty
+  api/                   cienkie route handlers: walidacja zod → lib/server
+lib/server/              dostęp do danych, AI (czat, RAG, enrichment, raporty), matchmaking
+server/db/               schemat Drizzle, migracje, seed
+shared/components/       komponenty współdzielone (czat, belka dostępności, markdown, animacje)
+docs/                    opis kreatora pomysłów, zrzuty ekranu
+```
 
-## 🚀 Plany Rozwoju (Roadmap)
+Szczegółowy przebieg ścieżki „Zaoferuj pomoc” (fiszka → kanwa → przekazanie → wniosek) opisuje
+[`docs/kreator-pomyslow.md`](docs/kreator-pomyslow.md).
 
-- [x] **01. Czat z RAG:** Działający asystent konwersacyjny spięty ze sprawdzoną bazą rozwiązań.
-- [ ] **02. Panel Zgłoszeń:** Rozbudowany panel administratora z historią rozmów, kategoryzacją i priorytetyzacją zgłoszeń.
-- [ ] **03. Rozszerzenie Bazy:** Dalsze zasilanie systemu nowymi innowacjami społecznymi z całego regionu.
+## Zespół
 
----
+- Piotr_Wittig[**Schoji**]
+- Karol_Wroński[**karol-wronski-dev**]
+- Mikołaj_Mołodecki[**MiniowaPM**]
+- Paweł_Dutkiewicz[**DudeQ7**]
+- Scarlet_Dorożalska[**MasterSun8**]
+- Aleksy_Chojnowski[**ZekqKeku**]
 
-## 🏛️ Partnerzy i Inicjatorzy
-
-Projekt realizowany z myślą o rozwoju innowacji społecznych w regionie Małopolski:
-* **ROPS Kraków** (Regionalny Ośrodek Polityki Społecznej w Krakowie)
-* **Województwo Małopolskie**
-
----
-
-<div align="center">
-  <sub><b>hubmi.pl</b> — Platforma Innowacji Społecznych dla Małopolski</sub>
-</div>

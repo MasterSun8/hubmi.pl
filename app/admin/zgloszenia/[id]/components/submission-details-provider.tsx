@@ -6,12 +6,12 @@ import type { ConversationResponse } from "@/types/chat";
 import type { GrantApplicationListItem } from "@/types/grants";
 import type { Submission, SubmissionStatus } from "../../components/submissions-provider";
 
-// GET /api/submissions/[id] does not return contact details yet; when it adds a
-// `submitter` object the contact section picks it up without further changes.
 export type SubmissionDetails = Submission & {
   riskReasoning: string | null;
-  submitter?: { fullName?: string | null; email?: string | null; phone?: string | null } | null;
 };
+
+// GET /api/submissions/[id]/contact.
+export type SubmissionContact = { fullName: string | null; email: string | null; phone: string | null };
 
 type DetailsState =
   | { status: "loading" }
@@ -21,6 +21,8 @@ type DetailsState =
       status: "ready";
       submission: SubmissionDetails;
       conversation: ConversationResponse | null;
+      // The author's contact; "unavailable" when the request failed, so staff don't read it as no contact.
+      contact: SubmissionContact | null | "unavailable";
       // Innovation canvas the author filled in (ideas only), or null.
       canvas: Canvas | null;
       // Grant applications the author submitted for this idea.
@@ -57,6 +59,17 @@ async function loadCanvas(conversationId: string, signal: AbortSignal) {
   return data;
 }
 
+async function loadContact(submissionId: string, signal: AbortSignal): Promise<SubmissionContact | null | "unavailable"> {
+  try {
+    const response = await fetch(`/api/submissions/${submissionId}/contact`, { signal });
+    if (!response.ok) return "unavailable";
+    const { data } = (await response.json()) as { data: SubmissionContact | null };
+    return data;
+  } catch {
+    return "unavailable";
+  }
+}
+
 async function loadApplications(submissionId: string, signal: AbortSignal) {
   const response = await fetch(`/api/submissions/${submissionId}/applications`, { signal });
   if (!response.ok) return [];
@@ -80,11 +93,12 @@ export function SubmissionDetailsProvider({ id, children }: { id: string; childr
       // The conversation is extra context; the page still works without it.
       const conversationResponse = await fetch(`/api/conversations/${submission.conversationId}`, { signal });
       const conversation = conversationResponse.ok ? ((await conversationResponse.json()) as ConversationResponse) : null;
-      const [canvas, applications] =
-        submission.type === "idea"
-          ? await Promise.all([loadCanvas(submission.conversationId, signal), loadApplications(submission.id, signal)])
-          : [null, []];
-      setState({ status: "ready", submission, conversation, canvas, applications });
+      const [contact, canvas, applications] = await Promise.all([
+        loadContact(submission.id, signal),
+        submission.type === "idea" ? loadCanvas(submission.conversationId, signal) : null,
+        submission.type === "idea" ? loadApplications(submission.id, signal) : [],
+      ]);
+      setState({ status: "ready", submission, conversation, contact, canvas, applications });
     }
 
     load().catch((error: unknown) => {

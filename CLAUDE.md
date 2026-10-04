@@ -1,3 +1,7 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 @AGENTS.md
 
 # hubmi.pl — Małopolski Hub Innowacji Społecznych
@@ -40,10 +44,18 @@ lockfile whenever dependencies change.
 ```bash
 pnpm dev                 # dev server
 pnpm typecheck && pnpm lint
+pnpm build               # production build (what Jenkins runs)
+pnpm db:generate         # drizzle-kit: SQL migration from server/db/schema.ts → server/db/migrations
+pnpm db:migrate          # apply migrations to DATABASE_URL (shared DB — ask first)
 pnpm seed                # imports solutions with embeddings before replacing the library
 pnpm embed:solutions     # repair missing/stale embeddings without reseeding
-pnpm enrich:submissions  # AI title/summary/category/targetGroup for submissions
+pnpm enrich:submissions  # backfill AI title/summary/category/targetGroup/risk/embedding
+pnpm seed:demo           # demo submissions from app/data/demo_submissions.json (stable ids, rerun replaces them)
 ```
+
+There is no test suite: verification is `pnpm typecheck && pnpm lint` plus checking the screen in the
+browser. Scripts run through `tsx --conditions=react-server` so they can import `server-only` modules
+from `lib/server`.
 
 - The database is on the LAN. The app-preview server cannot reach it (`EHOSTUNREACH`), so run
   `pnpm dev` from a normal shell / Bash in the background. `next.config.ts` allows `127.0.0.1` as a
@@ -56,9 +68,10 @@ pnpm enrich:submissions  # AI title/summary/category/targetGroup for submissions
 
 - `app/` — routes. Public: `/` (landing), `/zglos-problem` (report a problem chat),
   `/zaoferuj-pomoc` (offer help / idea chat) → `/zaoferuj-pomoc/kanwa` (innovation canvas + hand-off)
-  → `/zaoferuj-pomoc/wniosek` (grant application). Admin ("Panel instytucji"): `/admin` (statistics),
+  → `/zaoferuj-pomoc/wniosek` (grant application), `/innowacje/[id]` (public innovation details with
+  comments and tester sign-up, linked from chat solution cards). Admin ("Panel instytucji"): `/admin` (statistics),
   `/admin/zgloszenia` (+ `[id]`), `/admin/inicjatywy` (+ `[id]`), `/admin/nabory` (+ `[id]`),
-  `/admin/mapa-potrzeb`. The idea-creator flow for users and admins is described in
+  `/admin/mapa-potrzeb`, `/admin/raporty` (trends per county + AI report). The idea-creator flow for users and admins is described in
   `docs/kreator-pomyslow.md`.
 - **`page.tsx` holds the full page skeleton** (landmarks, layout grid, section order) and composes
   components; it should read like an outline of the screen.
@@ -66,7 +79,7 @@ pnpm enrich:submissions  # AI title/summary/category/targetGroup for submissions
   routes go in `shared/components/`. Data-fetching state lives in a `*-provider.tsx` next to the
   components that consume it (pattern: `XProvider` + `useX()` + `WhenXLoaded`).
 - `lib/server/` — server-only data access and AI (`submissions.ts`, `solutions.ts`, `groups.ts`,
-  `ai/`, `chat/`). Route handlers in `app/api/**` stay thin: validate with zod, call `lib/server`,
+  `canvas.ts`, `grants.ts`, `reports.ts`, `ai/`, `chat/`). Route handlers in `app/api/**` stay thin: validate with zod, call `lib/server`,
   map errors to 400/404/503.
 - `lib/chat/chat-client.ts` — browser SSE client for `/api/chat`.
 - `app/data/` — scraped source data (innovations, contacts, chat samples); `app/data/obserwator/` is
@@ -102,7 +115,12 @@ pnpm enrich:submissions  # AI title/summary/category/targetGroup for submissions
   (`help` = report a problem, `idea` = offer help); the chat ends with a submission draft the user
   confirms (`createSubmission`).
 - Submissions are enriched by AI (`lib/server/ai/enrich-submission.ts`): title, summary, one of 14
-  fixed categories, target group, embedding. The admin details page shows the AI summary first.
+  fixed categories, target group, embedding, and a risk level 1–4 (`lib/server/ai/risk.ts`: the
+  model returns factors — harm, urgency, vulnerability, threat to others — and code computes the
+  level). It runs after the response; a row missing any part waits for `pnpm enrich:submissions`.
+  The admin details page shows the AI summary first. The old "AI Score" was replaced by this level.
+- Reports (`lib/server/reports.ts`, `lib/server/ai/reports.ts`) join submissions (grouped by typed
+  location → county via `lib/geo/county-of-location`) with GUS indicators from `regional_statistics`.
 - **Solutions need embeddings.** The seed generates them with `withSolutionEmbeddings` before
   replacing the library in a transaction. If generation fails, the import fails and existing
   solutions remain intact. Use the same helper for any new solution creation/import path.
@@ -119,12 +137,14 @@ pnpm enrich:submissions  # AI title/summary/category/targetGroup for submissions
 ## API (summary)
 
 `/api/chat` · `/api/conversations/[id]` · `/api/submissions` (list, create) ·
-`/api/submissions/[id]` (GET, PATCH status) · `/api/submissions/[id]/matches` ·
+`/api/submissions/[id]` (GET, PATCH status, DELETE) · `/api/submissions/[id]/matches` ·
 `/api/solutions` (list + `matchedSubmissions`) · `/api/solutions/[id]` (GET + matching submissions,
-PATCH status) · `/api/regional-statistics` · `/api/groups` ·
+PATCH status, DELETE) · `/api/solutions/[id]/comments` (POST) · `/api/solutions/[id]/media` ·
+`/api/innovation-testers` (POST sign-up) · `/api/regional-statistics` · `/api/groups` ·
 `/api/conversations/[id]/idea-card` · `/api/conversations/[id]/canvas` (GET, PUT, POST = AI draft) ·
 `/api/conversations/[id]/application` (GET, PUT, `/draft`, `/submit`) · `/api/grant-calls` (list, create) ·
-`/api/grant-calls/[id]` · `/api/submissions/[id]/applications`.
+`/api/grant-calls/[id]` · `/api/submissions/[id]/applications` · `/api/reports/trends` ·
+`/api/reports/generate` (AI report).
 
 When extending a teammate's endpoint, keep it additive (don't remove or rename existing fields) and
 tell them.
@@ -154,13 +174,13 @@ Don't rewrite another person's area unasked; if a change there is needed, keep i
 | Module | Status |
 | --- | --- |
 | I. Matchmaking | Done in chat and admin (submission ↔ innovations, match counts) |
-| II. Knowledge base | Partial: needs map and innovation library in admin; no public library yet |
+| II. Knowledge base | Partial: needs map, reports and innovation library in admin; public innovation details page, but no public library listing |
 | III. Idea creator | Done: live idea card, innovation canvas (our own fields until ROPS's file), grant calls and AI-drafted applications; no visualization |
-| IV. Innovation tester | Not started |
+| IV. Innovation tester | Partial: public tester sign-up on `/innowacje/[id]`, registered testers in admin |
 | V. Communication | Not started: notify admin of new submissions, ROPS reply to the author |
 | VI. Admin panel | Done: submissions with statuses, innovations with publish/retire, needs map |
-| VII. Middleman | Not started: "Jak wdrożyć u nas?" from `implementation_recommendations` |
+| VII. Middleman | Done: the "Zgłoś problem" assistant recommends innovations to adopt (`implementation_recommendations` table is unused) |
 | WCAG AA | Contrast fixed; keep checking new screens |
 
-Also required: one-page maintenance cost estimate; anonymize the `contacts` table before the demo;
-AI Score is either implemented or hidden.
+Also required: anonymize the `contacts` table before the demo. The maintenance cost estimate is in
+`docs/koszty-utrzymania.md`.

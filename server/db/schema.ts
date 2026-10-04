@@ -56,6 +56,8 @@ export const reporterType = pgEnum("reporter_type", [
   "other",
 ]);
 export const contentStatus = pgEnum("content_status", ["draft", "published", "retired"]);
+// Etap realizacji pomysłu z fiszki (moduł Kreator pomysłów).
+export const ideaStage = pgEnum("idea_stage", ["idea", "prototype", "pilot", "running"]);
 
 // ---------- Rozmowy ----------
 
@@ -63,6 +65,12 @@ export const conversations = pgTable("conversations", {
   id: uuid().primaryKey().defaultRandom(),
   flow: conversationFlow().notNull().default("unknown"),
   status: conversationStatus().notNull().default("open"),
+  // Kanwa innowacji społecznych (moduł Kreator pomysłów, tylko flow = idea): pola kanwy,
+  // wstępnie wypełnione przez AI z rozmowy i poprawiane przez użytkownika.
+  canvas: jsonb().$type<Record<string, string>>(),
+  // Fiszka pomysłu na żywo (flow = idea) i liczba wiadomości, z której powstała: AI liczy ją
+  // ponownie dopiero, gdy w rozmowie przybędzie wiadomości.
+  ideaCard: jsonb().$type<{ messageCount: number; card: Record<string, unknown> }>(),
   ...timestamps,
 });
 
@@ -229,6 +237,9 @@ export const submissions = pgTable(
     summary: text().notNull(),
     category: text(),
     targetGroup: text(),
+    // Fiszka pomysłu (tylko type = idea): na czym polega pomysł i na jakim jest etapie.
+    essence: text(),
+    stage: ideaStage(),
     // Lokalizacja zamieszkania z formularza (dokładność do ustalenia: miejscowość/gmina).
     location: text().notNull(),
     // Deklarowana liczba osób – nie sumować bez weryfikacji między zgłoszeniami.

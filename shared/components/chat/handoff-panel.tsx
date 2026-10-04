@@ -2,9 +2,18 @@
 
 import { ArrowButton } from "@/shared/components/arrow-button";
 import { useChat } from "./chat-provider";
+import { NewConversationButton } from "./new-conversation-button";
+
+type HandoffPanelProps = {
+  description: string;
+  // Hands off on another page instead of the contact dialog ("Zaoferuj pomoc" continues on the canvas).
+  next?: { href: string; label: string; steps: string[] };
+};
+
+const dialogSteps = ["Sprawdź podsumowanie.", "Uzupełnij lokalizację i kontakt.", "Zatwierdź wysłanie zgłoszenia."];
 
 // The "Gotowe do przekazania?" column next to the conversation (Figma 11:587).
-export function HandoffPanel({ description }: { description: string }) {
+export function HandoffPanel({ description, next }: HandoffPanelProps) {
   const { sent, waiting, openDialog, startNew, newConversationLabel } = useChat();
 
   if (sent) {
@@ -26,17 +35,23 @@ export function HandoffPanel({ description }: { description: string }) {
       <p>{description}</p>
       <p className="text-caption font-medium tracking-label-sm uppercase">Następny krok</p>
       <p>
-        Sprawdź podsumowanie.
-        <br />
-        Uzupełnij lokalizację i kontakt.
-        <br />
-        Zatwierdź wysłanie zgłoszenia.
+        {(next?.steps ?? dialogSteps).map((step, index) => (
+          <span key={step}>
+            {index > 0 && <br />}
+            {step}
+          </span>
+        ))}
       </p>
       <div className="pt-5">
-        <ArrowButton onClick={openDialog} disabled={waiting}>
-          {"Przekaż\nzgłoszenie"}
-        </ArrowButton>
+        {next ? (
+          <ArrowButton href={next.href}>{next.label}</ArrowButton>
+        ) : (
+          <ArrowButton onClick={openDialog} disabled={waiting}>
+            {"Przekaż\nzgłoszenie"}
+          </ArrowButton>
+        )}
       </div>
+      <NewConversationButton />
     </>
   );
 }

@@ -7,7 +7,7 @@ export function InitiativesTabs() {
   const { tab, setTab, solutions, ideas, status } = useInitiatives();
   const tabs = [
     { id: "library" as const, label: "Biblioteka ROPS", count: solutions.length },
-    { id: "ideas" as const, label: "Pomysły mieszkańców", count: ideas.length },
+    { id: "ideas" as const, label: "Pomysły", count: ideas.length },
   ];
 
   return (

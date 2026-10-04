@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, use, useEffect, useMemo, useState, type ReactNode } from "react";
+import type { IdeaStage } from "@/shared/components/idea-stage";
 
 // Row shape returned by GET /api/submissions.
 export type Submission = {
@@ -12,12 +13,18 @@ export type Submission = {
   summary: string;
   category: string | null;
   targetGroup: string | null;
+  // Idea card fields, filled for ideas only.
+  essence?: string | null;
+  stage?: IdeaStage | null;
+  // Filled innovation canvas fields (list only).
+  canvasFilled?: number;
   location: string;
   peopleAffected: number | null;
   aiScore: number | null;
   priorityOverride: number | null;
   createdAt: string;
 };
+
 
 export type SubmissionStatus = "new" | "in_review" | "in_progress" | "resolved" | "rejected";
 

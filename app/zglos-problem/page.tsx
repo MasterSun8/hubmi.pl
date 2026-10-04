@@ -70,7 +70,11 @@ export default function ReportProblemPage() {
             >
               <HandoffPanel description="Przekaż opis potrzeby i pełną historię rozmowy do systemu, aby zgłoszenie mogło trafić do dalszej obsługi." />
             </motion.aside>
-            <motion.div className="col-start-1 max-lg:row-start-2" {...enter(1)}>
+            {/* On small screens the input sticks to the bottom, so the conversation stays visible above it. */}
+            <motion.div
+              className="col-start-1 max-lg:sticky max-lg:bottom-0 max-lg:z-10 max-lg:row-start-2 max-lg:-mx-page max-lg:border-t max-lg:border-line max-lg:bg-background max-lg:px-page max-lg:py-2.5"
+              {...enter(1)}
+            >
               <MessageComposer
                 placeholder={placeholder}
                 hint="Rozmowa nie została jeszcze przekazana. Możesz dalej pisać lub przygotować zgłoszenie."

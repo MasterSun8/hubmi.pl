@@ -17,6 +17,18 @@ export function MessageList() {
   const lastLength = messages.at(-1)?.content.length;
   const cards = useMemo(() => cardsPerMessage(messages), [messages]);
 
+  // When the on-screen keyboard opens the visible area shrinks; scroll back to the
+  // latest message so it is not hidden behind the input.
+  useEffect(() => {
+    const viewport = window.visualViewport;
+    if (!viewport) return;
+    const keepEndVisible = () => {
+      if (document.activeElement instanceof HTMLTextAreaElement) endRef.current?.scrollIntoView({ block: "nearest" });
+    };
+    viewport.addEventListener("resize", keepEndVisible);
+    return () => viewport.removeEventListener("resize", keepEndVisible);
+  }, []);
+
   useEffect(() => {
     endRef.current?.scrollIntoView({ block: "nearest", behavior: "smooth" });
   }, [messages.length, lastLength, thinking]);
@@ -68,7 +80,7 @@ export function MessageList() {
           )}
         </AnimatePresence>
       </ol>
-      <div ref={endRef} />
+      <div ref={endRef} className="max-lg:scroll-mb-28" />
     </>
   );
 }

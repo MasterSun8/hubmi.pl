@@ -18,10 +18,11 @@ const inputClass =
 const errorClass = "-mt-2.5 text-caption leading-6.5 text-error";
 const backClass = "cursor-pointer border-0 bg-transparent p-0 text-caption font-medium tracking-label-sm text-ink uppercase no-underline";
 
-type Errors = Partial<Record<keyof ContactDetails | "form" | "submit", string>>;
+export type ContactErrors = Partial<Record<keyof ContactDetails | "form" | "submit", string>>;
 
-function validate({ location, email, phone }: ContactDetails): Errors {
-  const errors: Errors = {};
+// Shared with the canvas page, where the contact fields are part of the page instead of a dialog.
+export function validateContact({ location, email, phone }: ContactDetails): ContactErrors {
+  const errors: ContactErrors = {};
   if (!location) errors.location = "Podaj miejscowość lub gminę.";
   if (!email && !phone) errors.form = "Podaj e-mail lub numer telefonu.";
   if (email && !emailPattern.test(email)) errors.email = "Sprawdź adres e-mail, np. anna@example.com.";
@@ -34,7 +35,7 @@ export function ContactDialog() {
     useChat();
   const [submitting, setSubmitting] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const [errors, setErrors] = useState<Errors>({});
+  const [errors, setErrors] = useState<ContactErrors>({});
   const titleId = useId();
   const formErrorId = useId();
   const emailErrorId = useId();
@@ -57,7 +58,7 @@ export function ContactDialog() {
       email: String(data.get("email") ?? "").trim(),
       phone: String(data.get("phone") ?? "").trim(),
     };
-    const nextErrors = validate(contact);
+    const nextErrors = validateContact(contact);
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 

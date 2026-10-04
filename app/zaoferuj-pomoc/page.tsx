@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import * as motion from "motion/react-client";
 import { BackLink } from "@/shared/components/chat/back-link";
 import { ChatProvider, ChatStage } from "@/shared/components/chat/chat-provider";
-import { ContactDialog } from "@/shared/components/chat/contact-dialog";
 import { HandoffPanel } from "@/shared/components/chat/handoff-panel";
 import { MessageComposer } from "@/shared/components/chat/message-composer";
 import { MessageList } from "@/shared/components/chat/message-list";
 import { enter } from "@/shared/components/motion/enter";
 import { SiteHeader } from "@/shared/components/site-header";
+import { IdeaCardPanel } from "./components/idea-card-panel";
 
 export const metadata: Metadata = {
   title: "Zaoferuj pomoc — Hubmi",
@@ -16,7 +16,8 @@ export const metadata: Metadata = {
 
 const placeholder = "Napisz, jak możesz pomóc…";
 
-// Figma 11:603 (conversation) and 14:756 (contact modal); the start screen follows 11:544.
+// Figma 11:603 (conversation); the start screen follows 11:544. The idea is handed off on the
+// canvas page (/zaoferuj-pomoc/kanwa), which holds the contact fields instead of a modal.
 export default function OfferHelpPage() {
   return (
     <ChatProvider flowId="pomoc" firstQuestion="Jak chcesz pomóc i komu chcesz zaoferować wsparcie?" newConversationLabel="Nowa oferta pomocy">
@@ -64,13 +65,25 @@ export default function OfferHelpPage() {
               <MessageList />
             </section>
             <motion.aside
-              className="flex flex-col items-start gap-5 self-start border-t border-line py-7.5 max-lg:row-start-3"
+              className="row-span-2 flex flex-col items-start gap-5 self-start border-t border-line py-7.5 max-lg:row-span-1 max-lg:row-start-3"
               aria-label="Przekazanie oferty pomocy"
               {...enter(2, { y: 0, x: 24 })}
             >
-              <HandoffPanel description="Przekaż ofertę pomocy i pełną historię rozmowy do systemu, aby można było połączyć ją ze zgłoszonymi potrzebami." />
+              <IdeaCardPanel />
+              <HandoffPanel
+                description="Przekaż pomysł i pełną historię rozmowy do Hubu, aby można było połączyć go ze zgłoszonymi potrzebami."
+                next={{
+                  href: "/zaoferuj-pomoc/kanwa",
+                  label: "Przejdź\ndo kanwy",
+                  steps: ["Sprawdź kanwę pomysłu.", "Uzupełnij lokalizację i kontakt.", "Przekaż pomysł."],
+                }}
+              />
             </motion.aside>
-            <motion.div className="col-start-1 max-lg:row-start-2" {...enter(1)}>
+            {/* The input sticks to the bottom, so it stays in reach however tall the idea card column grows. */}
+            <motion.div
+              className="sticky bottom-0 z-10 col-start-1 bg-background py-5 max-lg:row-start-2 max-lg:-mx-page max-lg:border-t max-lg:border-line max-lg:px-page max-lg:py-2.5"
+              {...enter(1)}
+            >
               <MessageComposer
                 placeholder={placeholder}
                 hint="Rozmowa nie została jeszcze przekazana. Możesz dalej pisać lub przygotować zgłoszenie."
@@ -80,7 +93,6 @@ export default function OfferHelpPage() {
           </main>
         </ChatStage>
 
-        <ContactDialog />
       </div>
     </ChatProvider>
   );

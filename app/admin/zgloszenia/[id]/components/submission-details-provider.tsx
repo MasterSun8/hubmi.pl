@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, use, useEffect, useState, type ReactNode } from "react";
+import type { Canvas } from "@/types/canvas";
 import type { ConversationResponse } from "@/types/chat";
 import type { Submission, SubmissionStatus } from "../../components/submissions-provider";
 
@@ -14,7 +15,13 @@ type DetailsState =
   | { status: "loading" }
   | { status: "not-found" }
   | { status: "error" }
-  | { status: "ready"; submission: SubmissionDetails; conversation: ConversationResponse | null };
+  | {
+      status: "ready";
+      submission: SubmissionDetails;
+      conversation: ConversationResponse | null;
+      // Innovation canvas the author filled in (ideas only), or null.
+      canvas: Canvas | null;
+    };
 
 type DetailsContextValue = {
   state: DetailsState;
@@ -38,6 +45,14 @@ export function useUpdateStatus() {
   return useDetailsContext().updateStatus;
 }
 
+// Like the conversation, the canvas is optional context: a failed request just hides it.
+async function loadCanvas(conversationId: string, signal: AbortSignal) {
+  const response = await fetch(`/api/conversations/${conversationId}/canvas`, { signal });
+  if (!response.ok) return null;
+  const { data } = (await response.json()) as { data: Canvas | null };
+  return data;
+}
+
 export function SubmissionDetailsProvider({ id, children }: { id: string; children: ReactNode }) {
   const [state, setState] = useState<DetailsState>({ status: "loading" });
 
@@ -54,7 +69,8 @@ export function SubmissionDetailsProvider({ id, children }: { id: string; childr
       // The conversation is extra context; the page still works without it.
       const conversationResponse = await fetch(`/api/conversations/${submission.conversationId}`, { signal });
       const conversation = conversationResponse.ok ? ((await conversationResponse.json()) as ConversationResponse) : null;
-      setState({ status: "ready", submission, conversation });
+      const canvas = submission.type === "idea" ? await loadCanvas(submission.conversationId, signal) : null;
+      setState({ status: "ready", submission, conversation, canvas });
     }
 
     load().catch((error: unknown) => {
